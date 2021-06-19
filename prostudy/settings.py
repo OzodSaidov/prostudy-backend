@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.urls import reverse_lazy
 
 load_dotenv()
 
@@ -47,7 +48,7 @@ SECONDARY_APPS = [
 ]
 
 USER_APPS = [
-
+    'user',
 ]
 
 INSTALLED_APPS = PRIMARY_APPS + SECONDARY_APPS + USER_APPS
