@@ -4,11 +4,14 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
 from prostudy.base_models import Base
-from .services.validators import validate_phone
-
+from .services.validators import validate_phone, validate_file_type_gallery, validate_image_type
+from django.utils.translation import ugettext_lazy as _
 
 class User(AbstractUser):
-    pass
+    username = models.CharField(max_length=255, unique=True, verbose_name=_('username'))
+    email = models.EmailField(verbose_name=_('email'), blank=True, null=True)
+    first_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return self.get_username()
@@ -58,10 +61,11 @@ class PostAttachment(Base):
 
 class PostImage(Base):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
-    file = models.ImageField(upload_to='post_images/')
+    file = models.ImageField(upload_to='post_images/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
 
 
+"""Галерея"""
 class Gallery(Base):
     GRAPHIC_DESIGN = 1
     WEB_DESIGN = 2
@@ -74,14 +78,18 @@ class Gallery(Base):
     )
 
     category = models.IntegerField(choices=CATEGORY)
-    file = models.FileField(upload_to='gallery/')
+    author = models.CharField(max_length=50, blank=True, null=True)
+    file = models.FileField(upload_to='gallery/', validators=[validate_file_type_gallery])
+
+    def __str__(self):
+        return f'{self.get_category_display()}'
 
 
 """Предподаватель"""
 class Teacher(Base):
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
-    photo = models.ImageField(upload_to='teachers/')
+    photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
 
 
 """Специальност"""
@@ -95,7 +103,7 @@ class Specialty(Base):
 class Graduate(Base):
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
-    photo = models.ImageField(upload_to='graduates/')
+    photo = models.ImageField(upload_to='graduates/', validators=[validate_image_type])
 
 
 """Курс"""
@@ -104,9 +112,9 @@ class Course(Base):
     short_title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
     short_content = models.JSONField(default=dict)
-    image_poster = models.ImageField(upload_to='courses/')
+    image_poster = models.ImageField(upload_to='courses/', validators=[validate_image_type])
     graduate = models.ForeignKey(Graduate, on_delete=models.DO_NOTHING)
-    gallery = models.OneToOneField(Gallery, on_delete=models.DO_NOTHING)
+    gallery = models.OneToOneField(Gallery, on_delete=models.DO_NOTHING, related_name='gallery')
 
 
 """Рекламный пост"""
@@ -114,7 +122,7 @@ class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
     short_content = models.JSONField(default=dict)
-    image_poster = models.ImageField(upload_to='advertisement/')
+    image_poster = models.ImageField(upload_to='advertisement/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
 
 
