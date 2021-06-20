@@ -64,6 +64,12 @@ class PostImage(Base):
     file = models.ImageField(upload_to='post_images/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
 
+class FileQuerySet(models.QuerySet):
+    def delete(self, *args, **kwargs):
+        for obj in self:
+            obj.file.delete()
+        super(FileQuerySet, self).delete()
+
 
 """Галерея"""
 class Gallery(Base):
@@ -80,6 +86,7 @@ class Gallery(Base):
     category = models.IntegerField(choices=CATEGORY)
     author = models.CharField(max_length=50, blank=True, null=True)
     file = models.FileField(upload_to='gallery/', validators=[validate_file_type_gallery])
+    objects = FileQuerySet.as_manager()
 
     def __str__(self):
         return f'{self.get_category_display()}'
@@ -123,6 +130,7 @@ class Advertisement(Base):
     content = models.JSONField(default=dict)
     short_content = models.JSONField(default=dict)
     image_poster = models.ImageField(upload_to='advertisement/', validators=[validate_image_type])
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='advertising_post', null=True)
     is_active = models.BooleanField(default=False)
 
 
@@ -138,7 +146,7 @@ class Review(Base):
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
-    phone = models.FloatField(validators=[validate_phone])
+    phone = models.CharField(max_length=13, validators=[validate_phone])
     message = models.TextField()
 
 
@@ -146,7 +154,7 @@ class Feedback(Base):
 class SubscriptionRequisition(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
-    phone = models.FloatField(validators=[validate_phone])
+    phone = models.CharField(max_length=13, validators=[validate_phone])
 
 # ===========================================
 

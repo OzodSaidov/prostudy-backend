@@ -1,11 +1,13 @@
-from django.core.validators import RegexValidator
 from django.conf import settings
 from django.core.exceptions import ValidationError
+import re
 
-validate_phone = RegexValidator(
-    regex=r"^998\d{9}$",
-    message="Phone number must begin with 998 and contain only 12 numbers",
-)
+
+def validate_phone(value):
+    pattern = r"^\+?998\d{9}$"
+    print(value)
+    if not re.search(pattern, str(value)):
+        raise ValidationError('Phone number must begin with 998 and contain only 12 numbers')
 
 
 def validate_file_type_gallery(value):
