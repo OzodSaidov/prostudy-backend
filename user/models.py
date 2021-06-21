@@ -2,6 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from imagekit.processors import ResizeToFit
+from imagekit.models import ProcessedImageField
 
 from prostudy.base_models import Base
 from .services.validators import validate_phone, validate_file_type_gallery, validate_image_type
@@ -84,12 +86,22 @@ class Gallery(Base):
     )
 
     category = models.IntegerField(choices=CATEGORY)
-    author = models.CharField(max_length=50, blank=True, null=True)
-    file = models.FileField(upload_to='gallery/', validators=[validate_file_type_gallery])
-    objects = FileQuerySet.as_manager()
 
     def __str__(self):
         return f'{self.get_category_display()}'
+
+
+class GalleryFile(models.Model):
+    file = models.FileField(upload_to='gallery/', validators=[validate_file_type_gallery])
+    gallery = models.ForeignKey(Gallery, on_delete=models.CASCADE, related_name='gallery_files')
+    objects = FileQuerySet.as_manager()
+
+    def __str__(self):
+        return f'{self.file.name}'
+
+    @property
+    def category_name(self):
+        return f'{self.gallery.get_category_display()}'
 
 
 """Предподаватель"""
