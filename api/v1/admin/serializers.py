@@ -2,7 +2,8 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import ListField, FileField, ImageField
 
-from user.models import Gallery, Menu, PostAttachment, PostImage, Post, GalleryFile
+from user.models import Menu, PostAttachment, PostImage, Post, GalleryFile, Teacher, Course, \
+    Advertisement, Program
 
 
 class MenuListSerializer(serializers.ModelSerializer):
@@ -126,34 +127,94 @@ class GalleryFileSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'gallery')
 
 
-class GallerySerializer(serializers.ModelSerializer):
-    files = ListField(child=FileField(allow_empty_file=False),
-                      required=False,
-                      write_only=True,
-                      allow_empty=True)
+# class GallerySerializer(serializers.ModelSerializer):
+#     files = serializers.ListField(child=FileField(allow_empty_file=False),
+#                                   required=False,
+#                                   write_only=True,
+#                                   allow_empty=True)
+#
+#     class Meta:
+#         model = Gallery
+#         fields = (
+#             'id',
+#             'category',
+#             'files',
+#         )
+#         read_only_fields = ('id', 'files')
+#
+#     def to_representation(self, instance):
+#         data = super(GallerySerializer, self).to_representation(instance)
+#         data['category'] = instance.get_category_display()
+#         return data
+#
+#     def create(self, validated_data):
+#         files = validated_data.pop('files', [])
+#
+#         with transaction.atomic():
+#             gallery, is_created = Gallery.objects.get_or_create(category=validated_data.pop('category'))
+#             for file in files:
+#                 GalleryFile.objects.create(gallery=gallery, file=file)
+#
+#         return gallery
+
+
+class TeacherSerializer(serializers.ModelSerializer):
+    photo = serializers.ImageField(required=False)
 
     class Meta:
-        model = Gallery
+        model = Teacher
         fields = (
             'id',
-            'category',
-            'files',
+            'first_name',
+            'last_name',
+            'photo',
+            'specialty',
+            'content_specialty',
+            'experience',
         )
-        read_only_fields = ('id', 'files')
 
-    def to_representation(self, instance):
-        print(instance)
-        data = super(GallerySerializer, self).to_representation(instance)
-        data['category'] = instance.get_category_display()
-        return data
 
-    def create(self, validated_data):
-        print(validated_data)
-        files = validated_data.pop('files', [])
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = (
+            'id',
+            'title',
+            'short_title',
+            'content',
+            'short_content',
+            'image_poster',
+            'gallery',
+        )
 
-        with transaction.atomic():
-            gallery, is_created = Gallery.objects.get_or_create(category=validated_data.pop('category'))
-            for file in files:
-                GalleryFile.objects.create(gallery=gallery, file=file)
 
-        return gallery
+class AdvertisementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Advertisement
+        fields = (
+            'id',
+            'title',
+            'content',
+            'short_content',
+            'image_poster',
+            'post',
+            'is_active',
+        )
+
+
+class ProgramSerializer(serializers.ModelSerializer):
+    image = serializers.ListField(child=FileField(allow_empty_file=False),
+                                  required=False,
+                                  write_only=True,
+                                  allow_empty=True)
+
+    class Meta:
+        model = Program
+        fields = (
+            'id',
+            'title',
+            'content',
+            'image',
+        )
+
+

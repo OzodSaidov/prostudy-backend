@@ -1,8 +1,12 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView
+from rest_framework.parsers import FileUploadParser
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.parsers import FormParser, MultiPartParser
 
-from api.v1.admin.serializers import PostSerializer, MenuSerializer, GallerySerializer
-from user.models import Post, Menu, Gallery
+from api.v1.admin.serializers import PostSerializer, MenuSerializer, GalleryFileSerializer, \
+    TeacherSerializer, CourseSerializer, AdvertisementSerializer, ProgramSerializer
+from user.models import Post, Menu, GalleryFile, Teacher, Course, Advertisement, Program
 
 
 class PostCreateView(ListCreateAPIView):
@@ -31,14 +35,88 @@ class MenuEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-class GalleryCreateView(ListCreateAPIView):
-    serializer_class = GallerySerializer
-    permission_classes = [AllowAny, ]
-    queryset = Gallery.objects.all()
+# class GalleryCreateView(ListCreateAPIView):
+#     serializer_class = GallerySerializer
+#     permission_classes = [AllowAny, ]
+#     queryset = Gallery.objects.all()
+#
+#
+# class GalleryEditView(RetrieveDestroyAPIView):
+#     serializer_class = GallerySerializer
+#     permission_classes = [AllowAny, ]
+#     queryset = Gallery.objects.all()
+#     lookup_url_kwarg = 'id'
 
 
-class GalleryEditView(RetrieveDestroyAPIView):
-    serializer_class = GallerySerializer
+class TeacherCreateView(ListCreateAPIView):
+    parser_classes = [MultiPartParser]
+    serializer_class = TeacherSerializer
     permission_classes = [AllowAny, ]
-    queryset = Gallery.objects.all()
+    queryset = Teacher.objects.all()
+
+
+class TeacherEditView(RetrieveUpdateDestroyAPIView):
+    parser_classes = [MultiPartParser]
+    serializer_class = TeacherSerializer
+    permission_classes = [AllowAny, ]
+    queryset = Teacher.objects.all()
     lookup_url_kwarg = 'id'
+
+
+class CourseCreateView(ListCreateAPIView):
+    parser_classes = [MultiPartParser]
+    serializer_class = CourseSerializer
+    permission_classes = [AllowAny]
+    queryset = Course.objects.all()
+
+
+class CourseEditView(RetrieveUpdateDestroyAPIView):
+    parser_classes = [MultiPartParser]
+    serializer_class = CourseSerializer
+    permission_classes = [AllowAny]
+    queryset = Course.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class AdvertisementCreateView(ListCreateAPIView):
+    parser_classes = [MultiPartParser]
+    serializer_class = AdvertisementSerializer
+    permission_classes = [AllowAny]
+    queryset = Advertisement.objects.all()
+
+
+class AdvertisementEditView(RetrieveUpdateDestroyAPIView):
+    parser_classes = [MultiPartParser]
+    serializer_class = AdvertisementSerializer
+    permission_classes = [AllowAny]
+    queryset = Advertisement.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class ReviewCreateView(ListCreateAPIView):
+    pass
+
+
+class ReviewEditView(RetrieveUpdateDestroyAPIView):
+    pass
+
+
+class FeedbackCreateView(ListCreateAPIView):
+    pass
+
+
+class FeedbackEditView(RetrieveUpdateDestroyAPIView):
+    pass
+
+
+class SubscriptionRequisitionCreateView(ListCreateAPIView):
+    pass
+
+
+class SubscriptionRequisitionEditView(RetrieveUpdateDestroyAPIView):
+    pass
+
+class ProgramCreateView(ListCreateAPIView):
+    serializer_class = ProgramSerializer
+    queryset = Program.objects.all()
+    permission_classes = [AllowAny]
