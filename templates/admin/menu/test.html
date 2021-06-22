@@ -1,0 +1,81 @@
+{% extends 'base_informer.html' %}
+{% load mptt_tags %}
+{% load static %}
+
+{% block styles %}
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-9 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h2 class="content-header-title float-left mb-0">Меню</h2>
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'user:index_admin' %}">Главная</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">Меню
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
+                    <div class="breadcrum-right">
+                        <a href="{% url 'user:menu_create' %}" class="btn btn-primary">Добавить</a>
+                    </div>
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Accordion with margin start -->
+                <section id="accordion-with-margin">
+                    <div class="card collapse-icon accordion-icon-rotate">
+                        <div class="card-body">
+                            <div class="accordion" id="accordion">
+                                {% recursetree menu_list %}
+                                    <div class="collapse-margin">
+                                        <div class="card-header" id="heading{{ node.id }}" data-toggle="collapse" role="button" data-target="#collapse{{ node.id }}" aria-expanded="false" aria-controls="collapse{{ node.id }}">
+                                            <span class="lead collapse-title">
+                                                {{ node.title.ru }}
+                                            </span>
+                                        </div>
+                                        <div id="collapse{{ node.id }}" class="collapse" aria-labelledby="heading{{ node.id }}" data-parent="#accordion{{ node.id }}">
+                                            <div class="card-body">
+                                                {% if not node.is_leaf_node %}
+                                                    <div class="accordion" id="accordion{{ node.id }}">
+                                                        {{ children }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endrecursetree %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Accordion with margin end -->
+
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block modals %}
+
+{% endblock %}
+
+
+{% block script %}
+
+{% endblock %}

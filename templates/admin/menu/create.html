@@ -1,0 +1,174 @@
+{% extends 'base_informer.html' %}
+{% load mptt_tags %}
+{% load static %}
+
+{% block styles %}
+
+{% endblock %}
+
+
+{% block content %}
+    <div class="app-content content">
+        <div class="content-overlay"></div>
+        <div class="header-navbar-shadow"></div>
+        <div class="content-wrapper">
+            <div class="content-header row">
+                <div class="content-header-left col-md-9 col-12 mb-2">
+                    <div class="row breadcrumbs-top">
+                        <div class="col-12">
+                            <h2 class="content-header-title float-left mb-0">Меню</h2>
+                            <div class="breadcrumb-wrapper col-12">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="{% url 'user:index_admin' %}">Главная</a>
+                                    </li>
+                                    <li class="breadcrumb-item"><a href="{% url 'user:menu_list' %}">Меню</a>
+                                    </li>
+                                    <li class="breadcrumb-item active">Добавить
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-header-right text-md-right col-md-3 col-12 d-md-block d-none">
+
+                </div>
+            </div>
+            <div class="content-body">
+                <!-- Data list view starts -->
+                <form id="addForm" class="card">
+                    <div class="card-header">
+                        <div class="form-tabs">
+                            <ul class="nav nav-pills nav-active-bordered-pill">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="base-pill_ru" data-toggle="pill" href="#pill_ru" aria-expanded="true"><i class="flag-icon flag-icon-ru"></i> Ру</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="base-pill_uz" data-toggle="pill" href="#pill_uz" aria-expanded="false"><i class="flag-icon flag-icon-uz"></i> Уз</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="base-pill_oz" data-toggle="pill" href="#pill_oz" aria-expanded="false"><i class="flag-icon flag-icon-uz"></i> O'z</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="base-pill_en" data-toggle="pill" href="#pill_en" aria-expanded="false"><i class="flag-icon flag-icon-us"></i> En</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="base-pill_qr" data-toggle="pill" href="#pill_qr" aria-expanded="false"><i class="flag-icon flag-icon-uz"></i> Qr</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="form-tabs">
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="pill_ru" aria-expanded="true" aria-labelledby="base-pill_ru">
+                                    <!-- Form Ru -->
+                                    <div class="form-group">
+                                        <label for="title_ru">Название (ру):</label>
+                                        <input id="title_ru" type="text" class="form-control text" name="title_ru" required>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="pill_uz" aria-labelledby="base-pill_uz">
+                                    <!-- Form Uz -->
+                                    <div class="form-group">
+                                        <label for="title_uz">Название (уз):</label>
+                                        <input id="title_uz" type="text" class="form-control text" name="title_uz" required>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="pill_oz" aria-labelledby="base-pill_oz">
+                                    <!-- Form Oz -->
+                                    <div class="form-group">
+                                        <label for="title_oz">Название (o'z):</label>
+                                        <input id="title_oz" type="text" class="form-control text" name="title_oz" required>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="pill_en" aria-labelledby="base-pill_en">
+                                    <!-- Form En -->
+                                    <div class="form-group">
+                                        <label for="title_en">Название (en):</label>
+                                        <input id="title_en" type="text" class="form-control text" name="title_en" required>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="pill_qr" aria-labelledby="base-pill_qr">
+                                    <!-- Form Qr -->
+                                    <div class="form-group">
+                                        <label for="title_qr">Название (qr):</label>
+                                        <input id="title_qr" type="text" class="form-control text" name="title_qr" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="parent">Родительское меню:</label>
+                            <select name="parent" class="form-control" id="parent">
+                                <option value="">Выберите</option>
+                                {% for parent in menu_list %}
+                                    <option value={{ parent.id }}>{{ parent.title.ru }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="is_active">Статус:</label>
+                            <select name="is_active" class="form-control" id="is_active">
+                                <option value="true">Активный</option>
+                                <option value="false">Неактивный</option>
+                            </select>
+                        </div>
+                        <div class="btns-group">
+                            <a href="{% url 'user:menu_list' %}" class="btn btn-secondary">Отмена</a>
+                            <button class="btn btn-primary">Сохранить</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- Data list view end -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block modals %}
+
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            /* Add */
+            $("#addForm").submit(function (e) {
+                e.preventDefault();
+
+                let formData = new FormData();
+
+                formData.append("title", `{
+                                            "ru": "${$("#title_ru").val()}",
+                                            "uz": "${$("#title_uz").val()}",
+                                            "oz": "${$("#title_oz").val()}",
+                                            "en": "${$("#title_en").val()}",
+                                            "qr": "${$("#title_qr").val()}"
+                                          }`);
+                formData.append("parent", $("#parent").val());
+                formData.append("is_active", $("#is_active").val());
+
+                let url = "/api/v1/moderator/menu/create/";
+
+                $.ajax({
+                    headers: {"X-CSRFToken": "{{csrf_token}}"},
+                    url: url,
+                    processData: false,
+                    contentType: false,
+                    method: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        //alert('успех!');
+                        window.location.href = "{% url 'user:menu_list' %}";
+                    },
+                    error: function (data) {
+                        alert('Ошибка');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
