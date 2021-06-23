@@ -5,6 +5,7 @@ from mptt.models import MPTTModel
 from imagekit.processors import ResizeToFit
 from imagekit.models import ProcessedImageField
 
+from prostudy import settings
 from prostudy.base_models import Base
 from .services.validators import validate_phone, validate_file_type_gallery, validate_image_type
 from django.utils.translation import ugettext_lazy as _
@@ -28,6 +29,14 @@ class Menu(MPTTModel):
     title = models.JSONField(default=dict)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        if settings.LANGUAGE_CODE == 'uz':
+            return self.title['uz']
+        elif settings.LANGUAGE_CODE == 'ru':
+            return self.title['ru']
+        else:
+            return self.title['en']
 
 
 class Post(Base):
@@ -58,10 +67,16 @@ class FileQuerySet(models.QuerySet):
         super(FileQuerySet, self).delete()
 
 
-class Gallery(models.Model):
-    file = models.FileField(upload_to='gallery/', validators=[validate_file_type_gallery])
+class Gallery(Base):
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery_files')
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='gallery')
+
+    def __str__(self):
+        return self.course.get_category_display()
+
+class GalleryFile(Base):
+    file = models.FileField(upload_to='gallery/', validators=[validate_file_type_gallery])
+    gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
 
     def __str__(self):
@@ -96,11 +111,24 @@ class Course(Base):
     category = models.IntegerField(choices=CATEGORY)
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict, null=True)
-    image_course = models.ImageField(upload_to='courses/', validators=[validate_image_type])
+    # image_course = models.ImageField(upload_to='courses/', validators=[validate_image_type])
     lesson = models.JSONField(default=dict)
-    lesson_icon = models.ImageField(upload_to='lesson_icon/', validators=[validate_image_type])
+    # lesson_icon = models.ImageField(upload_to='lesson_icon/', validators=[validate_image_type])
     price = models.JSONField(default=dict)
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='course')
+
+    def __str__(self):
+        return self.get_category_display()
+
+
+class CourseImage(Base):
+    course_image = models.ImageField(upload_to='course_images/', validators=[validate_image_type])
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_images')
+
+
+class LessonIcon(Base):
+    lesson_icon = models.ImageField(upload_to='lesson_icons/', validators=[validate_image_type])
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='lesson_icons')
 
 
 class Program(Base):
