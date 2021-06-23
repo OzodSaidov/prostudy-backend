@@ -128,7 +128,9 @@ class GallerySerializer(serializers.ModelSerializer):
                                  required=False,
                                  write_only=True,
                                  allow_empty=True)
-    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=True, write_only=True)
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None),
+                                              required=True,
+                                              write_only=True)
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=True)
 
     class Meta:
@@ -222,7 +224,6 @@ class CourseSerializer(serializers.ModelSerializer):
         print(validated_data)
         with transaction.atomic():
             course, is_created = Course.objects.get_or_create(category=validated_data.pop('category'), **validated_data)
-            # course = super(CourseSerializer, self).create(validated_data)
             for image in course_images:
                 CourseImage.objects.create(course=course, course_image=image)
             for icon in lesson_icons:
