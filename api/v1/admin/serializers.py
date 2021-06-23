@@ -2,7 +2,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import ListField, FileField, ImageField
 
-from user.models import Menu, PostAttachment, PostImage, Post, GalleryFile, Teacher, Course, \
+from user.models import Menu, PostAttachment, PostImage, Post, Gallery, Teacher, Course, \
     Advertisement, Program
 
 
@@ -116,46 +116,16 @@ class PostSerializer(serializers.ModelSerializer):
         return response
 
 
-class GalleryFileSerializer(serializers.ModelSerializer):
+class GallerySerializer(serializers.ModelSerializer):
     class Meta:
-        model = GalleryFile
+        model = Gallery
         fields = (
             'id',
             'file',
-            'gallery',
+            'course',
+            'menu',
         )
-        read_only_fields = ('id', 'gallery')
-
-
-# class GallerySerializer(serializers.ModelSerializer):
-#     files = serializers.ListField(child=FileField(allow_empty_file=False),
-#                                   required=False,
-#                                   write_only=True,
-#                                   allow_empty=True)
-#
-#     class Meta:
-#         model = Gallery
-#         fields = (
-#             'id',
-#             'category',
-#             'files',
-#         )
-#         read_only_fields = ('id', 'files')
-#
-#     def to_representation(self, instance):
-#         data = super(GallerySerializer, self).to_representation(instance)
-#         data['category'] = instance.get_category_display()
-#         return data
-#
-#     def create(self, validated_data):
-#         files = validated_data.pop('files', [])
-#
-#         with transaction.atomic():
-#             gallery, is_created = Gallery.objects.get_or_create(category=validated_data.pop('category'))
-#             for file in files:
-#                 GalleryFile.objects.create(gallery=gallery, file=file)
-#
-#         return gallery
+        read_only_fields = ('id', 'course', 'menu')
 
 
 class TeacherSerializer(serializers.ModelSerializer):

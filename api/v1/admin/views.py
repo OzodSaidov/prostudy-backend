@@ -4,9 +4,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
-from api.v1.admin.serializers import PostSerializer, MenuSerializer, GalleryFileSerializer, \
+from api.v1.admin.serializers import PostSerializer, MenuSerializer, GallerySerializer, \
     TeacherSerializer, CourseSerializer, AdvertisementSerializer, ProgramSerializer
-from user.models import Post, Menu, GalleryFile, Teacher, Course, Advertisement, Program
+from user.models import Post, Menu, Gallery, Teacher, Course, Advertisement, Program
 
 
 class PostCreateView(ListCreateAPIView):
@@ -35,17 +35,17 @@ class MenuEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-# class GalleryCreateView(ListCreateAPIView):
-#     serializer_class = GallerySerializer
-#     permission_classes = [AllowAny, ]
-#     queryset = Gallery.objects.all()
-#
-#
-# class GalleryEditView(RetrieveDestroyAPIView):
-#     serializer_class = GallerySerializer
-#     permission_classes = [AllowAny, ]
-#     queryset = Gallery.objects.all()
-#     lookup_url_kwarg = 'id'
+class GalleryCreateView(ListCreateAPIView):
+    serializer_class = GallerySerializer
+    permission_classes = [AllowAny, ]
+    queryset = Gallery.objects.all()
+
+
+class GalleryEditView(RetrieveDestroyAPIView):
+    serializer_class = GallerySerializer
+    permission_classes = [AllowAny, ]
+    queryset = Gallery.objects.all()
+    lookup_url_kwarg = 'id'
 
 
 class TeacherCreateView(ListCreateAPIView):

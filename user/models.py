@@ -58,7 +58,7 @@ class FileQuerySet(models.QuerySet):
         super(FileQuerySet, self).delete()
 
 
-class GalleryFile(models.Model):
+class Gallery(models.Model):
     file = models.FileField(upload_to='gallery/', validators=[validate_file_type_gallery])
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery_files')
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='gallery')
@@ -75,7 +75,7 @@ class Teacher(Base):
     specialty = models.JSONField(default=dict)
     experience = models.JSONField(default=dict)
     photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='teacher')
+    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='teacher')
 
 
 """Курс"""
@@ -100,14 +100,14 @@ class Course(Base):
     lesson = models.JSONField(default=dict)
     lesson_icon = models.ImageField(upload_to='lesson_icon/', validators=[validate_image_type])
     price = models.JSONField(default=dict)
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='course')
+    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='course')
 
 
 class Program(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
     image = models.ImageField(upload_to='programs/', validators=[validate_image_type])
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='programs')
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs')
 
 
 """Рекламный пост"""
@@ -117,7 +117,7 @@ class Advertisement(Base):
     short_content = models.JSONField(default=dict)
     image_poster = models.ImageField(upload_to='advertisement/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='advertising_post')
+    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='advertising_post')
 
 
 """Обратная связь"""
@@ -127,7 +127,7 @@ class Feedback(Base):
     phone = models.CharField(max_length=13, validators=[validate_phone])
     message = models.TextField()
     is_active = models.BooleanField(default=True)
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='feedback')
+    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='feedback')
 
 
 """Заявка на подписку"""
@@ -136,4 +136,4 @@ class SubscriptionRequisition(Base):
     number_visitors = models.IntegerField()
     phone = models.CharField(max_length=13, validators=[validate_phone])
     is_active = models.BooleanField(default=True)
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='subscription')
+    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='subscription')

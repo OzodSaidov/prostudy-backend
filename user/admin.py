@@ -3,7 +3,7 @@ from .models import (
     User,
     PostImage,
     Feedback,
-    GalleryFile,
+    Gallery,
     Teacher,
     Advertisement,
     SubscriptionRequisition,
@@ -19,7 +19,7 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email',)
 
 
-class GalleryFileAdmin(admin.ModelAdmin):
+class GalleryAdmin(admin.ModelAdmin):
     list_display = ('file',)
 
     def get_files(self, obj):
@@ -29,7 +29,7 @@ class GalleryFileAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(GalleryFile, GalleryFileAdmin)
+admin.site.register(Gallery, GalleryAdmin)
 admin.site.register(Course)
 admin.site.register(Post)
 admin.site.register(PostImage)
