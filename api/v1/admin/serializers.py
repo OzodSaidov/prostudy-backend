@@ -2,8 +2,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import ListField, FileField, ImageField
 
-from user.models import Menu, PostAttachment, PostImage, Post, Gallery, Teacher, Course, \
-    Advertisement, Program, CourseImage, LessonIcon, GalleryFile
+from user.models import *
 
 
 class MenuListSerializer(serializers.ModelSerializer):
@@ -260,3 +259,9 @@ class ProgramSerializer(serializers.ModelSerializer):
             'content',
             'image',
         )
+
+
+class SubscriptionRequest(serializers.ModelSerializer):
+    class Meta:
+        model = SubscriptionRequest
+        fields = '__all__'
