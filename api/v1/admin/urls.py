@@ -8,7 +8,13 @@ from api.v1.admin.views import (
     GalleryCreateView,
     GalleryEditView,
     TeacherCreateView,
-    TeacherEditView, ProgramCreateView, CourseCreateView, CourseEditView,
+    TeacherEditView,
+    ProgramCreateView,
+    CourseCreateView,
+    CourseEditView,
+    ProgramEditView,
+    FeedbackCreateView,
+    FeedbackEditView,
 )
 
 urlpatterns = [
@@ -20,7 +26,10 @@ urlpatterns = [
     path('gallery/<int:id>/', GalleryEditView.as_view()),
     path('course/create/', CourseCreateView.as_view()),
     path('course/<int:id>/', CourseEditView.as_view()),
+    path('program/create/', ProgramCreateView.as_view()),
+    path('program/<int:id>/', ProgramEditView.as_view()),
     path('teacher/create/', TeacherCreateView.as_view()),
     path('teacher/<int:id>/', TeacherEditView.as_view()),
-    path('program/create/', ProgramCreateView.as_view())
+    path('feedback/create/', FeedbackCreateView.as_view()),
+    path('feedback/<int:id>/', FeedbackEditView.as_view()),
 ]

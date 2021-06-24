@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rest_framework.fields import ListField, FileField, ImageField
 
 from user.models import Menu, PostAttachment, PostImage, Post, Gallery, Teacher, Course, \
-    Advertisement, Program, CourseImage, LessonIcon, GalleryFile
+    Advertisement, Program, CourseImage, LessonIcon, GalleryFile, Feedback, SubscriptionRequisition
 
 
 class MenuListSerializer(serializers.ModelSerializer):
@@ -129,8 +129,7 @@ class GallerySerializer(serializers.ModelSerializer):
                                  write_only=True,
                                  allow_empty=True)
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None),
-                                              required=True,
-                                              write_only=True)
+                                              required=True)
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=True)
 
     class Meta:
@@ -149,8 +148,15 @@ class GallerySerializer(serializers.ModelSerializer):
         with transaction.atomic():
             gallery, is_created = Gallery.objects.get_or_create(validated_data)
             for file in files:
-                GalleryFile.objects.create(file=file, gallery=gallery)
+                GalleryFile.objects.create(gallery=gallery, file=file)
         return gallery
+
+    def to_representation(self, instance):
+        print(instance)
+        data = super(GallerySerializer, self).to_representation(instance)
+        data['course'] = instance.course.get_category_display()
+        data['menu'] = instance.menu.title
+        return data
 
 
 class TeacherSerializer(serializers.ModelSerializer):
@@ -164,7 +170,6 @@ class TeacherSerializer(serializers.ModelSerializer):
             'last_name',
             'photo',
             'specialty',
-            'content_specialty',
             'experience',
         )
 
@@ -223,13 +228,28 @@ class CourseSerializer(serializers.ModelSerializer):
         lesson_icons = validated_data.pop('lesson_icon', [])
         print(validated_data)
         with transaction.atomic():
-            course, is_created = Course.objects.get_or_create(category=validated_data.pop('category'), **validated_data)
-            for image in course_images:
-                CourseImage.objects.create(course=course, course_image=image)
-            for icon in lesson_icons:
-                LessonIcon.objects.create(course=course, lesson_icon=icon)
+            course, is_created = Course.objects.get_or_create(**validated_data)
+            if course_images:
+                for image in course_images:
+                    CourseImage.objects.create(course=course, course_image=image)
+            if lesson_icons:
+                for icon in lesson_icons:
+                    LessonIcon.objects.create(course=course, lesson_icon=icon)
 
         return course
+
+    def update(self, instance, validated_data):
+        title = validated_data.pop('title', dict())
+        content = validated_data.pop('content', dict())
+        lesson = validated_data.pop('lesson', dict())
+        price = validated_data.pop('price', dict())
+
+        instance.title.update(title)
+        instance.content.update(content)
+        instance.lesson.update(lesson)
+        instance.price.update(price)
+
+        return super(CourseSerializer, self).update(instance, validated_data)
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
@@ -241,7 +261,6 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             'content',
             'short_content',
             'image_poster',
-            'post',
             'is_active',
         )
 
@@ -259,4 +278,19 @@ class ProgramSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'image',
+            'course'
+        )
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = (
+            'id',
+            'name',
+            'email',
+            'phone',
+            'message',
+            'is_active',
+            'menu'
         )

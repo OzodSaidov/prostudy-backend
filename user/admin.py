@@ -21,10 +21,13 @@ from .models import (
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email',)
 
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('id', 'category')
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Gallery)
-admin.site.register(Course)
+admin.site.register(Course, CourseAdmin)
 admin.site.register(Post)
 admin.site.register(PostImage)
 admin.site.register(PostAttachment)

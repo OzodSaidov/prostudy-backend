@@ -68,14 +68,18 @@ class FileQuerySet(models.QuerySet):
 
 
 class Gallery(Base):
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery_files')
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery')
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='gallery')
 
     def __str__(self):
         return self.course.get_category_display()
 
 class GalleryFile(Base):
-    file = models.FileField(upload_to='gallery/', validators=[validate_file_type_gallery])
+
+    def gallery_file_path(self, filename):
+        return 'gallery/{0}/{1}'.format(self.gallery.course.get_category_display(), filename)
+
+    file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type_gallery])
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
 
@@ -122,12 +126,17 @@ class Course(Base):
 
 
 class CourseImage(Base):
-    course_image = models.ImageField(upload_to='course_images/', validators=[validate_image_type])
+    def course_image_path(self, filename):
+        return 'course_images/{0}/{1}'.format(self.course.id, filename)
+
+    course_image = models.ImageField(upload_to=course_image_path, validators=[validate_image_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_images')
 
 
 class LessonIcon(Base):
-    lesson_icon = models.ImageField(upload_to='lesson_icons/', validators=[validate_image_type])
+    def lesson_icon_path(self, filename):
+        return 'lesson_icon/{0}/{1}'.format(self.course.id, filename)
+    lesson_icon = models.ImageField(upload_to=lesson_icon_path, validators=[validate_image_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='lesson_icons')
 
 
@@ -156,6 +165,9 @@ class Feedback(Base):
     message = models.TextField()
     is_active = models.BooleanField(default=True)
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='feedback')
+
+    class Meta:
+        ordering = ['-create_at']
 
 
 """Заявка на подписку"""
