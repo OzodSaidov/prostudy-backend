@@ -6,8 +6,9 @@ from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
 from api.v1.admin.serializers import PostSerializer, MenuSerializer, GallerySerializer, \
-    TeacherSerializer, CourseSerializer, AdvertisementSerializer, ProgramSerializer, FeedbackSerializer
-from user.models import Post, Menu, Gallery, Teacher, Course, Advertisement, Program, CourseImage, Feedback
+    TeacherSerializer, CourseSerializer, AdvertisementSerializer, ProgramSerializer, FeedbackSerializer, \
+    GalleryFileSerializer
+from user.models import Post, Menu, Gallery, Teacher, Course, Advertisement, Program, CourseImage, Feedback, GalleryFile
 
 
 class PostCreateView(ListCreateAPIView):
@@ -33,6 +34,19 @@ class MenuEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = MenuSerializer
     permission_classes = (AllowAny,)
     queryset = Menu.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class GalleryFileCreateView(ListCreateAPIView):
+    permission_classes = [AllowAny, ]
+    serializer_class = GalleryFileSerializer
+    queryset = GalleryFile.objects.all()
+
+
+class GalleryFileDestroyView(RetrieveDestroyAPIView):
+    queryset = GalleryFile.objects.all()
+    permission_classes = [AllowAny]
+    serializer_class = GalleryFileSerializer
     lookup_url_kwarg = 'id'
 
 

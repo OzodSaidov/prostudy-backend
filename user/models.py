@@ -68,7 +68,7 @@ class FileQuerySet(models.QuerySet):
 
 
 class Gallery(Base):
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery')
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery_files')
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='gallery')
 
     def __str__(self):

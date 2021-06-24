@@ -129,8 +129,8 @@ class GallerySerializer(serializers.ModelSerializer):
                                  write_only=True,
                                  allow_empty=True)
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None),
-                                              required=True)
-    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=True)
+                                              required=False)
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
 
     class Meta:
         model = Gallery
@@ -143,7 +143,6 @@ class GallerySerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'course', 'menu')
 
     def create(self, validated_data):
-        print(validated_data)
         files = validated_data.pop('file', [])
         with transaction.atomic():
             gallery, is_created = Gallery.objects.get_or_create(validated_data)
@@ -205,7 +204,7 @@ class CourseSerializer(serializers.ModelSerializer):
                                         required=False,
                                         write_only=True,
                                         allow_empty=True)
-    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=True)
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
 
     class Meta:
         model = Course
@@ -278,7 +277,7 @@ class ProgramSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'image',
-            'course'
+            'course',
         )
 
 
