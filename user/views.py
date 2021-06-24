@@ -12,3 +12,7 @@ class UserRedirectView(LoginRequiredMixin, generic.RedirectView):
 
 class IndexAdminView(AdminAccess, generic.TemplateView):
     template_name = 'admin/index.html'
+
+
+class MenuView(AdminAccess, generic.TemplateView):
+    pass
