@@ -1,6 +1,8 @@
 from django.db import transaction
+from django.http import Http404
 from rest_framework import serializers
 from rest_framework.fields import ListField, FileField, ImageField
+from rest_framework.generics import get_object_or_404
 
 from user.models import Menu, PostAttachment, PostImage, Post, Gallery, Teacher, Course, \
     Advertisement, Program, CourseImage, LessonIcon, GalleryFile, Feedback, SubscriptionRequisition
@@ -128,11 +130,12 @@ class GalleryFileSerializer(serializers.ModelSerializer):
         fields = ('id', 'file', 'gallery')
         read_only_fields = ('id', 'gallery')
 
-    # def create(self, validated_data):
-    #     print(validated_data)
-    #     files = validated_data.pop('file', [])
-    #     for file in files:
-    #         return super(GalleryFileSerializer, self).create()
+    def create(self, validated_data):
+        files = validated_data.pop('file', [])
+        with transaction.atomic():
+            for file in files:
+                GalleryFile.objects.create(file=file, **validated_data)
+        return super(GalleryFileSerializer, self).data
 
 
 class GallerySerializer(serializers.ModelSerializer):
@@ -157,13 +160,15 @@ class GallerySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         files = validated_data.pop('file', [])
         with transaction.atomic():
-            gallery, is_created = Gallery.objects.get_or_create(validated_data)
+            try:
+                gallery = get_object_or_404(Gallery, course=validated_data.get('course'))
+            except Http404 as e:
+                gallery = Gallery.objects.create(**validated_data)
             for file in files:
                 GalleryFile.objects.create(gallery=gallery, file=file)
         return gallery
 
     def to_representation(self, instance):
-        print(instance)
         data = super(GallerySerializer, self).to_representation(instance)
         data['course'] = instance.course.get_category_display()
         data['menu'] = instance.menu.title
@@ -234,12 +239,13 @@ class CourseSerializer(serializers.ModelSerializer):
         read_only_field = ('id', 'menu')
 
     def create(self, validated_data):
-        print(validated_data)
         course_images = validated_data.pop('course_image', [])
         lesson_icons = validated_data.pop('lesson_icon', [])
-        print(validated_data)
         with transaction.atomic():
-            course, is_created = Course.objects.get_or_create(**validated_data)
+            try:
+                course = get_object_or_404(Course, category=validated_data.get('category'))
+            except Http404:
+                course = Course.objects.create(**validated_data)
             if course_images:
                 for image in course_images:
                     CourseImage.objects.create(course=course, course_image=image)
