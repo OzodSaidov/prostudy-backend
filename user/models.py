@@ -2,8 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-from imagekit.processors import ResizeToFit
-from imagekit.models import ProcessedImageField
+# from imagekit.processors import ResizeToFit
+# from imagekit.models import ProcessedImageField
 
 from prostudy import settings
 from prostudy.base_models import Base
@@ -69,7 +69,7 @@ class FileQuerySet(models.QuerySet):
 
 class Gallery(Base):
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery_files')
-    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='gallery')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='gallery')
 
     def __str__(self):
         return self.course.get_category_display()
@@ -94,7 +94,7 @@ class Teacher(Base):
     specialty = models.JSONField(default=dict)
     experience = models.JSONField(default=dict)
     photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
-    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='teacher')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='teacher')
 
 
 """Курс"""
@@ -119,7 +119,7 @@ class Course(Base):
     lesson = models.JSONField(default=dict)
     # lesson_icon = models.ImageField(upload_to='lesson_icon/', validators=[validate_image_type])
     price = models.JSONField(default=dict)
-    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='course')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='course')
 
     def __str__(self):
         return self.get_category_display()
@@ -154,7 +154,7 @@ class Advertisement(Base):
     short_content = models.JSONField(default=dict)
     image_poster = models.ImageField(upload_to='advertisement/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
-    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='advertising_post')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='advertising_post')
 
 
 """Обратная связь"""
@@ -164,7 +164,7 @@ class Feedback(Base):
     phone = models.CharField(max_length=13, validators=[validate_phone])
     message = models.TextField()
     is_active = models.BooleanField(default=True)
-    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='feedback')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='feedback')
 
     class Meta:
         ordering = ['-create_at']
@@ -176,4 +176,4 @@ class SubscriptionRequisition(Base):
     number_visitors = models.IntegerField()
     phone = models.CharField(max_length=13, validators=[validate_phone])
     is_active = models.BooleanField(default=True)
-    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='subscription')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='subscription')

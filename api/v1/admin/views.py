@@ -43,7 +43,7 @@ class GalleryFileCreateView(ListCreateAPIView):
     queryset = GalleryFile.objects.all()
 
 
-class GalleryFileDestroyView(RetrieveDestroyAPIView):
+class GalleryFileRetrieveDestroyView(RetrieveDestroyAPIView):
     queryset = GalleryFile.objects.all()
     permission_classes = [AllowAny]
     serializer_class = GalleryFileSerializer

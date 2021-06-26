@@ -117,10 +117,22 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class GalleryFileSerializer(serializers.ModelSerializer):
+    file = serializers.ListField(child=FileField(allow_empty_file=False),
+                                 required=False,
+                                 write_only=True,
+                                 allow_empty=True)
+    gallery = serializers.PrimaryKeyRelatedField(queryset=Gallery.objects.all())
+
     class Meta:
         model = GalleryFile
         fields = ('id', 'file', 'gallery')
         read_only_fields = ('id', 'gallery')
+
+    # def create(self, validated_data):
+    #     print(validated_data)
+    #     files = validated_data.pop('file', [])
+    #     for file in files:
+    #         return super(GalleryFileSerializer, self).create()
 
 
 class GallerySerializer(serializers.ModelSerializer):
