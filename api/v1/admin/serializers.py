@@ -11,7 +11,7 @@ from user.models import Menu, PostAttachment, PostImage, Post, Gallery, Teacher,
 class MenuListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
-        fields = ('id', 'title', 'parent', 'children', 'is_active')
+        fields = ('id', 'href', 'title', 'parent', 'children', 'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
@@ -20,7 +20,7 @@ class MenuListSerializer(serializers.ModelSerializer):
 class MenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
-        fields = ('id', 'title', 'parent', 'children', 'is_active')
+        fields = ('id', 'href', 'title', 'parent', 'children', 'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
