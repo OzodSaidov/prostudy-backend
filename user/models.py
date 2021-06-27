@@ -26,6 +26,7 @@ class User(AbstractUser):
 
 
 class Menu(MPTTModel):
+    href = models.CharField(max_length=200, null=True, verbose_name='uri')
     title = models.JSONField(default=dict)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     is_active = models.BooleanField(default=False)
