@@ -5,13 +5,13 @@ from rest_framework.fields import ListField, FileField, ImageField
 from rest_framework.generics import get_object_or_404
 
 from user.models import Menu, PostAttachment, PostImage, Post, Gallery, Teacher, Course, \
-    Advertisement, Program, CourseImage, LessonIcon, GalleryFile, Feedback, SubscriptionRequisition
+    Advertisement, Program, CourseImage, LessonIcon, GalleryFile, Feedback, SubscriptionRequest
 
 
 class MenuListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
-        fields = ('id', 'title', 'parent', 'children', 'is_active')
+        fields = ('id', 'href', 'title', 'parent', 'children', 'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
@@ -20,7 +20,7 @@ class MenuListSerializer(serializers.ModelSerializer):
 class MenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
-        fields = ('id', 'title', 'parent', 'children', 'is_active')
+        fields = ('id', 'href', 'title', 'parent', 'children', 'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
@@ -177,6 +177,7 @@ class GallerySerializer(serializers.ModelSerializer):
 
 class TeacherSerializer(serializers.ModelSerializer):
     photo = serializers.ImageField(required=False)
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
 
     class Meta:
         model = Teacher
@@ -187,6 +188,7 @@ class TeacherSerializer(serializers.ModelSerializer):
             'photo',
             'specialty',
             'experience',
+            'menu'
         )
 
 
@@ -270,6 +272,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+
     class Meta:
         model = Advertisement
         fields = (
@@ -279,6 +283,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             'short_content',
             'image_poster',
             'is_active',
+            'menu'
         )
 
 
@@ -300,6 +305,8 @@ class ProgramSerializer(serializers.ModelSerializer):
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+
     class Meta:
         model = Feedback
         fields = (
@@ -311,3 +318,11 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'is_active',
             'menu'
         )
+
+
+class SubscriptionRequestSerializer(serializers.ModelSerializer):
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+
+    class Meta:
+        model = SubscriptionRequest
+        fields = ('id', 'name', 'number_visitors', 'phone', 'is_active', 'menu')

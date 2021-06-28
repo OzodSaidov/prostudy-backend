@@ -26,6 +26,7 @@ class User(AbstractUser):
 
 
 class Menu(MPTTModel):
+    href = models.CharField(max_length=200, null=True, verbose_name='uri')
     title = models.JSONField(default=dict)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     is_active = models.BooleanField(default=False)
@@ -171,9 +172,12 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
-class SubscriptionRequisition(Base):
+class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
     phone = models.CharField(max_length=13, validators=[validate_phone])
     is_active = models.BooleanField(default=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='subscription')
+
+    class Meta:
+        ordering = ['-create_at']

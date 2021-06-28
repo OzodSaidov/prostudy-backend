@@ -7,7 +7,7 @@ from .models import (
     GalleryFile,
     Teacher,
     Advertisement,
-    SubscriptionRequisition,
+    SubscriptionRequest,
     PostAttachment,
     Course,
     Menu,
@@ -37,7 +37,7 @@ admin.site.register(PostAttachment)
 admin.site.register(Feedback)
 admin.site.register(Teacher)
 admin.site.register(Advertisement)
-admin.site.register(SubscriptionRequisition)
+admin.site.register(SubscriptionRequest)
 admin.site.register(Menu)
 admin.site.register(Program)
 admin.site.register(GalleryFile, GalleryFileAdmin)

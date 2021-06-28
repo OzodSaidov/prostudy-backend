@@ -14,7 +14,8 @@ from api.v1.admin.views import (
     CourseEditView,
     ProgramEditView,
     FeedbackCreateView,
-    FeedbackEditView, GalleryFileCreateView, GalleryFileRetrieveDestroyView,
+    FeedbackEditView, GalleryFileCreateView, GalleryFileRetrieveDestroyView, SubscriptionRequestCreateView,
+    SubscriptionRequestEditView,
 )
 
 urlpatterns = [
@@ -34,4 +35,6 @@ urlpatterns = [
     path('teacher/<int:id>/', TeacherEditView.as_view()),
     path('feedback/create/', FeedbackCreateView.as_view()),
     path('feedback/<int:id>/', FeedbackEditView.as_view()),
+    path('subscriptionrequest/create/', SubscriptionRequestCreateView.as_view()),
+    path('subscriptionrequest/<int:id>/', SubscriptionRequestEditView.as_view()),
 ]

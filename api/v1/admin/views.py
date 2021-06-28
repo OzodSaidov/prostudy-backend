@@ -1,14 +1,10 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, \
-    DestroyAPIView
-from rest_framework.parsers import FileUploadParser
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView
 from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
-from rest_framework.parsers import FormParser, MultiPartParser
-
 from api.v1.admin.serializers import PostSerializer, MenuSerializer, GallerySerializer, \
     TeacherSerializer, CourseSerializer, AdvertisementSerializer, ProgramSerializer, FeedbackSerializer, \
-    GalleryFileSerializer
-from user.models import Post, Menu, Gallery, Teacher, Course, Advertisement, Program, CourseImage, Feedback, GalleryFile
+    GalleryFileSerializer, SubscriptionRequestSerializer
+from user.models import Post, Menu, Gallery, Teacher, Course, Advertisement, Program, Feedback, GalleryFile, \
+    SubscriptionRequest
 
 
 class PostCreateView(ListCreateAPIView):
@@ -134,9 +130,14 @@ class FeedbackEditView(RetrieveDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-class SubscriptionRequisitionCreateView(ListCreateAPIView):
-    pass
+class SubscriptionRequestCreateView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = SubscriptionRequestSerializer
+    queryset = SubscriptionRequest
 
 
-class SubscriptionRequisitionEditView(RetrieveUpdateDestroyAPIView):
-    pass
+class SubscriptionRequestEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = SubscriptionRequestSerializer
+    queryset = SubscriptionRequest
+    lookup_url_kwarg = 'id'
