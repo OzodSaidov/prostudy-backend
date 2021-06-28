@@ -234,14 +234,6 @@ class LessonIconSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    course_file = serializers.ListField(child=FileField(allow_empty_file=False),
-                                        required=False,
-                                        write_only=True,
-                                        allow_empty=True)
-    lesson_icon = serializers.ListField(child=ImageField(allow_empty_file=False),
-                                        required=False,
-                                        write_only=True,
-                                        allow_empty=True)
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
 
     class Meta:
@@ -250,31 +242,13 @@ class CourseSerializer(serializers.ModelSerializer):
             'id',
             'category',
             'title',
+            'href',
             'content',
-            'course_file',
             'lesson',
-            'lesson_icon',
             'price',
             'menu',
         )
         read_only_field = ('id', 'menu')
-
-    def create(self, validated_data):
-        course_files = validated_data.pop('course_file', [])
-        lesson_icons = validated_data.pop('lesson_icon', [])
-        with transaction.atomic():
-            try:
-                course = get_object_or_404(Course, category=validated_data.get('category'))
-            except Http404:
-                course = Course.objects.create(**validated_data)
-            if course_files:
-                for image in course_files:
-                    CourseFile.objects.create(course=course, course_file=image)
-            if lesson_icons:
-                for icon in lesson_icons:
-                    LessonIcon.objects.create(course=course, lesson_icon=icon)
-
-        return course
 
     def update(self, instance, validated_data):
         title = validated_data.pop('title', dict())
