@@ -13,7 +13,7 @@ from .models import (
     Menu,
     Post,
     Program,
-    CourseImage,
+    CourseFile,
     LessonIcon,
 )
 
@@ -21,10 +21,19 @@ from .models import (
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email',)
 
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ('category', 'id')
+
+class GalleryFileAdmin(admin.ModelAdmin):
+    list_display = ('file', 'id', 'gallery')
+
+class CourseFileAdmin(admin.ModelAdmin):
+    list_display = ('course', 'course_file')
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Gallery)
-admin.site.register(Course)
+admin.site.register(Course, CourseAdmin)
 admin.site.register(Post)
 admin.site.register(PostImage)
 admin.site.register(PostAttachment)
@@ -34,6 +43,6 @@ admin.site.register(Advertisement)
 admin.site.register(SubscriptionRequest)
 admin.site.register(Menu)
 admin.site.register(Program)
-admin.site.register(GalleryFile)
-admin.site.register(CourseImage)
+admin.site.register(GalleryFile, GalleryFileAdmin)
+admin.site.register(CourseFile, CourseFileAdmin)
 admin.site.register(LessonIcon)

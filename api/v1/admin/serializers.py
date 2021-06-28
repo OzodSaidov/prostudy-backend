@@ -1,14 +1,17 @@
 from django.db import transaction
+from django.http import Http404
 from rest_framework import serializers
 from rest_framework.fields import ListField, FileField, ImageField
+from rest_framework.generics import get_object_or_404
 
-from user.models import *
+from user.models import Menu, PostAttachment, PostImage, Post, Gallery, Teacher, Course, \
+    Advertisement, Program, CourseFile, LessonIcon, GalleryFile, Feedback, SubscriptionRequest
 
 
 class MenuListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
-        fields = ('id', 'title', 'parent', 'children', 'is_active')
+        fields = ('id', 'href', 'title', 'parent', 'children', 'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
@@ -17,7 +20,7 @@ class MenuListSerializer(serializers.ModelSerializer):
 class MenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
-        fields = ('id', 'title', 'parent', 'children', 'is_active')
+        fields = ('id', 'href', 'title', 'parent', 'children', 'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
@@ -116,10 +119,23 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class GalleryFileSerializer(serializers.ModelSerializer):
+    file = serializers.ListField(child=FileField(allow_empty_file=False),
+                                 required=False,
+                                 write_only=True,
+                                 allow_empty=True)
+    gallery = serializers.PrimaryKeyRelatedField(queryset=Gallery.objects.all())
+
     class Meta:
         model = GalleryFile
         fields = ('id', 'file', 'gallery')
         read_only_fields = ('id', 'gallery')
+
+    def create(self, validated_data):
+        files = validated_data.pop('file', [])
+        with transaction.atomic():
+            for file in files:
+                GalleryFile.objects.create(file=file, **validated_data)
+        return super(GalleryFileSerializer, self).data
 
 
 class GallerySerializer(serializers.ModelSerializer):
@@ -128,14 +144,14 @@ class GallerySerializer(serializers.ModelSerializer):
                                  write_only=True,
                                  allow_empty=True)
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None),
-                                              required=True,
-                                              write_only=True)
-    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=True)
+                                              required=False)
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
 
     class Meta:
         model = Gallery
         fields = (
             'id',
+            'title',
             'file',
             'course',
             'menu',
@@ -143,17 +159,31 @@ class GallerySerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'course', 'menu')
 
     def create(self, validated_data):
-        print(validated_data)
         files = validated_data.pop('file', [])
         with transaction.atomic():
-            gallery, is_created = Gallery.objects.get_or_create(validated_data)
+            try:
+                gallery = get_object_or_404(Gallery, course=validated_data.get('course'))
+            except Http404 as e:
+                gallery = Gallery.objects.create(**validated_data)
             for file in files:
-                GalleryFile.objects.create(file=file, gallery=gallery)
+                GalleryFile.objects.create(gallery=gallery, file=file)
         return gallery
+
+    def to_representation(self, instance):
+        data = super(GallerySerializer, self).to_representation(instance)
+        data['course'] = instance.course.get_category_display()
+        data['menu'] = instance.menu.title
+        return data
+
+    def update(self, instance, validated_data):
+        title = validated_data.pop('title', dict())
+        instance.title.update(title)
+        return super(GallerySerializer, self).update(instance, validated_data)
 
 
 class TeacherSerializer(serializers.ModelSerializer):
     photo = serializers.ImageField(required=False)
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
 
     class Meta:
         model = Teacher
@@ -163,25 +193,38 @@ class TeacherSerializer(serializers.ModelSerializer):
             'last_name',
             'photo',
             'specialty',
-            'content_specialty',
             'experience',
+            'menu'
         )
 
 
-class CourseImageSerializer(serializers.ModelSerializer):
+class CourseFileSerializer(serializers.ModelSerializer):
+    course_file = serializers.ListField(child=FileField(allow_empty_file=False),
+                                        required=False,
+                                        write_only=True,
+                                        allow_empty=True)
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
+
     class Meta:
-        model = CourseImage
+        model = CourseFile
         fields = (
             'id',
-            'course_image',
+            'course_file',
             'course',
         )
         read_only_fields = ('id', 'course')
 
+    def create(self, validated_data):
+        files = validated_data.pop('course_file', [])
+        with transaction.atomic():
+            for file in files:
+                CourseFile.objects.create(course_file=file, **validated_data)
+        return super(CourseFileSerializer, self).data
+
 
 class LessonIconSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CourseImage
+        model = LessonIcon
         fields = (
             'id',
             'lesson_icon',
@@ -191,15 +234,7 @@ class LessonIconSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    course_image = serializers.ListField(child=ImageField(allow_empty_file=False),
-                                         required=False,
-                                         write_only=True,
-                                         allow_empty=True)
-    lesson_icon = serializers.ListField(child=ImageField(allow_empty_file=False),
-                                        required=False,
-                                        write_only=True,
-                                        allow_empty=True)
-    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=True)
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
 
     class Meta:
         model = Course
@@ -207,31 +242,38 @@ class CourseSerializer(serializers.ModelSerializer):
             'id',
             'category',
             'title',
+            'href',
             'content',
-            'course_image',
             'lesson',
-            'lesson_icon',
             'price',
             'menu',
         )
         read_only_field = ('id', 'menu')
 
-    def create(self, validated_data):
-        print(validated_data)
-        course_images = validated_data.pop('course_image', [])
-        lesson_icons = validated_data.pop('lesson_icon', [])
-        print(validated_data)
-        with transaction.atomic():
-            course, is_created = Course.objects.get_or_create(category=validated_data.pop('category'), **validated_data)
-            for image in course_images:
-                CourseImage.objects.create(course=course, course_image=image)
-            for icon in lesson_icons:
-                LessonIcon.objects.create(course=course, lesson_icon=icon)
+    def update(self, instance, validated_data):
+        title = validated_data.pop('title', dict())
+        content = validated_data.pop('content', dict())
+        lesson = validated_data.pop('lesson', dict())
+        price = validated_data.pop('price', dict())
 
-        return course
+        instance.title.update(title)
+        instance.content.update(content)
+        instance.lesson.update(lesson)
+        instance.price.update(price)
+
+        return super(CourseSerializer, self).update(instance, validated_data)
+
+    def to_representation(self, instance):
+        data = super(CourseSerializer, self).to_representation(instance)
+        data['category'] = instance.get_category_display()
+        data['menu'] = instance.menu.title
+
+        return data
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+
     class Meta:
         model = Advertisement
         fields = (
@@ -240,8 +282,8 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             'content',
             'short_content',
             'image_poster',
-            'post',
             'is_active',
+            'menu'
         )
 
 
@@ -258,10 +300,29 @@ class ProgramSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'image',
+            'course',
         )
 
 
-class SubscriptionRequest(serializers.ModelSerializer):
+class FeedbackSerializer(serializers.ModelSerializer):
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+
+    class Meta:
+        model = Feedback
+        fields = (
+            'id',
+            'name',
+            'email',
+            'phone',
+            'message',
+            'is_active',
+            'menu'
+        )
+
+
+class SubscriptionRequestSerializer(serializers.ModelSerializer):
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+
     class Meta:
         model = SubscriptionRequest
-        fields = '__all__'
+        fields = ('id', 'name', 'number_visitors', 'phone', 'is_active', 'menu')
