@@ -15,7 +15,7 @@ from api.v1.admin.views import (
     ProgramEditView,
     FeedbackCreateView,
     FeedbackEditView, GalleryFileCreateView, GalleryFileRetrieveDestroyView, SubscriptionRequestCreateView,
-    SubscriptionRequestEditView,
+    SubscriptionRequestEditView, CourseFileCreateView, CourseFileRetrieveDestroyView,
 )
 
 urlpatterns = [
@@ -29,6 +29,8 @@ urlpatterns = [
     path('gallery/file/<int:id>/', GalleryFileRetrieveDestroyView.as_view()),
     path('course/create/', CourseCreateView.as_view()),
     path('course/<int:id>/', CourseEditView.as_view()),
+    path('course/file/create/', CourseFileCreateView.as_view()),
+    path('course/file/<int:id>/', CourseFileRetrieveDestroyView.as_view()),
     path('program/create/', ProgramCreateView.as_view()),
     path('program/<int:id>/', ProgramEditView.as_view()),
     path('teacher/create/', TeacherCreateView.as_view()),

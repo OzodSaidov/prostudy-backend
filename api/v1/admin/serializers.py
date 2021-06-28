@@ -5,7 +5,7 @@ from rest_framework.fields import ListField, FileField, ImageField
 from rest_framework.generics import get_object_or_404
 
 from user.models import Menu, PostAttachment, PostImage, Post, Gallery, Teacher, Course, \
-    Advertisement, Program, CourseImage, LessonIcon, GalleryFile, Feedback, SubscriptionRequest
+    Advertisement, Program, CourseFile, LessonIcon, GalleryFile, Feedback, SubscriptionRequest
 
 
 class MenuListSerializer(serializers.ModelSerializer):
@@ -198,20 +198,33 @@ class TeacherSerializer(serializers.ModelSerializer):
         )
 
 
-class CourseImageSerializer(serializers.ModelSerializer):
+class CourseFileSerializer(serializers.ModelSerializer):
+    course_file = serializers.ListField(child=FileField(allow_empty_file=False),
+                                        required=False,
+                                        write_only=True,
+                                        allow_empty=True)
+    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
+
     class Meta:
-        model = CourseImage
+        model = CourseFile
         fields = (
             'id',
-            'course_image',
+            'course_file',
             'course',
         )
         read_only_fields = ('id', 'course')
 
+    def create(self, validated_data):
+        files = validated_data.pop('course_file', [])
+        with transaction.atomic():
+            for file in files:
+                CourseFile.objects.create(course_file=file, **validated_data)
+        return super(CourseFileSerializer, self).data
+
 
 class LessonIconSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CourseImage
+        model = LessonIcon
         fields = (
             'id',
             'lesson_icon',
@@ -221,10 +234,10 @@ class LessonIconSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    course_image = serializers.ListField(child=ImageField(allow_empty_file=False),
-                                         required=False,
-                                         write_only=True,
-                                         allow_empty=True)
+    course_file = serializers.ListField(child=FileField(allow_empty_file=False),
+                                        required=False,
+                                        write_only=True,
+                                        allow_empty=True)
     lesson_icon = serializers.ListField(child=ImageField(allow_empty_file=False),
                                         required=False,
                                         write_only=True,
@@ -238,7 +251,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'category',
             'title',
             'content',
-            'course_image',
+            'course_file',
             'lesson',
             'lesson_icon',
             'price',
@@ -247,16 +260,16 @@ class CourseSerializer(serializers.ModelSerializer):
         read_only_field = ('id', 'menu')
 
     def create(self, validated_data):
-        course_images = validated_data.pop('course_image', [])
+        course_files = validated_data.pop('course_file', [])
         lesson_icons = validated_data.pop('lesson_icon', [])
         with transaction.atomic():
             try:
                 course = get_object_or_404(Course, category=validated_data.get('category'))
             except Http404:
                 course = Course.objects.create(**validated_data)
-            if course_images:
-                for image in course_images:
-                    CourseImage.objects.create(course=course, course_image=image)
+            if course_files:
+                for image in course_files:
+                    CourseFile.objects.create(course=course, course_file=image)
             if lesson_icons:
                 for icon in lesson_icons:
                     LessonIcon.objects.create(course=course, lesson_icon=icon)

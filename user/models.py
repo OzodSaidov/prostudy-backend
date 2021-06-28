@@ -129,19 +129,25 @@ class Course(Base):
         return self.get_category_display()
 
 
-class CourseImage(Base):
-    def course_image_path(self, filename):
+class CourseFile(Base):
+    def course_file_path(self, filename):
         return 'course_files/{0}/{1}'.format(self.course.get_category_display(), filename)
 
-    course_image = models.ImageField(upload_to=course_image_path, validators=[validate_file_type], null=True)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_images')
+    course_file = models.FileField(upload_to=course_file_path, validators=[validate_file_type], null=True)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_files')
+
+    def __str__(self):
+        return self.course.get_category_display()
 
 
 class LessonIcon(Base):
     def lesson_icon_path(self, filename):
         return 'lesson_icon/{0}/{1}'.format(self.course.get_category_display(), filename)
-    lesson_icon = models.ImageField(upload_to=lesson_icon_path, validators=[validate_image_type], null=True)
+    lesson_icon = models.FileField(upload_to=lesson_icon_path, validators=[validate_file_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='lesson_icons')
+
+    def __str__(self):
+        return self.course.get_category_display()
 
 
 class Program(Base):

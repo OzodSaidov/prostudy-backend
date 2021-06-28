@@ -13,7 +13,7 @@ from .models import (
     Menu,
     Post,
     Program,
-    CourseImage,
+    CourseFile,
     LessonIcon,
 )
 
@@ -41,5 +41,5 @@ admin.site.register(SubscriptionRequest)
 admin.site.register(Menu)
 admin.site.register(Program)
 admin.site.register(GalleryFile, GalleryFileAdmin)
-admin.site.register(CourseImage)
+admin.site.register(CourseFile)
 admin.site.register(LessonIcon)

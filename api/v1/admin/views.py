@@ -2,9 +2,9 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from api.v1.admin.serializers import PostSerializer, MenuSerializer, GallerySerializer, \
     TeacherSerializer, CourseSerializer, AdvertisementSerializer, ProgramSerializer, FeedbackSerializer, \
-    GalleryFileSerializer, SubscriptionRequestSerializer
+    GalleryFileSerializer, SubscriptionRequestSerializer, CourseFileSerializer
 from user.models import Post, Menu, Gallery, Teacher, Course, Advertisement, Program, Feedback, GalleryFile, \
-    SubscriptionRequest
+    SubscriptionRequest, CourseFile
 
 
 class PostCreateView(ListCreateAPIView):
@@ -69,6 +69,19 @@ class TeacherEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = TeacherSerializer
     permission_classes = [IsAuthenticated, ]
     queryset = Teacher.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class CourseFileCreateView(ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = CourseFileSerializer
+    queryset = CourseFile.objects.all()
+
+
+class CourseFileRetrieveDestroyView(RetrieveDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = CourseFileSerializer
+    queryset = CourseFile.objects.all()
     lookup_url_kwarg = 'id'
 
 
