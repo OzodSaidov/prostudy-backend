@@ -25,6 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+# Database credentials
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_NAME = os.getenv('DB_NAME')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 if os.getenv('DEBUG') == 'TRUE':
     DEBUG = True
@@ -58,6 +63,7 @@ USER_APPS = [
 INSTALLED_APPS = PRIMARY_APPS + SECONDARY_APPS + USER_APPS
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -93,20 +99,20 @@ WSGI_APPLICATION = 'prostudy.wsgi.application'
 if os.getenv('PRODUCTION') == 'TRUE':
     DATABASES = {
         'default': {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": os.getenv("DB_NAME"),
-            "USER": os.getenv("DB_USER"),
-            "HOST": os.getenv("DB_HOST"),
-            "PORT": os.getenv("DB_PORT"),
-            "PASSWORD": os.getenv("DB_PASSWORD"),
-            # MySQL settings
+            # "ENGINE": "django.db.backends.postgresql_psycopg2",
+            # "NAME": os.getenv("DB_NAME"),
+            # "USER": os.getenv("DB_USER"),
+            # "HOST": os.getenv("DB_HOST"),
+            # "PORT": os.getenv("DB_PORT"),
             # "PASSWORD": os.getenv("DB_PASSWORD"),
-            # 'ENGINE': 'django.db.backends.mysql',
-            # 'NAME': DB_NAME,
-            # 'USER': DB_USER,
-            # 'PASSWORD': DB_PASSWORD,
-            # 'HOST': 'localhost',
-            # 'PORT': 3306,
+
+            # MySQL settings
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': DB_NAME,
+            'USER': DB_USER,
+            'PASSWORD': DB_PASSWORD,
+            'HOST': 'localhost',
+            'PORT': 3306,
         }
     }
 else:
