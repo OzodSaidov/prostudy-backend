@@ -31,7 +31,7 @@ if os.getenv('DEBUG') == 'TRUE':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0:8000']
 
 # Application definition
 PRIMARY_APPS = [
@@ -48,6 +48,7 @@ SECONDARY_APPS = [
     'mptt',
     'drf_yasg',
     'imagekit',
+    'corsheaders',
 ]
 
 USER_APPS = [
@@ -97,7 +98,14 @@ if os.getenv('PRODUCTION') == 'TRUE':
             "USER": os.getenv("DB_USER"),
             "HOST": os.getenv("DB_HOST"),
             "PORT": os.getenv("DB_PORT"),
-            "PASSWORD": os.getenv("DB_PASSWORD"),
+            # MySQL settings
+            # "PASSWORD": os.getenv("DB_PASSWORD"),
+            # 'ENGINE': 'django.db.backends.mysql',
+            # 'NAME': DB_NAME,
+            # 'USER': DB_USER,
+            # 'PASSWORD': DB_PASSWORD,
+            # 'HOST': 'localhost',
+            # 'PORT': 3306,
         }
     }
 else:
@@ -156,3 +164,4 @@ AUTH_USER_MODEL = 'user.User'
 LOGIN_REDIRECT_URL = reverse_lazy('user:admin')
 LOGOUT_REDIRECT_URL = reverse_lazy('user:login')
 LOGIN_URL = reverse_lazy('user:login')
+CORS_ALLOW_ALL_ORIGINS = True
