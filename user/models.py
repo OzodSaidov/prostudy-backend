@@ -115,6 +115,7 @@ class Course(Base):
     )
     category = models.IntegerField(choices=CATEGORY)
     title = models.JSONField(default=dict)
+    href = models.CharField(max_length=200, null=True, verbose_name='uri')
     content = models.JSONField(default=dict, null=True)
     # image_course = models.ImageField(upload_to='courses/', validators=[validate_image_type])
     lesson = models.JSONField(default=dict)
