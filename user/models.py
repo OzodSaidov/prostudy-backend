@@ -69,7 +69,8 @@ class FileQuerySet(models.QuerySet):
 
 
 class Gallery(Base):
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery_files')
+    title = models.JSONField(default=dict)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery_files', null=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='gallery')
 
     def __str__(self):
@@ -79,7 +80,6 @@ class GalleryFile(Base):
 
     def gallery_file_path(self, filename):
         return 'gallery/{0}/{1}'.format(self.gallery.course.get_category_display(), filename)
-
     file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type_gallery])
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
