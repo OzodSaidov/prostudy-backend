@@ -22,10 +22,13 @@ class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email',)
 
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ('id', 'category')
+    list_display = ('category', 'id')
 
 class GalleryFileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'file', 'gallery')
+    list_display = ('file', 'id', 'gallery')
+
+class CourseFileAdmin(admin.ModelAdmin):
+    list_display = ('course', 'course_file')
 
 
 admin.site.register(User, UserAdmin)
@@ -41,5 +44,5 @@ admin.site.register(SubscriptionRequest)
 admin.site.register(Menu)
 admin.site.register(Program)
 admin.site.register(GalleryFile, GalleryFileAdmin)
-admin.site.register(CourseFile)
+admin.site.register(CourseFile, CourseFileAdmin)
 admin.site.register(LessonIcon)

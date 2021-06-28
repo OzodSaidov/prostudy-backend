@@ -263,6 +263,13 @@ class CourseSerializer(serializers.ModelSerializer):
 
         return super(CourseSerializer, self).update(instance, validated_data)
 
+    def to_representation(self, instance):
+        data = super(CourseSerializer, self).to_representation(instance)
+        data['category'] = instance.get_category_display()
+        data['menu'] = instance.menu.title
+
+        return data
+
 
 class AdvertisementSerializer(serializers.ModelSerializer):
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)

@@ -39,6 +39,9 @@ class Menu(MPTTModel):
         else:
             return self.title['en']
 
+    class Meta:
+        ordering = ['id']
+
 
 class Post(Base):
     title = models.JSONField(null=True, blank=True, default=dict)
@@ -76,10 +79,12 @@ class Gallery(Base):
     def __str__(self):
         return self.course.get_category_display()
 
+
 class GalleryFile(Base):
 
     def gallery_file_path(self, filename):
         return 'gallery/{0}/{1}'.format(self.gallery.course.get_category_display(), filename)
+
     file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
@@ -89,6 +94,8 @@ class GalleryFile(Base):
 
 
 """Предподаватель"""
+
+
 class Teacher(Base):
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
@@ -99,6 +106,8 @@ class Teacher(Base):
 
 
 """Курс"""
+
+
 class Course(Base):
     GRAPHIC_DESIGN = 1
     WEB_DESIGN = 2
@@ -128,6 +137,9 @@ class Course(Base):
     def __str__(self):
         return self.get_category_display()
 
+    class Meta:
+        ordering = ['id']
+
 
 class CourseFile(Base):
     def course_file_path(self, filename):
@@ -143,6 +155,7 @@ class CourseFile(Base):
 class LessonIcon(Base):
     def lesson_icon_path(self, filename):
         return 'lesson_icon/{0}/{1}'.format(self.course.get_category_display(), filename)
+
     lesson_icon = models.FileField(upload_to=lesson_icon_path, validators=[validate_file_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='lesson_icons')
 
@@ -158,6 +171,8 @@ class Program(Base):
 
 
 """Рекламный пост"""
+
+
 class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
@@ -168,6 +183,8 @@ class Advertisement(Base):
 
 
 """Обратная связь"""
+
+
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -181,6 +198,8 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
+
+
 class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
