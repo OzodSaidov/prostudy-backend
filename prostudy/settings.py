@@ -98,6 +98,7 @@ if os.getenv('PRODUCTION') == 'TRUE':
             "USER": os.getenv("DB_USER"),
             "HOST": os.getenv("DB_HOST"),
             "PORT": os.getenv("DB_PORT"),
+            "PASSWORD": os.getenv("DB_PASSWORD"),
             # MySQL settings
             # "PASSWORD": os.getenv("DB_PASSWORD"),
             # 'ENGINE': 'django.db.backends.mysql',
