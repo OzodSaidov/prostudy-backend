@@ -151,6 +151,7 @@ class GallerySerializer(serializers.ModelSerializer):
         model = Gallery
         fields = (
             'id',
+            'title',
             'file',
             'course',
             'menu',
@@ -173,6 +174,11 @@ class GallerySerializer(serializers.ModelSerializer):
         data['course'] = instance.course.get_category_display()
         data['menu'] = instance.menu.title
         return data
+
+    def update(self, instance, validated_data):
+        title = validated_data.pop('title', dict())
+        instance.title.update(title)
+        return super(GallerySerializer, self).update(instance, validated_data)
 
 
 class TeacherSerializer(serializers.ModelSerializer):
