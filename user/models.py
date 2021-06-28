@@ -159,7 +159,7 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
-class SubscriptionRequisition(Base):
+class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
     phone = models.CharField(max_length=13, validators=[validate_phone])

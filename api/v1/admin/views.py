@@ -4,9 +4,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.parsers import FormParser, MultiPartParser
 
-from api.v1.admin.serializers import PostSerializer, MenuSerializer, GallerySerializer, \
-    TeacherSerializer, CourseSerializer, AdvertisementSerializer, ProgramSerializer
-from user.models import Post, Menu, Gallery, Teacher, Course, Advertisement, Program
+from api.v1.admin.serializers import *
+from user.models import *
 
 
 class PostCreateView(ListCreateAPIView):
@@ -109,12 +108,13 @@ class FeedbackEditView(RetrieveUpdateDestroyAPIView):
     pass
 
 
-class SubscriptionRequisitionCreateView(ListCreateAPIView):
+class SubscriptionRequestCreateView(ListCreateAPIView):
     pass
 
 
-class SubscriptionRequisitionEditView(RetrieveUpdateDestroyAPIView):
+class SubscriptionRequestEditView(RetrieveUpdateDestroyAPIView):
     pass
+
 
 class ProgramCreateView(ListCreateAPIView):
     serializer_class = ProgramSerializer
