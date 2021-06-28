@@ -7,7 +7,7 @@ from mptt.models import MPTTModel
 
 from prostudy import settings
 from prostudy.base_models import Base
-from .services.validators import validate_phone, validate_file_type_gallery, validate_image_type
+from .services.validators import validate_phone, validate_file_type, validate_image_type
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -80,7 +80,7 @@ class GalleryFile(Base):
 
     def gallery_file_path(self, filename):
         return 'gallery/{0}/{1}'.format(self.gallery.course.get_category_display(), filename)
-    file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type_gallery])
+    file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
 
@@ -131,15 +131,15 @@ class Course(Base):
 
 class CourseImage(Base):
     def course_image_path(self, filename):
-        return 'course_images/{0}/{1}'.format(self.course.id, filename)
+        return 'course_files/{0}/{1}'.format(self.course.get_category_display(), filename)
 
-    course_image = models.ImageField(upload_to=course_image_path, validators=[validate_image_type], null=True)
+    course_image = models.ImageField(upload_to=course_image_path, validators=[validate_file_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_images')
 
 
 class LessonIcon(Base):
     def lesson_icon_path(self, filename):
-        return 'lesson_icon/{0}/{1}'.format(self.course.id, filename)
+        return 'lesson_icon/{0}/{1}'.format(self.course.get_category_display(), filename)
     lesson_icon = models.ImageField(upload_to=lesson_icon_path, validators=[validate_image_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='lesson_icons')
 
