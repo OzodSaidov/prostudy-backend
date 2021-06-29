@@ -26,10 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.getenv('DEBUG') == 'TRUE':
-    DEBUG = True
-else:
-    DEBUG = False
+DEBUG = bool(os.getenv("DEBUG") == 'TRUE')
 
 ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0', '127.0.0.1']
 
