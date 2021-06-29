@@ -99,13 +99,19 @@ WSGI_APPLICATION = 'prostudy.wsgi.application'
 if os.getenv('PRODUCTION') == 'TRUE':
     DATABASES = {
         'default': {
-            # "ENGINE": "django.db.backends.postgresql_psycopg2",
-            # "NAME": os.getenv("DB_NAME"),
-            # "USER": os.getenv("DB_USER"),
-            # "HOST": os.getenv("DB_HOST"),
-            # "PORT": os.getenv("DB_PORT"),
-            # "PASSWORD": os.getenv("DB_PASSWORD"),
-
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": os.getenv("DB_NAME"),
+            "USER": os.getenv("DB_USER"),
+            "HOST": os.getenv("DB_HOST"),
+            "PORT": os.getenv("DB_PORT"),
+            "PASSWORD": os.getenv("DB_PASSWORD"),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            # 'ENGINE': 'django.db.backends.sqlite3',
+            # 'NAME': BASE_DIR / 'db.sqlite3',
             # MySQL settings
             'ENGINE': 'django.db.backends.mysql',
             'NAME': DB_NAME,
@@ -113,13 +119,6 @@ if os.getenv('PRODUCTION') == 'TRUE':
             'PASSWORD': DB_PASSWORD,
             'HOST': 'localhost',
             'PORT': 3306,
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
