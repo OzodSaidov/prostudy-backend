@@ -143,18 +143,20 @@ class Course(Base):
 
 class CourseFile(Base):
     def course_file_path(self, filename):
-        return 'course_files/{0}/{1}'.format(self.course.get_category_display(), filename)
+        title = str(self.course.title['en']).replace(' ', '_').lower()
+        return 'course_files/{0}/{1}'.format(title, filename)
 
     course_file = models.FileField(upload_to=course_file_path, validators=[validate_file_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='course_files')
 
     def __str__(self):
-        return self.course.get_category_display()
+        return self.course_file.url
 
 
 class LessonIcon(Base):
     def lesson_icon_path(self, filename):
-        return 'lesson_icon/{0}/{1}'.format(self.course.get_category_display(), filename)
+        title = str(self.course.title['en']).replace(' ', '_').lower()
+        return 'lesson_icon/{0}/{1}'.format(title, filename)
 
     lesson_icon = models.FileField(upload_to=lesson_icon_path, validators=[validate_file_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='lesson_icons')

@@ -199,11 +199,7 @@ class TeacherSerializer(serializers.ModelSerializer):
 
 
 class CourseFileSerializer(serializers.ModelSerializer):
-    course_file = serializers.ListField(child=FileField(allow_empty_file=False),
-                                        required=False,
-                                        write_only=True,
-                                        allow_empty=True)
-    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
+    course = serializers.HiddenField(default=None)
 
     class Meta:
         model = CourseFile
@@ -214,15 +210,10 @@ class CourseFileSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('id', 'course')
 
-    def create(self, validated_data):
-        files = validated_data.pop('course_file', [])
-        with transaction.atomic():
-            for file in files:
-                CourseFile.objects.create(course_file=file, **validated_data)
-        return super(CourseFileSerializer, self).data
-
 
 class LessonIconSerializer(serializers.ModelSerializer):
+    course = serializers.HiddenField(default=None)
+
     class Meta:
         model = LessonIcon
         fields = (
@@ -235,6 +226,8 @@ class LessonIconSerializer(serializers.ModelSerializer):
 
 class CourseSerializer(serializers.ModelSerializer):
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+    course_file = CourseFileSerializer(source='course_files', many=True)
+    lesson_icon = LessonIconSerializer(source='lesson_icons', many=True)
 
     class Meta:
         model = Course
@@ -247,6 +240,8 @@ class CourseSerializer(serializers.ModelSerializer):
             'lesson',
             'price',
             'menu',
+            'course_file',
+            'lesson_icon',
         )
         read_only_field = ('id', 'menu')
 
@@ -264,10 +259,10 @@ class CourseSerializer(serializers.ModelSerializer):
         return super(CourseSerializer, self).update(instance, validated_data)
 
     def to_representation(self, instance):
+        print(instance)
         data = super(CourseSerializer, self).to_representation(instance)
         data['category'] = instance.get_category_display()
         data['menu'] = instance.menu.title
-
         return data
 
 

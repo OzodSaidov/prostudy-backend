@@ -31,7 +31,7 @@ if os.getenv('DEBUG') == 'TRUE':
 else:
     DEBUG = False
 
-ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0:8000']
+ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0', '127.0.0.1']
 
 # Application definition
 PRIMARY_APPS = [
