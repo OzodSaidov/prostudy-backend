@@ -157,7 +157,7 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-IMAGE_TYPES = ('.JPG', '.JPEG', '.PNG')
+IMAGE_TYPES = ('.JPG', '.JPEG', '.PNG', '.GIF')
 VIDEO_TYPES = ('.MP4', '.MPEG')
 AUTH_USER_MODEL = 'user.User'
 
@@ -167,7 +167,7 @@ LOGIN_URL = reverse_lazy('user:login')
 CORS_ALLOW_ALL_ORIGINS = True
 
 # REST FRAMEWORK
-# --------------------------------------------------------------------------------------
+# ----------------------------------- ---------------------------------------------------
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

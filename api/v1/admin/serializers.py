@@ -265,7 +265,7 @@ class CourseSerializer(serializers.ModelSerializer):
         data['menu'] = instance.menu.title
         for file in data['course_file']:
             file_url = file['course_file']
-            if file_url.endswith(('.jpg', '.jpeg', '.png')):
+            if file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
                 urls['image'] = file_url
             elif file_url.endswith(('.mp4', '.mpeg')):
                 urls['video'] = file_url
