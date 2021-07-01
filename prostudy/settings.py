@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
+from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
 from django.urls import reverse_lazy
@@ -31,12 +32,9 @@ DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_NAME = os.getenv('DB_NAME')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.getenv('DEBUG') == 'TRUE':
-    DEBUG = True
-else:
-    DEBUG = False
+DEBUG = bool(os.getenv("DEBUG") == 'TRUE')
 
-ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0:8000']
+ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0', '127.0.0.1']
 
 # Application definition
 PRIMARY_APPS = [
@@ -54,6 +52,7 @@ SECONDARY_APPS = [
     'drf_yasg',
     'imagekit',
     'corsheaders',
+    'rest_framework_simplejwt',
 ]
 
 USER_APPS = [
@@ -171,3 +170,44 @@ LOGIN_REDIRECT_URL = reverse_lazy('user:admin')
 LOGOUT_REDIRECT_URL = reverse_lazy('user:login')
 LOGIN_URL = reverse_lazy('user:login')
 CORS_ALLOW_ALL_ORIGINS = True
+
+# REST FRAMEWORK
+# --------------------------------------------------------------------------------------
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
+# --------------------------------------------------------------------------------------
+
+# Simple JWT
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': False,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
