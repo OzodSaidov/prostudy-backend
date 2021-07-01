@@ -115,6 +115,9 @@ class Course(Base):
     FRONT_END = 4
     BACK_END = 5
     BUSINESS = 6
+    LOGO_MAKING = 7
+    MICROSOFT_OFFICE = 8
+    SOCIAL_MEDIA_MARKETING = 9
 
     CATEGORY = (
         (GRAPHIC_DESIGN, 'Graphic design'),
@@ -122,7 +125,10 @@ class Course(Base):
         (CMM, 'CMM'),
         (FRONT_END, 'Front-end'),
         (BACK_END, 'Back-end'),
-        (BUSINESS, 'Business course')
+        (BUSINESS, 'Business course'),
+        (LOGO_MAKING, 'Logo making'),
+        (MICROSOFT_OFFICE, 'Microsoft office'),
+        (SOCIAL_MEDIA_MARKETING, 'Social Media Marketing'),
     )
     category = models.IntegerField(choices=CATEGORY)
     title = models.JSONField(default=dict)
