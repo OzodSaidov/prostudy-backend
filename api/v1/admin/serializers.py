@@ -259,9 +259,17 @@ class CourseSerializer(serializers.ModelSerializer):
         return super(CourseSerializer, self).update(instance, validated_data)
 
     def to_representation(self, instance):
+        urls = {}
         data = super(CourseSerializer, self).to_representation(instance)
         data['category'] = instance.get_category_display()
         data['menu'] = instance.menu.title
+        for file in data['course_file']:
+            file_url = file['course_file']
+            if file_url.endswith(('.jpg', '.jpeg', '.png')):
+                urls['image'] = file_url
+            elif file_url.endswith(('.mp4', '.mpeg')):
+                urls['video'] = file_url
+        data['course_file'] = urls
         return data
 
 
