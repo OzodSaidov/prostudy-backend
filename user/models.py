@@ -103,6 +103,9 @@ class Teacher(Base):
     photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='teacher')
 
+    def __str__(self):
+        return f"{self.first_name['ru']} {self.last_name['ru']}"
+
     @admin.display(description='Fullname')
     def fullname(self):
         return f"{self.first_name['ru']} {self.last_name['ru']}"

@@ -1,5 +1,21 @@
 from django.contrib import admin
-from .models import *
+from .models import (
+    User,
+    PostImage,
+    Feedback,
+    Gallery,
+    GalleryFile,
+    Teacher,
+    Advertisement,
+    SubscriptionRequest,
+    PostAttachment,
+    Course,
+    Menu,
+    Post,
+    Program,
+    CourseFile,
+    LessonIcon,
+)
 
 
 class UserAdmin(admin.ModelAdmin):
