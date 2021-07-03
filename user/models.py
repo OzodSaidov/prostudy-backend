@@ -1,3 +1,5 @@
+from django.core import validators
+
 from django.contrib.auth.models import AbstractUser
 from django.contrib import admin
 from django.db import models
@@ -223,3 +225,17 @@ class SubscriptionRequest(Base):
 
     class Meta:
         ordering = ['-create_at']
+
+
+class Company(Base):
+
+    def company_icon_path(self, filename):
+        return 'company/{0}/{1}'.format(self.title.lower(), filename)
+
+    title = models.CharField(max_length=200)
+    url = models.URLField(validators=[validators.URLValidator(schemes=['https', 'http'])])
+    logo = models.ImageField(upload_to=company_icon_path, validators=[validate_image_type])
+    menu = models.ForeignKey(Menu, on_delete=models.DO_NOTHING, related_name='companies')
+
+    def __str__(self):
+        return self.title

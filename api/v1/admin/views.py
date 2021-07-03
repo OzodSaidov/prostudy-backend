@@ -2,9 +2,9 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from api.v1.admin.serializers import PostSerializer, MenuSerializer, GallerySerializer, \
     TeacherSerializer, CourseSerializer, AdvertisementSerializer, ProgramSerializer, FeedbackSerializer, \
-    GalleryFileSerializer, SubscriptionRequestSerializer, CourseFileSerializer
+    GalleryFileSerializer, SubscriptionRequestSerializer, CourseFileSerializer, CompanySerializer
 from user.models import Post, Menu, Gallery, Teacher, Course, Advertisement, Program, Feedback, GalleryFile, \
-    SubscriptionRequest, CourseFile
+    SubscriptionRequest, CourseFile, Company
 
 
 class PostCreateView(ListCreateAPIView):
@@ -140,11 +140,22 @@ class FeedbackEditView(RetrieveDestroyAPIView):
 class SubscriptionRequestCreateView(ListCreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = SubscriptionRequestSerializer
-    queryset = SubscriptionRequest
+    queryset = SubscriptionRequest.objects.all()
 
 
 class SubscriptionRequestEditView(RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
     serializer_class = SubscriptionRequestSerializer
-    queryset = SubscriptionRequest
+    queryset = SubscriptionRequest.objects.all()
+    lookup_url_kwarg = 'id'
+
+class CompanyCreateView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CompanySerializer
+    queryset = Company.objects.all()
+
+class CompanyEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CompanySerializer
+    queryset = Company.objects.all()
     lookup_url_kwarg = 'id'

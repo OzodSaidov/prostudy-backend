@@ -18,7 +18,7 @@ from user.models import (
     Post,
     Program,
     CourseFile,
-    LessonIcon,
+    LessonIcon, Company,
 )
 
 
@@ -342,3 +342,11 @@ class SubscriptionRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscriptionRequest
         fields = ('id', 'name', 'number_visitors', 'phone', 'is_active', 'menu')
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+
+    class Meta:
+        model = Company
+        fields = ('id', 'title', 'url', 'logo', 'menu')

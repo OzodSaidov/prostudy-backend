@@ -15,6 +15,7 @@ from .models import (
     Program,
     CourseFile,
     LessonIcon,
+    Company,
 )
 
 
@@ -53,3 +54,4 @@ admin.site.register(Program)
 admin.site.register(GalleryFile, GalleryFileAdmin)
 admin.site.register(CourseFile, CourseFileAdmin)
 admin.site.register(LessonIcon)
+admin.site.register(Company)
