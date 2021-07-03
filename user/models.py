@@ -1,9 +1,8 @@
 from django.contrib.auth.models import AbstractUser
+from django.contrib import admin
 from django.db import models
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-# from imagekit.processors import ResizeToFit
-# from imagekit.models import ProcessedImageField
 
 from prostudy import settings
 from prostudy.base_models import Base
@@ -103,6 +102,13 @@ class Teacher(Base):
     experience = models.JSONField(default=dict)
     photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='teacher')
+
+    def __str__(self):
+        return f"{self.first_name['ru']} {self.last_name['ru']}"
+
+    @admin.display(description='Fullname')
+    def fullname(self):
+        return f"{self.first_name['ru']} {self.last_name['ru']}"
 
 
 """Курс"""

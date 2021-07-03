@@ -4,8 +4,22 @@ from rest_framework import serializers
 from rest_framework.fields import ListField, FileField, ImageField
 from rest_framework.generics import get_object_or_404
 
-from user.models import Menu, PostAttachment, PostImage, Post, Gallery, Teacher, Course, \
-    Advertisement, Program, CourseFile, LessonIcon, GalleryFile, Feedback, SubscriptionRequest
+from user.models import (
+    PostImage,
+    Feedback,
+    Gallery,
+    GalleryFile,
+    Teacher,
+    Advertisement,
+    SubscriptionRequest,
+    PostAttachment,
+    Course,
+    Menu,
+    Post,
+    Program,
+    CourseFile,
+    LessonIcon,
+)
 
 
 class MenuListSerializer(serializers.ModelSerializer):
@@ -163,7 +177,7 @@ class GallerySerializer(serializers.ModelSerializer):
         with transaction.atomic():
             try:
                 gallery = get_object_or_404(Gallery, course=validated_data.get('course'))
-            except Http404 as e:
+            except Http404:
                 gallery = Gallery.objects.create(**validated_data)
             for file in files:
                 GalleryFile.objects.create(gallery=gallery, file=file)
