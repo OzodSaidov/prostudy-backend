@@ -50,7 +50,8 @@ class Post(Base):
     url = models.URLField(null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
     short_content = models.JSONField(null=True, blank=True, default=dict)
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, null=True, blank=True)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='posts')
     is_active = models.BooleanField(default=False)
 
 
@@ -85,7 +86,7 @@ class GalleryFile(Base):
 
     def gallery_file_path(self, filename):
         return 'gallery/{0}/{1}'.format(self.gallery.course.get_category_display(), filename)
-
+    title = models.JSONField(default=dict)
     file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
@@ -141,11 +142,11 @@ class Course(Base):
     category = models.IntegerField(choices=CATEGORY)
     title = models.JSONField(default=dict)
     href = models.CharField(max_length=200, null=True, verbose_name='uri')
-    content = models.JSONField(default=dict, null=True)
-    # image_course = models.ImageField(upload_to='courses/', validators=[validate_image_type])
-    lesson = models.JSONField(default=dict)
-    # lesson_icon = models.ImageField(upload_to='lesson_icon/', validators=[validate_image_type])
-    price = models.JSONField(default=dict)
+    # content = models.JSONField(default=dict, null=True)
+    # lesson = models.JSONField(default=dict)
+    # price = models.JSONField(default=dict)
+    program_training = models.JSONField(default=dict)
+    result = models.JSONField(default=dict)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='course')
 
     def __str__(self):
@@ -153,6 +154,16 @@ class Course(Base):
 
     class Meta:
         ordering = ['id']
+
+# Стоимость обучения
+class Training(Base):
+    # course FK(Course)
+    pass
+
+# 1-post
+class CourseInfo(Base):
+    # course FK(Course)
+    pass
 
 
 class CourseFile(Base):
@@ -167,16 +178,16 @@ class CourseFile(Base):
         return self.course_file.url
 
 
-class LessonIcon(Base):
-    def lesson_icon_path(self, filename):
-        title = str(self.course.title['en']).replace(' ', '_').lower()
-        return 'lesson_icon/{0}/{1}'.format(title, filename)
-
-    lesson_icon = models.FileField(upload_to=lesson_icon_path, validators=[validate_file_type], null=True)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='lesson_icons')
-
-    def __str__(self):
-        return self.course.get_category_display()
+# class LessonIcon(Base):
+#     def lesson_icon_path(self, filename):
+#         title = str(self.course.title['en']).replace(' ', '_').lower()
+#         return 'lesson_icon/{0}/{1}'.format(title, filename)
+#
+#     lesson_icon = models.FileField(upload_to=lesson_icon_path, validators=[validate_file_type], null=True)
+#     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='lesson_icons')
+#
+#     def __str__(self):
+#         return self.course.get_category_display()
 
 
 class Program(Base):
@@ -187,8 +198,6 @@ class Program(Base):
 
 
 """Рекламный пост"""
-
-
 class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
