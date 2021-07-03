@@ -26,15 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# Database credentials
-DB_USER = os.getenv('DB_USER')
-DB_PASSWORD = os.getenv('DB_PASSWORD')
-DB_NAME = os.getenv('DB_NAME')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG") == 'TRUE')
 
-ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['sherzodbek.ml', '127.0.0.1']
 
 # Application definition
 PRIMARY_APPS = [
@@ -113,11 +108,11 @@ else:
             # 'NAME': BASE_DIR / 'db.sqlite3',
             # MySQL settings
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': DB_NAME,
-            'USER': DB_USER,
-            'PASSWORD': DB_PASSWORD,
-            'HOST': 'localhost',
-            'PORT': 3306,
+            'NAME': os.getenv('DB_NAME'),
+            'USER': os.getenv('DB_USER'),
+            'PASSWORD': os.getenv('DB_PASSWORD'),
+            'HOST': os.getenv('DB_HOST'),
+            'PORT': os.getenv('DB_PORT'),
         }
     }
 
