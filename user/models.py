@@ -142,8 +142,8 @@ class Course(Base):
     category = models.IntegerField(choices=CATEGORY)
     title = models.JSONField(default=dict)
     href = models.CharField(max_length=200, null=True, verbose_name='uri')
-    program_training = models.JSONField(default=dict)  # Программа обучения
-    result = models.JSONField(default=dict)  # 100% результат
+    # program_training = models.JSONField(default=dict)  # Программа обучения
+    # result = models.JSONField(default=dict)  # 100% результат
     background = models.ImageField(upload_to='background/', validators=[validate_image_type], null=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='courses')
 
@@ -152,6 +152,21 @@ class Course(Base):
 
     class Meta:
         ordering = ['id']
+
+
+class ProgramTraining(Base):
+    title = models.JSONField(default=dict)
+    month = models.JSONField(default=dict)
+    description = models.JSONField(default=dict)
+    full_description = models.JSONField(default=dict)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='programs_training')
+
+
+class Result(Base):
+    title = models.JSONField(default=dict)
+    content = models.JSONField(default=dict)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='results')
+
 
 class Certificate(Base):
     title = models.JSONField(default=dict, null=True)

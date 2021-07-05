@@ -13,6 +13,8 @@ from .models import (
     CourseInfo,
     CourseInfoDetail,
     CostOfEducation,
+    ProgramTraining,
+    Result,
     Menu,
     Post,
     Program,
@@ -47,6 +49,8 @@ admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseInfo)
 admin.site.register(CourseInfoDetail)
 admin.site.register(CostOfEducation)
+admin.site.register(ProgramTraining)
+admin.site.register(Result)
 admin.site.register(Post)
 admin.site.register(PostImage)
 admin.site.register(PostAttachment)

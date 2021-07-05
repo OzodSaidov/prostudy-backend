@@ -18,7 +18,7 @@ from user.models import (
     Post,
     Program,
     CourseFile,
-    Company, CourseInfo, CourseInfoDetail, CostOfEducation, Certificate,
+    Company, CourseInfo, CourseInfoDetail, CostOfEducation, Certificate, ProgramTraining, Result,
 )
 
 
@@ -271,6 +271,18 @@ class CertificateSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'image', 'course')
 
 
+class ProgramTrainingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProgramTraining
+        fields = ('id', 'title', 'month', 'description', 'full_description', 'course')
+
+
+class ResultSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Result
+        fields = ('id', 'title', 'content')
+
+
 class CourseSerializer(serializers.ModelSerializer):
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
     course_file = CourseFileSerializer(source='course_files', many=True, required=False)
@@ -278,6 +290,8 @@ class CourseSerializer(serializers.ModelSerializer):
     cost_education = CostOfEducationSerializer(source='cost_educations', many=True, required=False)
     program = ProgramSerializer(source='programs', many=True, required=False)
     certificate = CertificateSerializer(source='cert', required=False, many=True)
+    program_training = ProgramTrainingSerializer(source='programs_training', many=True, required=False)
+    result = ResultSerializer(source='results', many=True, required=False)
 
     class Meta:
         model = Course
@@ -295,27 +309,19 @@ class CourseSerializer(serializers.ModelSerializer):
             'program',
             'certificate',
             'background',
+            'program_training',
+            'result'
         )
         read_only_field = ('id', 'menu')
 
     def update(self, instance, validated_data):
         title = validated_data.pop('title', dict())
-        content = validated_data.pop('content', dict())
-        lesson = validated_data.pop('lesson', dict())
-        price = validated_data.pop('price', dict())
-
         instance.title.update(title)
-        instance.content.update(content)
-        instance.lesson.update(lesson)
-        instance.price.update(price)
-
         return super(CourseSerializer, self).update(instance, validated_data)
 
     def to_representation(self, instance):
         urls = {}
-        print(instance)
         data = super(CourseSerializer, self).to_representation(instance)
-        print(data)
         data['category'] = instance.get_category_display()
         data['menu'] = instance.menu.title
         for file in data['course_file']:
