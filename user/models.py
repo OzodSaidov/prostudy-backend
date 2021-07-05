@@ -144,7 +144,6 @@ class Course(Base):
     href = models.CharField(max_length=200, null=True, verbose_name='uri')
     program_training = models.JSONField(default=dict)  # Программа обучения
     result = models.JSONField(default=dict)  # 100% результат
-    certificate = models.ImageField(upload_to='certificate/', validators=[validate_image_type])
     background = models.ImageField(upload_to='background/', validators=[validate_image_type])
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='course')
 
@@ -154,6 +153,9 @@ class Course(Base):
     class Meta:
         ordering = ['id']
 
+class Certificate(Base):
+    cert = models.ImageField(upload_to='certificate/', validators=[validate_image_type])
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='certificate')
 
 # 1-post
 class CourseInfo(Base):
