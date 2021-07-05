@@ -51,7 +51,7 @@ class Post(Base):
     slug = models.SlugField(null=True, blank=True)
     short_content = models.JSONField(null=True, blank=True, default=dict)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, null=True, blank=True)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='posts')
+    # course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='posts')
     is_active = models.BooleanField(default=False)
 
 
@@ -142,11 +142,8 @@ class Course(Base):
     category = models.IntegerField(choices=CATEGORY)
     title = models.JSONField(default=dict)
     href = models.CharField(max_length=200, null=True, verbose_name='uri')
-    # content = models.JSONField(default=dict, null=True)
-    # lesson = models.JSONField(default=dict)
-    # price = models.JSONField(default=dict)
-    program_training = models.JSONField(default=dict)
-    result = models.JSONField(default=dict)
+    program_training = models.JSONField(default=dict)  # Программа обучения
+    result = models.JSONField(default=dict)  # 100% результат
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='course')
 
     def __str__(self):
@@ -155,15 +152,28 @@ class Course(Base):
     class Meta:
         ordering = ['id']
 
-# Стоимость обучения
-class Training(Base):
-    # course FK(Course)
-    pass
 
 # 1-post
 class CourseInfo(Base):
-    # course FK(Course)
-    pass
+    title = models.JSONField(default=dict)
+    body = models.JSONField(default=dict)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course_informations')
+
+class CourseInfoDetail(Base):
+    title = models.JSONField(default=dict)
+    body = models.JSONField(default=dict)
+    image = models.ImageField(upload_to='course_info_detail/', validators=[validate_image_type])
+    course_info = models.ForeignKey(CourseInfo, on_delete=models.CASCADE, related_name='course_info_details')
+
+
+# Стоимость обучения
+class CostOfEducation(Base):
+    title = models.JSONField(default=dict)
+    body = models.JSONField(default=dict)
+    old_price = models.JSONField(default=dict, null=True)
+    new_price = models.JSONField(default=dict)
+    image = models.ImageField(upload_to='cost_education/', validators=[validate_image_type])
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='cost_educations')
 
 
 class CourseFile(Base):
@@ -176,18 +186,6 @@ class CourseFile(Base):
 
     def __str__(self):
         return self.course_file.url
-
-
-# class LessonIcon(Base):
-#     def lesson_icon_path(self, filename):
-#         title = str(self.course.title['en']).replace(' ', '_').lower()
-#         return 'lesson_icon/{0}/{1}'.format(title, filename)
-#
-#     lesson_icon = models.FileField(upload_to=lesson_icon_path, validators=[validate_file_type], null=True)
-#     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='lesson_icons')
-#
-#     def __str__(self):
-#         return self.course.get_category_display()
 
 
 class Program(Base):

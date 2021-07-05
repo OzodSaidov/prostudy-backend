@@ -18,8 +18,7 @@ from user.models import (
     Post,
     Program,
     CourseFile,
-    # LessonIcon,
-    Company,
+    Company, CourseInfo, CourseInfoDetail, CostOfEducation,
 )
 
 
@@ -76,6 +75,7 @@ class PostSerializer(serializers.ModelSerializer):
                        allow_empty=True)
 
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+
     # course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
 
     class Meta:
@@ -90,7 +90,6 @@ class PostSerializer(serializers.ModelSerializer):
             'attachments',
             'images',
             'menu',
-
 
         )
         read_only_fields = (
@@ -229,24 +228,49 @@ class CourseFileSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'course')
 
 
-# class LessonIconSerializer(serializers.ModelSerializer):
-#     course = serializers.HiddenField(default=None)
-#
-#     class Meta:
-#         model = LessonIcon
-#         fields = (
-#             'id',
-#             'lesson_icon',
-#             'course',
-#         )
-#         read_only_fields = ('id', 'course')
+class CourseInfoDetailSerializer(serializers.ModelSerializer):
+    course_info = serializers.HiddenField(default=None)
+
+    class Meta:
+        model = CourseInfoDetail
+        fields = ('id', 'title', 'body', 'image', 'course_info')
+
+
+class CourseInfoSerializer(serializers.ModelSerializer):
+    course_info_detail = CourseInfoDetailSerializer(source='course_info_details', many=True)
+    course = serializers.HiddenField(default=None)
+
+    class Meta:
+        model = CourseInfo
+        fields = ('id', 'title', 'body', 'course_info_detail', 'course')
+
+
+class CostOfEducationSerializer(serializers.ModelSerializer):
+    course = serializers.HiddenField(default=None)
+
+    class Meta:
+        model = CostOfEducation
+        fields = ('id', 'title', 'body', 'old_price', 'new_price', 'image', 'course')
+
+
+class ProgramSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Program
+        fields = (
+            'id',
+            'title',
+            'content',
+            'image',
+            'course',
+        )
 
 
 class CourseSerializer(serializers.ModelSerializer):
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
-    course_file = CourseFileSerializer(source='course_files', many=True)
-    post = PostSerializer(source='posts', many=True)
-    # lesson_icon = LessonIconSerializer(source='lesson_icons', many=True)
+    course_file = CourseFileSerializer(source='course_files', many=True, required=False)
+    course_info = CourseInfoSerializer(source='course_informations', many=True, required=False)
+    cost_education = CostOfEducationSerializer(source='cost_educations', many=True, required=False)
+    program = ProgramSerializer(source='programs', many=True, required=False)
 
     class Meta:
         model = Course
@@ -255,13 +279,13 @@ class CourseSerializer(serializers.ModelSerializer):
             'category',
             'title',
             'href',
-            # 'content',
-            # 'lesson',
-            'price',
+            'program_training',
+            'result',
             'menu',
             'course_file',
-            'post',
-            # 'lesson_icon',
+            'course_info',
+            'cost_education',
+            'program',
         )
         read_only_field = ('id', 'menu')
 
@@ -280,7 +304,6 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         urls = {}
-        # post = {}
         data = super(CourseSerializer, self).to_representation(instance)
         data['category'] = instance.get_category_display()
         data['menu'] = instance.menu.title
@@ -288,11 +311,9 @@ class CourseSerializer(serializers.ModelSerializer):
             file_url = file['course_file']
             if file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
                 urls['image'] = file_url
-                # urls['image_background']
             elif file_url.endswith(('.mp4', '.mpeg')):
                 urls['video'] = file_url
         data['course_file'] = urls
-        # print(data['post'])
         return data
 
 
@@ -309,23 +330,6 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             'image_poster',
             'is_active',
             'menu'
-        )
-
-
-class ProgramSerializer(serializers.ModelSerializer):
-    image = serializers.ListField(child=FileField(allow_empty_file=False),
-                                  required=False,
-                                  write_only=True,
-                                  allow_empty=True)
-
-    class Meta:
-        model = Program
-        fields = (
-            'id',
-            'title',
-            'content',
-            'image',
-            'course',
         )
 
 

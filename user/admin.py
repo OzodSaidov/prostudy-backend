@@ -10,11 +10,13 @@ from .models import (
     SubscriptionRequest,
     PostAttachment,
     Course,
+    CourseInfo,
+    CourseInfoDetail,
+    CostOfEducation,
     Menu,
     Post,
     Program,
     CourseFile,
-    # LessonIcon,
     Company,
 )
 
@@ -42,6 +44,9 @@ class TeacherAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Gallery)
 admin.site.register(Course, CourseAdmin)
+admin.site.register(CourseInfo)
+admin.site.register(CourseInfoDetail)
+admin.site.register(CostOfEducation)
 admin.site.register(Post)
 admin.site.register(PostImage)
 admin.site.register(PostAttachment)
@@ -53,5 +58,4 @@ admin.site.register(Menu)
 admin.site.register(Program)
 admin.site.register(GalleryFile, GalleryFileAdmin)
 admin.site.register(CourseFile, CourseFileAdmin)
-# admin.site.register(LessonIcon)
 admin.site.register(Company)
