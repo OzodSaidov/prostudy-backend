@@ -144,7 +144,7 @@ class Course(Base):
     href = models.CharField(max_length=200, null=True, verbose_name='uri')
     program_training = models.JSONField(default=dict)  # Программа обучения
     result = models.JSONField(default=dict)  # 100% результат
-    background = models.ImageField(upload_to='background/', validators=[validate_image_type])
+    background = models.ImageField(upload_to='background/', validators=[validate_image_type], null=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='courses')
 
     def __str__(self):
