@@ -15,6 +15,7 @@ from .models import (
     CostOfEducation,
     ProgramTraining,
     Result,
+    Certificate,
     Menu,
     Post,
     Program,
@@ -51,6 +52,7 @@ admin.site.register(CourseInfoDetail)
 admin.site.register(CostOfEducation)
 admin.site.register(ProgramTraining)
 admin.site.register(Result)
+admin.site.register(Certificate)
 admin.site.register(Post)
 admin.site.register(PostImage)
 admin.site.register(PostAttachment)
