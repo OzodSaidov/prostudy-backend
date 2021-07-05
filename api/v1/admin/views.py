@@ -1,10 +1,45 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
-from api.v1.admin.serializers import PostSerializer, MenuSerializer, GallerySerializer, \
-    TeacherSerializer, CourseSerializer, AdvertisementSerializer, ProgramSerializer, FeedbackSerializer, \
-    GalleryFileSerializer, SubscriptionRequestSerializer, CourseFileSerializer, CompanySerializer
-from user.models import Post, Menu, Gallery, Teacher, Course, Advertisement, Program, Feedback, GalleryFile, \
-    SubscriptionRequest, CourseFile, Company
+from api.v1.admin.serializers import (
+    PostSerializer,
+    MenuSerializer,
+    GallerySerializer,
+    TeacherSerializer,
+    AdvertisementSerializer,
+    ProgramSerializer,
+    FeedbackSerializer,
+    GalleryFileSerializer,
+    SubscriptionRequestSerializer,
+    CompanySerializer,
+    CourseSerializer,
+    CourseFileSerializer,
+    CourseInfoSerializer,
+    CourseInfoDetailSerializer,
+    CostOfEducationSerializer,
+    CertificateSerializer,
+    ProgramTrainingSerializer,
+    ResultSerializer
+)
+from user.models import (
+    Post,
+    Menu,
+    Gallery,
+    Teacher,
+    Advertisement,
+    Program,
+    Feedback,
+    GalleryFile,
+    SubscriptionRequest,
+    CourseFile,
+    Company,
+    Course,
+    CourseInfo,
+    CourseInfoDetail,
+    CostOfEducation,
+    Certificate,
+    ProgramTraining,
+    Result
+)
 
 
 class PostCreateView(ListCreateAPIView):
@@ -149,13 +184,93 @@ class SubscriptionRequestEditView(RetrieveUpdateDestroyAPIView):
     queryset = SubscriptionRequest.objects.all()
     lookup_url_kwarg = 'id'
 
+
 class CompanyCreateView(ListCreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = CompanySerializer
     queryset = Company.objects.all()
 
+
 class CompanyEditView(RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
     serializer_class = CompanySerializer
     queryset = Company.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class CourseInfoCreateView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CourseInfoSerializer
+    queryset = CourseInfo.objects.all()
+
+
+class CourseInfoEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CourseInfoSerializer
+    queryset = CourseInfo.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class CourseInfoDetailCreateView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CourseInfoDetailSerializer
+    queryset = CourseInfoDetail.objects.all()
+
+
+class CourseInfoDetailEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CourseInfoDetailSerializer
+    queryset = CourseInfoDetail.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class CostEducationCreateView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CostOfEducationSerializer
+    queryset = CostOfEducation.objects.all()
+
+
+class CostEducationEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CostOfEducationSerializer
+    queryset = CostOfEducation.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class CertificateCreateView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CertificateSerializer
+    queryset = Certificate.objects.all()
+
+
+class CertificateEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CertificateSerializer
+    queryset = Certificate.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class ProgramTrainingCreateView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ProgramTrainingSerializer
+    queryset = ProgramTraining.objects.all()
+
+
+class ProgramTrainingEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ProgramTrainingSerializer
+    queryset = ProgramTraining.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class ResultCreateView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ResultSerializer
+    queryset = Result.objects.all()
+
+
+class ResultEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ResultSerializer
+    queryset = Result.objects.all()
     lookup_url_kwarg = 'id'
