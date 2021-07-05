@@ -145,7 +145,7 @@ class Course(Base):
     program_training = models.JSONField(default=dict)  # Программа обучения
     result = models.JSONField(default=dict)  # 100% результат
     background = models.ImageField(upload_to='background/', validators=[validate_image_type])
-    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='course')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='courses')
 
     def __str__(self):
         return self.get_category_display()
@@ -154,8 +154,9 @@ class Course(Base):
         ordering = ['id']
 
 class Certificate(Base):
-    cert = models.ImageField(upload_to='certificate/', validators=[validate_image_type])
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='certificate')
+    title = models.JSONField(default=dict, null=True)
+    image = models.ImageField(upload_to='certificate/', validators=[validate_image_type])
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='cert')
 
 # 1-post
 class CourseInfo(Base):

@@ -18,7 +18,7 @@ from user.models import (
     Post,
     Program,
     CourseFile,
-    Company, CourseInfo, CourseInfoDetail, CostOfEducation,
+    Company, CourseInfo, CourseInfoDetail, CostOfEducation, Certificate,
 )
 
 
@@ -265,12 +265,19 @@ class ProgramSerializer(serializers.ModelSerializer):
         )
 
 
+class CertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Certificate
+        fields = ('id', 'title', 'image', 'course')
+
+
 class CourseSerializer(serializers.ModelSerializer):
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
     course_file = CourseFileSerializer(source='course_files', many=True, required=False)
     course_info = CourseInfoSerializer(source='course_informations', many=True, required=False)
     cost_education = CostOfEducationSerializer(source='cost_educations', many=True, required=False)
     program = ProgramSerializer(source='programs', many=True, required=False)
+    certificate = CertificateSerializer(source='cert', required=False, many=True)
 
     class Meta:
         model = Course
@@ -286,6 +293,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'course_info',
             'cost_education',
             'program',
+            'certificate',
         )
         read_only_field = ('id', 'menu')
 
@@ -304,7 +312,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         urls = {}
+        print(instance)
         data = super(CourseSerializer, self).to_representation(instance)
+        print(data)
         data['category'] = instance.get_category_display()
         data['menu'] = instance.menu.title
         for file in data['course_file']:
