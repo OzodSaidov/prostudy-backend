@@ -189,7 +189,7 @@ class CostOfEducation(Base):
     body = models.JSONField(default=dict)
     old_price = models.JSONField(default=dict, null=True)
     new_price = models.JSONField(default=dict)
-    image = models.ImageField(upload_to='cost_education/', validators=[validate_image_type])
+    image = models.FileField(upload_to='cost_education/')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='cost_educations')
 
 
