@@ -167,7 +167,7 @@ class CourseInfo(Base):
 class CourseInfoDetail(Base):
     title = models.JSONField(default=dict)
     body = models.JSONField(default=dict)
-    image = models.ImageField(upload_to='course_info_detail/', validators=[validate_image_type])
+    image = models.FileField(upload_to='course_info_detail/')
     course_info = models.ForeignKey(CourseInfo, on_delete=models.CASCADE, related_name='course_info_details')
 
 
