@@ -157,7 +157,7 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-IMAGE_TYPES = ('.JPG', '.JPEG', '.PNG', '.GIF')
+IMAGE_TYPES = ('.JPG', '.JPEG', '.PNG', '.GIF', '.SVG')
 VIDEO_TYPES = ('.MP4', '.MPEG')
 AUTH_USER_MODEL = 'user.User'
 

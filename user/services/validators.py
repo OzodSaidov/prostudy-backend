@@ -18,4 +18,4 @@ def validate_file_type(value):
 def validate_image_type(value):
     file = value.name.upper()
     if not file.endswith(settings.IMAGE_TYPES):
-        raise ValidationError('File type not supported. JPG, JPEG or PNG recommended.')
+        raise ValidationError('File type not supported. SVG, JPG, JPEG or PNG recommended.')
