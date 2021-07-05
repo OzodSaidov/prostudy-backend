@@ -294,6 +294,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'cost_education',
             'program',
             'certificate',
+            'background',
         )
         read_only_field = ('id', 'menu')
 
