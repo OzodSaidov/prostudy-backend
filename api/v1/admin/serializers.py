@@ -18,7 +18,8 @@ from user.models import (
     Post,
     Program,
     CourseFile,
-    Company, CourseInfo, CourseInfoDetail, CostOfEducation, Certificate, ProgramTraining, Result,
+    Company, CostOfEducation, Certificate, QuestionAndAnswers, Result, InformationContent,
+    InformationContentDetail,
 )
 
 
@@ -228,21 +229,24 @@ class CourseFileSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', 'course')
 
 
-class CourseInfoDetailSerializer(serializers.ModelSerializer):
+class InformationContentDetailSerializer(serializers.ModelSerializer):
     course_info = serializers.HiddenField(default=None)
 
     class Meta:
-        model = CourseInfoDetail
-        fields = ('id', 'title', 'body', 'image', 'course_info')
+        model = InformationContentDetail
+        fields = ('id', 'title', 'body', 'image', 'information_content')
 
 
-class CourseInfoSerializer(serializers.ModelSerializer):
-    course_info_detail = CourseInfoDetailSerializer(source='course_info_details', many=True)
+class InformationContentSerializer(serializers.ModelSerializer):
+    information_content_detail = InformationContentDetailSerializer(source='content_details', many=True)
+    background = serializers.ImageField(required=False)
     course = serializers.HiddenField(default=None)
+    program = serializers.HiddenField(default=None)
+    menu = serializers.HiddenField(default=None)
 
     class Meta:
-        model = CourseInfo
-        fields = ('id', 'title', 'body', 'course_info_detail', 'course')
+        model = InformationContent
+        fields = ('id', 'title', 'body', 'background', 'course', 'program', 'menu')
 
 
 class CostOfEducationSerializer(serializers.ModelSerializer):
@@ -271,10 +275,10 @@ class CertificateSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'image', 'course')
 
 
-class ProgramTrainingSerializer(serializers.ModelSerializer):
+class QuestionAndAnswersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProgramTraining
-        fields = ('id', 'month', 'description', 'full_description', 'course')
+        model = QuestionAndAnswers
+        fields = ('id', 'month', 'description', 'full_description', 'course', 'program')
 
 
 class ResultSerializer(serializers.ModelSerializer):

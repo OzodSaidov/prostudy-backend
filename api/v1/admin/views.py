@@ -5,47 +5,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAu
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api.v1.admin.serializers import (
-    PostSerializer,
-    MenuSerializer,
-    GallerySerializer,
-    TeacherSerializer,
-    AdvertisementSerializer,
-    ProgramSerializer,
-    FeedbackSerializer,
-    GalleryFileSerializer,
-    SubscriptionRequestSerializer,
-    CompanySerializer,
-    CourseSerializer,
-    CourseFileSerializer,
-    CourseInfoSerializer,
-    CourseInfoDetailSerializer,
-    CostOfEducationSerializer,
-    CertificateSerializer,
-    ProgramTrainingSerializer,
-    ResultSerializer
-)
-from user.models import (
-    Post,
-    Menu,
-    Gallery,
-    Teacher,
-    Advertisement,
-    Program,
-    Feedback,
-    GalleryFile,
-    SubscriptionRequest,
-    CourseFile,
-    Company,
-    Course,
-    CourseInfo,
-    CourseInfoDetail,
-    CostOfEducation,
-    Certificate,
-    ProgramTraining,
-    Result
-)
-
+from api.v1.admin.serializers import *
+from user.models import *
 
 class PostCreateView(ListCreateAPIView):
     serializer_class = PostSerializer
@@ -149,7 +110,18 @@ class CourseEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-class ProgramCreateView(ListCreateAPIView):
+class ProgramListByCourseView(ListAPIView):
+    serializer_class = ProgramSerializer
+    queryset = Program.objects.all()
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        queryset = Program.objects.filter(course_id=self.kwargs['id'])
+        serializer = ProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class ProgramCreateView(CreateAPIView):
     serializer_class = ProgramSerializer
     queryset = Program.objects.all()
     permission_classes = [AllowAny]
@@ -214,43 +186,43 @@ class CompanyEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-class CourseInfoByCourseView(APIView):
+class InformationContentByCourseView(APIView):
     permission_classes = [AllowAny]
-    serializer_class = CourseInfoSerializer
-    queryset = CourseInfo.objects.all()
+    serializer_class = InformationContentSerializer
+    queryset = InformationContent.objects.all()
 
     def get(self, request, *args, **kwargs):
         try:
-            queryset = CourseInfo.objects.get(course_id=self.kwargs['id'])
-            serializer = CourseInfoSerializer(queryset)
+            queryset = InformationContent.objects.get(course_id=self.kwargs['id'])
+            serializer = InformationContentSerializer(queryset)
             return Response(serializer.data)
         except ObjectDoesNotExist:
             return Response(status=404)
 
 
-class CourseInfoCreateView(CreateAPIView):
+class InformationContentCreateView(CreateAPIView):
     permission_classes = [AllowAny]
-    serializer_class = CourseInfoSerializer
-    queryset = CourseInfo.objects.all()
+    serializer_class = InformationContentSerializer
+    queryset = InformationContent.objects.all()
 
 
-class CourseInfoEditView(RetrieveUpdateDestroyAPIView):
+class InformationContentEditView(RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
-    serializer_class = CourseInfoSerializer
-    queryset = CourseInfo.objects.all()
+    serializer_class = InformationContentSerializer
+    queryset = InformationContent.objects.all()
     lookup_url_kwarg = 'id'
 
 
-class CourseInfoDetailCreateView(ListCreateAPIView):
+class InformationContentDetailCreateView(ListCreateAPIView):
     permission_classes = [AllowAny]
-    serializer_class = CourseInfoDetailSerializer
-    queryset = CourseInfoDetail.objects.all()
+    serializer_class = InformationContentDetailSerializer
+    queryset = InformationContentDetail.objects.all()
 
 
-class CourseInfoDetailEditView(RetrieveUpdateDestroyAPIView):
+class InformationContentDetailEditView(RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
-    serializer_class = CourseInfoDetailSerializer
-    queryset = CourseInfoDetail.objects.all()
+    serializer_class = InformationContentDetailSerializer
+    queryset = InformationContentDetail.objects.all()
     lookup_url_kwarg = 'id'
 
 
@@ -303,26 +275,26 @@ class CertificateEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-class ProgramTrainingListByCourseView(ListAPIView):
+class QuestionAndAnswersListByCourseView(ListAPIView):
     permission_classes = [AllowAny]
-    serializer_class = ProgramTrainingSerializer
-    queryset = ProgramTraining.objects.all()
+    serializer_class = QuestionAndAnswersSerializer
+    queryset = QuestionAndAnswers.objects.all()
 
     def get(self, request, *args, **kwargs):
-        queryset = ProgramTraining.objects.filter(course_id=self.kwargs['id'])
-        serializer = ProgramTrainingSerializer(queryset, many=True)
+        queryset = QuestionAndAnswers.objects.filter(course_id=self.kwargs['id'])
+        serializer = QuestionAndAnswersSerializer(queryset, many=True)
         return Response(serializer.data)
 
-class ProgramTrainingCreateView(CreateAPIView):
+class QuestionAndAnswersCreateView(CreateAPIView):
     permission_classes = [AllowAny]
-    serializer_class = ProgramTrainingSerializer
-    queryset = ProgramTraining.objects.all()
+    serializer_class = QuestionAndAnswersSerializer
+    queryset = QuestionAndAnswers.objects.all()
 
 
-class ProgramTrainingEditView(RetrieveUpdateDestroyAPIView):
+class QuestionAndAnswersEditView(RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
-    serializer_class = ProgramTrainingSerializer
-    queryset = ProgramTraining.objects.all()
+    serializer_class = QuestionAndAnswersSerializer
+    queryset = QuestionAndAnswers.objects.all()
     lookup_url_kwarg = 'id'
 
 

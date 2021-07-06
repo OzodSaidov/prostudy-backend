@@ -10,10 +10,10 @@ from .models import (
     SubscriptionRequest,
     PostAttachment,
     Course,
-    CourseInfo,
-    CourseInfoDetail,
+    InformationContent,
+    InformationContentDetail,
     CostOfEducation,
-    ProgramTraining,
+    QuestionAndAnswers,
     Result,
     Certificate,
     Menu,
@@ -47,10 +47,10 @@ class TeacherAdmin(admin.ModelAdmin):
 admin.site.register(User, UserAdmin)
 admin.site.register(Gallery)
 admin.site.register(Course, CourseAdmin)
-admin.site.register(CourseInfo)
-admin.site.register(CourseInfoDetail)
+admin.site.register(InformationContent)
+admin.site.register(InformationContentDetail)
 admin.site.register(CostOfEducation)
-admin.site.register(ProgramTraining)
+admin.site.register(QuestionAndAnswers)
 admin.site.register(Result)
 admin.site.register(Certificate)
 admin.site.register(Post)

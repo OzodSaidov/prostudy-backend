@@ -74,10 +74,10 @@ class FileQuerySet(models.QuerySet):
 
 
 class Gallery(Base):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE,
                                related_name='gallery_files', null=True, blank=True)
-    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='gallery')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='galleries')
 
     def __str__(self):
         if self.course:
@@ -92,6 +92,8 @@ class GalleryFile(Base):
         return 'gallery/{0}/{1}'.format(self.gallery.course.get_category_display(), filename)
     title = models.CharField(max_length=100, null=True)
     file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
+    image_for_video = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
+                                        null=True)
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
 
@@ -153,11 +155,14 @@ class Course(Base):
         ordering = ['id']
 
 
-class ProgramTraining(Base):
-    month = models.JSONField(default=dict)
+class QuestionAndAnswers(Base):
+    title = models.JSONField(default=dict, null=True)
     description = models.JSONField(default=dict)
     full_description = models.JSONField(default=dict)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='programs_training')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='programs_training',
+                               null=True, blank=True)
+    program = models.ForeignKey('Program', on_delete=models.CASCADE, related_name='questions',
+                                null=True, blank=True)
 
 
 class Result(Base):
@@ -172,16 +177,21 @@ class Certificate(Base):
     course = models.OneToOneField(Course, on_delete=models.CASCADE, related_name='cert')
 
 
-class CourseInfo(Base):
+class InformationContent(Base):
     title = models.JSONField(default=dict)
     body = models.JSONField(default=dict)
-    course = models.OneToOneField(Course, on_delete=models.CASCADE)
+    background = models.ImageField(upload_to='information_content', null=True, blank=True,
+                                   validators=[validate_image_type])
+    course = models.OneToOneField(Course, on_delete=models.CASCADE, null=True, blank=True)
+    program = models.OneToOneField('Program', on_delete=models.CASCADE, null=True, blank=True)
+    menu = models.OneToOneField(Menu, on_delete=models.CASCADE, null=True, blank=True)
 
-class CourseInfoDetail(Base):
+class InformationContentDetail(Base):
     title = models.JSONField(default=dict)
     body = models.JSONField(default=dict)
     image = models.FileField(upload_to='course_info_detail/')
-    course_info = models.ForeignKey(CourseInfo, on_delete=models.CASCADE, related_name='course_info_details')
+    information_content = models.ForeignKey(InformationContent, on_delete=models.CASCADE,
+                                            related_name='content_details')
 
 
 # Стоимость обучения
@@ -230,7 +240,6 @@ class Feedback(Base):
     phone = models.CharField(max_length=13, validators=[validate_phone])
     message = models.TextField()
     is_active = models.BooleanField(default=True)
-    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='feedback')
 
     class Meta:
         ordering = ['-create_at']
@@ -242,7 +251,6 @@ class SubscriptionRequest(Base):
     number_visitors = models.IntegerField()
     phone = models.CharField(max_length=13, validators=[validate_phone])
     is_active = models.BooleanField(default=True)
-    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='subscription')
 
     class Meta:
         ordering = ['-create_at']
