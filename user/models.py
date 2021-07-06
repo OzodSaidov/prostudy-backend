@@ -77,7 +77,8 @@ class Gallery(Base):
     title = models.CharField(max_length=100, null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE,
                                related_name='gallery_files', null=True, blank=True)
-    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='galleries')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='galleries',
+                             null=True, blank=True)
 
     def __str__(self):
         if self.course:
