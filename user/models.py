@@ -74,19 +74,24 @@ class FileQuerySet(models.QuerySet):
 
 
 class Gallery(Base):
-    title = models.JSONField(default=dict)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='gallery_files', null=True)
+    title = models.CharField(max_length=100)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE,
+                               related_name='gallery_files', null=True, blank=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='gallery')
 
     def __str__(self):
-        return self.course.get_category_display()
+        print(bool(self.course))
+        if self.course:
+            return self.course.get_category_display()
+        else:
+            return self.title
 
 
 class GalleryFile(Base):
 
     def gallery_file_path(self, filename):
         return 'gallery/{0}/{1}'.format(self.gallery.course.get_category_display(), filename)
-    title = models.JSONField(default=dict)
+    title = models.CharField(max_length=100, null=True)
     file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
@@ -96,15 +101,14 @@ class GalleryFile(Base):
 
 
 """Предподаватель"""
-
-
 class Teacher(Base):
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
     specialty = models.JSONField(default=dict)
     experience = models.JSONField(default=dict)
     photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
-    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='teacher')
+    course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, related_name='teachers', null=True)
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='teachers')
 
     def __str__(self):
         return f"{self.first_name['ru']} {self.last_name['ru']}"
@@ -115,8 +119,6 @@ class Teacher(Base):
 
 
 """Курс"""
-
-
 class Course(Base):
     GRAPHIC_DESIGN = 1
     WEB_DESIGN = 2
@@ -223,8 +225,6 @@ class Advertisement(Base):
 
 
 """Обратная связь"""
-
-
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -238,8 +238,6 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
-
-
 class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()

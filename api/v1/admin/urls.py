@@ -20,6 +20,7 @@ from api.v1.admin.views import (
     CostEducationCreateView, CostEducationEditView, CertificateCreateView, CertificateEditView,
     ProgramTrainingCreateView, ProgramTrainingEditView, ResultCreateView, ResultEditView, CostEducationListByCourseView,
     CourseInfoByCourseView, CertificateByCourseView, ProgramTrainingListByCourseView, ResultListByCourseView,
+    TeacherListByCourseView,
 )
 
 urlpatterns = [
@@ -47,6 +48,7 @@ urlpatterns = [
     path('companies/<int:id>/', CompanyEditView.as_view()),
 
 
+    path('course/<int:id>/teachers/', TeacherListByCourseView.as_view()),
     path('course/<int:id>/information/', CourseInfoByCourseView.as_view()),
     path('course/information/', CourseInfoCreateView.as_view()),
     path('course/information/<int:id>/', CourseInfoEditView.as_view()),

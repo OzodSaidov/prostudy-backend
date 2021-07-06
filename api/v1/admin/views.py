@@ -99,6 +99,17 @@ class GalleryEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
+class TeacherListByCourseView(ListAPIView):
+    serializer_class = TeacherSerializer
+    permission_classes = [AllowAny, ]
+    queryset = Teacher.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        queryset = Teacher.objects.filter(course_id=self.kwargs['id'])
+        serializer = TeacherSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 class TeacherCreateView(ListCreateAPIView):
     serializer_class = TeacherSerializer
     permission_classes = [AllowAny, ]

@@ -162,7 +162,6 @@ class GallerySerializer(serializers.ModelSerializer):
                                  allow_empty=True)
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None),
                                               required=False)
-    course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
 
     class Meta:
         model = Gallery
@@ -211,7 +210,8 @@ class TeacherSerializer(serializers.ModelSerializer):
             'photo',
             'specialty',
             'experience',
-            'menu'
+            'menu',
+            'course'
         )
 
 
