@@ -219,6 +219,7 @@ class CourseFile(Base):
 class Program(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
+    information_content = models.JSONField(default=dict)
     main_image = models.ImageField(upload_to='programs/', validators=[validate_image_type], null=True)
     information_image = models.ImageField(upload_to='programs/', validators=[validate_image_type])
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs')

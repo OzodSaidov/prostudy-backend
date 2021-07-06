@@ -265,6 +265,7 @@ class ProgramSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'content',
+            'information_content',
             'main_image',
             'information_image',
             'course',
