@@ -80,7 +80,6 @@ class Gallery(Base):
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='gallery')
 
     def __str__(self):
-        print(bool(self.course))
         if self.course:
             return self.course.get_category_display()
         else:
