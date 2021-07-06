@@ -18,7 +18,8 @@ from api.v1.admin.views import (
     SubscriptionRequestEditView, CourseFileCreateView, CourseFileRetrieveDestroyView, CompanyCreateView,
     CompanyEditView, CourseInfoCreateView, CourseInfoEditView, CourseInfoDetailCreateView, CourseInfoDetailEditView,
     CostEducationCreateView, CostEducationEditView, CertificateCreateView, CertificateEditView,
-    ProgramTrainingCreateView, ProgramTrainingEditView, ResultCreateView, ResultEditView,
+    ProgramTrainingCreateView, ProgramTrainingEditView, ResultCreateView, ResultEditView, CostEducationListByCourseView,
+    CourseInfoByCourseView, CertificateByCourseView, ProgramTrainingListByCourseView, ResultListByCourseView,
 )
 
 urlpatterns = [
@@ -44,15 +45,33 @@ urlpatterns = [
     path('subscriptionrequest/<int:id>/', SubscriptionRequestEditView.as_view()),
     path('companies/', CompanyCreateView.as_view()),
     path('companies/<int:id>/', CompanyEditView.as_view()),
-    path('course/informations/', CourseInfoCreateView.as_view()),
-    path('course/informations/<int:id>/', CourseInfoEditView.as_view()),
+
+
+    path('course/<int:id>/information/', CourseInfoByCourseView.as_view()),
+    path('course/information/', CourseInfoCreateView.as_view()),
+    path('course/information/<int:id>/', CourseInfoEditView.as_view()),
+
+
     path('course/info-details/', CourseInfoDetailCreateView.as_view()),
     path('course/info-details/<int:id>/', CourseInfoDetailEditView.as_view()),
-    path('course/cost-educations/', CostEducationCreateView.as_view()),
-    path('course/certificates/', CertificateCreateView.as_view()),
-    path('course/certificates/<int:id>/', CertificateEditView.as_view()),
+
+
+    path('course/<int:id>/cost-educations/', CostEducationListByCourseView.as_view()),
+    path('course/cost-education/', CostEducationCreateView.as_view()),
+    path('course/cost-education/<int:id>/', CostEducationEditView.as_view()),
+
+
+    path('course/<int:id>/certificate/', CertificateByCourseView.as_view()),
+    path('course/certificate/', CertificateCreateView.as_view()),
+    path('course/certificate/<int:id>/', CertificateEditView.as_view()),
+
+
+    path('course/<int:id>/program-training/', ProgramTrainingListByCourseView.as_view()),
     path('course/program-training/', ProgramTrainingCreateView.as_view()),
     path('course/program-training/<int:id>/', ProgramTrainingEditView.as_view()),
-    path('course/results/', ResultCreateView.as_view()),
-    path('course/results/<int:id>/', ResultEditView.as_view()),
+
+
+    path('course/<int:id>/results/', ResultListByCourseView.as_view()),
+    path('course/result/', ResultCreateView.as_view()),
+    path('course/result/<int:id>/', ResultEditView.as_view()),
 ]

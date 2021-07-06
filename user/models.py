@@ -168,13 +168,13 @@ class Result(Base):
 class Certificate(Base):
     title = models.JSONField(default=dict, null=True)
     image = models.ImageField(upload_to='certificate/', validators=[validate_image_type])
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='cert')
+    course = models.OneToOneField(Course, on_delete=models.CASCADE, related_name='cert')
 
 
 class CourseInfo(Base):
     title = models.JSONField(default=dict)
     body = models.JSONField(default=dict)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course_informations')
+    course = models.OneToOneField(Course, on_delete=models.CASCADE)
 
 class CourseInfoDetail(Base):
     title = models.JSONField(default=dict)
