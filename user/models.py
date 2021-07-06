@@ -94,7 +94,7 @@ class GalleryFile(Base):
     title = models.CharField(max_length=100, null=True)
     file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
     image_for_video = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
-                                        null=True)
+                                        null=True, blank=True)
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
 
