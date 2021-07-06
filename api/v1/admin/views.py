@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from api.v1.admin.serializers import *
 from user.models import *
 
+
 class PostCreateView(ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = (AllowAny,)
@@ -118,6 +119,32 @@ class ProgramListByCourseView(ListAPIView):
     def get(self, request, *args, **kwargs):
         queryset = Program.objects.filter(course_id=self.kwargs['id'])
         serializer = ProgramSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class InfoContentByProgramView(APIView):
+    serializer_class = InformationContentSerializer
+    queryset = InformationContent.objects.all()
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            queryset = InformationContent.objects.get(program_id=self.kwargs['id'])
+            serializer = InformationContentSerializer(queryset)
+            return Response(serializer.data)
+        except ObjectDoesNotExist:
+            return Response(status=404)
+
+
+class QuestionListByProgramView(APIView):
+    serializer_class = QuestionAndAnswersSerializer
+    queryset = QuestionAndAnswers.objects.all()
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        print(kwargs['id'])
+        queryset = QuestionAndAnswers.objects.filter(program_id=self.kwargs['id'])
+        serializer = QuestionAndAnswersSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -236,6 +263,7 @@ class CostEducationListByCourseView(ListAPIView):
         serializer = CostOfEducationSerializer(queryset, many=True)
         return Response(serializer.data)
 
+
 class CostEducationCreateView(CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = CostOfEducationSerializer
@@ -284,6 +312,7 @@ class QuestionAndAnswersListByCourseView(ListAPIView):
         queryset = QuestionAndAnswers.objects.filter(course_id=self.kwargs['id'])
         serializer = QuestionAndAnswersSerializer(queryset, many=True)
         return Response(serializer.data)
+
 
 class QuestionAndAnswersCreateView(CreateAPIView):
     permission_classes = [AllowAny]

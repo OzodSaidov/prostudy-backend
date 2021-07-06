@@ -14,6 +14,8 @@ urlpatterns = [
     path('course/<int:id>/', CourseEditView.as_view()),
     path('course/file/create/', CourseFileCreateView.as_view()),
     path('course/file/<int:id>/', CourseFileRetrieveDestroyView.as_view()),
+    path('program/<int:id>/info-content/', InfoContentByProgramView.as_view()),
+    path('program/<int:id>/question/', QuestionListByProgramView.as_view()),
     path('program/create/', ProgramCreateView.as_view()),
     path('program/<int:id>/', ProgramEditView.as_view()),
     path('teacher/create/', TeacherCreateView.as_view()),

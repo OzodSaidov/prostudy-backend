@@ -230,7 +230,7 @@ class CourseFileSerializer(serializers.ModelSerializer):
 
 
 class InformationContentDetailSerializer(serializers.ModelSerializer):
-    course_info = serializers.HiddenField(default=None)
+    information_content = serializers.HiddenField(default=None)
 
     class Meta:
         model = InformationContentDetail
@@ -246,7 +246,8 @@ class InformationContentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InformationContent
-        fields = ('id', 'title', 'body', 'background', 'course', 'program', 'menu')
+        fields = ('id', 'title', 'body', 'background', 'course', 'program', 'menu',
+                  'information_content_detail')
 
 
 class CostOfEducationSerializer(serializers.ModelSerializer):
@@ -264,7 +265,8 @@ class ProgramSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'content',
-            'image',
+            'main_image',
+            'information_image',
             'course',
         )
 
@@ -278,7 +280,7 @@ class CertificateSerializer(serializers.ModelSerializer):
 class QuestionAndAnswersSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionAndAnswers
-        fields = ('id', 'month', 'description', 'full_description', 'course', 'program')
+        fields = ('id', 'title', 'description', 'full_description', 'course', 'program')
 
 
 class ResultSerializer(serializers.ModelSerializer):
