@@ -366,17 +366,14 @@ class ResultEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-class PostByMenuView(APIView):
+class PostByMenuView(ListAPIView):
     permission_classes = [AllowAny]
     serializers = PostSerializer
     queryset = Post.objects.all()
 
     def get(self, request, *args, **kwargs):
-        try:
-            serializer = PostSerializer(Post.objects.get(menu_id=self.kwargs['id']))
-            return Response(serializer.data)
-        except ObjectDoesNotExist:
-            return Response(status=404)
+        serializer = PostSerializer(Post.objects.filter(menu_id=self.kwargs['id']))
+        return Response(serializer.data)
 
 
 class GalleryByMenuView(APIView):
