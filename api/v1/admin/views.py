@@ -61,6 +61,18 @@ class GalleryEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
+class GalleryByProgramView(ListAPIView):
+    serializer_class = GallerySerializer
+    permission_classes = [AllowAny]
+    queryset = Gallery.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        course = Course.objects.get(programs=self.kwargs['id'])
+        gallery = Gallery.objects.get(course_id=course.id)
+        serializer = GallerySerializer(gallery)
+        return Response(serializer.data)
+
+
 class TeacherListByCourseView(ListAPIView):
     serializer_class = TeacherSerializer
     permission_classes = [AllowAny, ]
@@ -349,3 +361,39 @@ class ResultEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = ResultSerializer
     queryset = Result.objects.all()
     lookup_url_kwarg = 'id'
+
+
+class PostByMenuView(APIView):
+    permission_classes = [AllowAny]
+    serializers = PostSerializer
+    queryset = Post.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        try:
+            serializer = PostSerializer(Post.objects.get(menu_id=self.kwargs['id']))
+            return Response(serializer.data)
+        except ObjectDoesNotExist:
+            return Response(status=404)
+
+
+class GalleryByMenuView(APIView):
+    permission_classes = [AllowAny]
+    serializers = GallerySerializer
+    queryset = Gallery.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        try:
+            serializer = GallerySerializer(Gallery.objects.get(menu_id=self.kwargs['id']))
+            return Response(serializer.data)
+        except ObjectDoesNotExist:
+            return Response(status=404)
+
+class PostListByProgramView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializers = PostSerializer
+    queryset = Post.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        queryset = Post.objects.filter(menu_id=self.kwargs['id'])
+        serializer = PostSerializer(queryset, many=True)
+        return Response(serializer.data)

@@ -4,6 +4,8 @@ from api.v1.admin.views import *
 urlpatterns = [
     path('menu/create/', MenuCreateView.as_view()),
     path('menu/<int:id>/', MenuEditView.as_view()),
+    path('menu/<int:id>/post/', PostByMenuView.as_view()),
+    path('menu/<int:id>/gallery/', GalleryByMenuView.as_view()),
     path('post/create/', PostCreateView.as_view()),
     path('post/<int:id>/', PostEditView.as_view()),
     path('gallery/create/', GalleryCreateView.as_view()),
@@ -16,6 +18,8 @@ urlpatterns = [
     path('course/file/<int:id>/', CourseFileRetrieveDestroyView.as_view()),
     path('program/<int:id>/info-content/', InfoContentByProgramView.as_view()),
     path('program/<int:id>/question/', QuestionListByProgramView.as_view()),
+    path('program/<int:id>/gallery/', GalleryByProgramView.as_view()),
+    path('program/<int:id>/posts/', PostListByProgramView.as_view()),
     path('program/create/', ProgramCreateView.as_view()),
     path('program/<int:id>/', ProgramEditView.as_view()),
     path('teacher/create/', TeacherCreateView.as_view()),

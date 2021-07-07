@@ -50,9 +50,10 @@ class Post(Base):
     url = models.URLField(null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
     short_content = models.JSONField(null=True, blank=True, default=dict)
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, null=True, blank=True)
-    # course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='posts')
-    is_active = models.BooleanField(default=False)
+    menu = models.OneToOneField(Menu, on_delete=models.CASCADE, null=True, blank=True)
+    course = models.OneToOneField('Course', on_delete=models.CASCADE, null=True, blank=True)
+    program = models.OneToOneField('Program', on_delete=models.CASCADE, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
 
 
 class PostAttachment(Base):
@@ -90,16 +91,13 @@ class Gallery(Base):
 class GalleryFile(Base):
 
     def gallery_file_path(self, filename):
-        return 'gallery/{0}/{1}'.format(self.gallery.course.get_category_display(), filename)
+        return 'gallery/{0}/{1}'.format(self.gallery.title, filename)
     title = models.CharField(max_length=100, null=True)
     file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
     image_for_video = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
                                         null=True, blank=True)
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
-
-    def __str__(self):
-        return self.file.name
 
 
 """Предподаватель"""
@@ -219,10 +217,10 @@ class CourseFile(Base):
 
 class Program(Base):
     title = models.JSONField(default=dict)
-    content = models.JSONField(default=dict)
-    information_content = models.JSONField(default=dict)
-    main_image = models.ImageField(upload_to='programs/', validators=[validate_image_type], null=True)
-    information_image = models.ImageField(upload_to='programs/', validators=[validate_image_type])
+    # content = models.JSONField(default=dict)
+    # information_content = models.JSONField(default=dict)
+    # main_image = models.ImageField(upload_to='programs/', validators=[validate_image_type], null=True)
+    # information_image = models.ImageField(upload_to='programs/', validators=[validate_image_type])
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs')
 
 

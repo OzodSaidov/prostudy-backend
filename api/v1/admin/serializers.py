@@ -1,8 +1,6 @@
 from django.db import transaction
-from django.http import Http404
 from rest_framework import serializers
 from rest_framework.fields import ListField, FileField, ImageField
-from rest_framework.generics import get_object_or_404
 
 from user.models import (
     PostImage,
@@ -77,8 +75,6 @@ class PostSerializer(serializers.ModelSerializer):
 
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
 
-    # course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all(), required=False)
-
     class Meta:
         model = Post
         fields = (
@@ -91,6 +87,8 @@ class PostSerializer(serializers.ModelSerializer):
             'attachments',
             'images',
             'menu',
+            'course',
+            'program'
 
         )
         read_only_fields = (
@@ -137,32 +135,17 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class GalleryFileSerializer(serializers.ModelSerializer):
-    file = serializers.ListField(child=FileField(allow_empty_file=False),
-                                 required=False,
-                                 write_only=True,
-                                 allow_empty=True)
-    gallery = serializers.PrimaryKeyRelatedField(queryset=Gallery.objects.all())
+    gallery = serializers.HiddenField(default=None)
 
     class Meta:
         model = GalleryFile
-        fields = ('id', 'file', 'image_for_video', 'gallery')
+        fields = ('id', 'title', 'file', 'image_for_video', 'gallery')
         read_only_fields = ('id', 'gallery')
-
-    def create(self, validated_data):
-        files = validated_data.pop('file', [])
-        with transaction.atomic():
-            for file in files:
-                GalleryFile.objects.create(file=file, **validated_data)
-        return super(GalleryFileSerializer, self).data
 
 
 class GallerySerializer(serializers.ModelSerializer):
-    file = serializers.ListField(child=FileField(allow_empty_file=False),
-                                 required=False,
-                                 write_only=True,
-                                 allow_empty=True)
-    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None),
-                                              required=False)
+    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+    file = GalleryFileSerializer(source='gallery_files', many=True)
 
     class Meta:
         model = Gallery
@@ -175,21 +158,9 @@ class GallerySerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('id', 'course', 'menu')
 
-    def create(self, validated_data):
-        files = validated_data.pop('file', [])
-        with transaction.atomic():
-            try:
-                gallery = get_object_or_404(Gallery, course=validated_data.get('course'))
-            except Http404:
-                gallery = Gallery.objects.create(**validated_data)
-            for file in files:
-                GalleryFile.objects.create(gallery=gallery, file=file)
-        return gallery
-
     def to_representation(self, instance):
         data = super(GallerySerializer, self).to_representation(instance)
         data['course'] = instance.course.get_category_display()
-        data['menu'] = instance.menu.title
         return data
 
     def update(self, instance, validated_data):
@@ -264,10 +235,10 @@ class ProgramSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'content',
-            'information_content',
-            'main_image',
-            'information_image',
+            # 'content',
+            # 'information_content',
+            # 'main_image',
+            # 'information_image',
             'course',
         )
 
