@@ -224,7 +224,7 @@ class Program(Base):
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs')
 
     def __str__(self):
-        return self.title
+        return self.title['ru']
 
 
 """Рекламный пост"""
