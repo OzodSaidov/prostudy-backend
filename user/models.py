@@ -223,6 +223,9 @@ class Program(Base):
     # information_image = models.ImageField(upload_to='programs/', validators=[validate_image_type])
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs')
 
+    def __str__(self):
+        return self.title
+
 
 """Рекламный пост"""
 class Advertisement(Base):
