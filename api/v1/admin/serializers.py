@@ -158,10 +158,10 @@ class GallerySerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('id', 'course', 'menu')
 
-    def to_representation(self, instance):
-        data = super(GallerySerializer, self).to_representation(instance)
-        data['course'] = instance.course.get_category_display()
-        return data
+    # def to_representation(self, instance):
+    #     data = super(GallerySerializer, self).to_representation(instance)
+    #     data['course'] = instance.course.get_category_display()
+    #     return data
 
     def update(self, instance, validated_data):
         title = validated_data.pop('title', dict())

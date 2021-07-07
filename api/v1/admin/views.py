@@ -51,7 +51,10 @@ class GalleryFileRetrieveDestroyView(RetrieveDestroyAPIView):
 class GalleryCreateView(ListCreateAPIView):
     serializer_class = GallerySerializer
     permission_classes = [AllowAny, ]
-    queryset = Gallery.objects.all()
+
+    def get_queryset(self):
+        queryset = Gallery.objects.filter(course__category__isnull=False)
+        return queryset
 
 
 class GalleryEditView(RetrieveUpdateDestroyAPIView):
