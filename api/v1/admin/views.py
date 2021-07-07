@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpRequest
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, \
     ListAPIView, CreateAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
@@ -6,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from api.v1.admin.serializers import *
+# from api.v1.admin.services.throttles import PostAnononymousRateThrottle
 from user.models import *
 
 
@@ -153,12 +155,12 @@ class InfoContentByProgramView(APIView):
 
 class QuestionListByProgramView(APIView):
     serializer_class = QuestionAndAnswersSerializer
-    queryset = QuestionAndAnswers.objects.all()
+    queryset = QuestionAndAnswer.objects.all()
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         print(kwargs['id'])
-        queryset = QuestionAndAnswers.objects.filter(program_id=self.kwargs['id'])
+        queryset = QuestionAndAnswer.objects.filter(program_id=self.kwargs['id'])
         serializer = QuestionAndAnswersSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -190,6 +192,7 @@ class AdvertisementEditView(RetrieveUpdateDestroyAPIView):
 
 
 class FeedbackCreateView(ListCreateAPIView):
+    # throttle_classes = [PostAnononymousRateThrottle, ]
     permission_classes = [AllowAny]
     serializer_class = FeedbackSerializer
     queryset = Feedback.objects.all()
@@ -203,6 +206,7 @@ class FeedbackEditView(RetrieveDestroyAPIView):
 
 
 class SubscriptionRequestCreateView(ListCreateAPIView):
+    # throttle_classes = [PostAnononymousRateThrottle]
     permission_classes = [AllowAny]
     serializer_class = SubscriptionRequestSerializer
     queryset = SubscriptionRequest.objects.all()
@@ -299,8 +303,13 @@ class CertificateByCourseView(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            serializer = CertificateSerializer(Certificate.objects.get(course_id=self.kwargs['id']))
-            return Response(serializer.data)
+            cert = Certificate.objects.get(course_id=self.kwargs['id'])
+            serializer = CertificateSerializer(cert)
+            title = serializer.data['title']
+            image = serializer.data['image']
+            domain = request.scheme + '://' + request.get_host()
+            image_url = domain + image
+            return Response(data={"title": title, "image": image_url})
         except ObjectDoesNotExist:
             return Response(status=404)
 
@@ -321,10 +330,10 @@ class CertificateEditView(RetrieveUpdateDestroyAPIView):
 class QuestionAndAnswersListByCourseView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = QuestionAndAnswersSerializer
-    queryset = QuestionAndAnswers.objects.all()
+    queryset = QuestionAndAnswer.objects.all()
 
     def get(self, request, *args, **kwargs):
-        queryset = QuestionAndAnswers.objects.filter(course_id=self.kwargs['id'])
+        queryset = QuestionAndAnswer.objects.filter(course_id=self.kwargs['id'])
         serializer = QuestionAndAnswersSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -332,13 +341,13 @@ class QuestionAndAnswersListByCourseView(ListAPIView):
 class QuestionAndAnswersCreateView(CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = QuestionAndAnswersSerializer
-    queryset = QuestionAndAnswers.objects.all()
+    queryset = QuestionAndAnswer.objects.all()
 
 
 class QuestionAndAnswersEditView(RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
     serializer_class = QuestionAndAnswersSerializer
-    queryset = QuestionAndAnswers.objects.all()
+    queryset = QuestionAndAnswer.objects.all()
     lookup_url_kwarg = 'id'
 
 

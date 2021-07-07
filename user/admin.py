@@ -13,7 +13,7 @@ from .models import (
     InformationContent,
     InformationContentDetail,
     CostOfEducation,
-    QuestionAndAnswers,
+    QuestionAndAnswer,
     Result,
     Certificate,
     Menu,
@@ -45,14 +45,17 @@ class CourseFileAdmin(admin.ModelAdmin):
 class TeacherAdmin(admin.ModelAdmin):
     list_display = ('fullname', 'specialty', 'experience')
 
+class InformationContentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
+
 
 admin.site.register(User, UserAdmin)
 admin.site.register(Gallery)
 admin.site.register(Course, CourseAdmin)
-admin.site.register(InformationContent)
+admin.site.register(InformationContent, InformationContentAdmin)
 admin.site.register(InformationContentDetail)
 admin.site.register(CostOfEducation)
-admin.site.register(QuestionAndAnswers)
+admin.site.register(QuestionAndAnswer)
 admin.site.register(Result)
 admin.site.register(Certificate)
 admin.site.register(Post)
@@ -62,7 +65,7 @@ admin.site.register(Feedback)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Advertisement)
 admin.site.register(SubscriptionRequest)
-admin.site.register(Menu,MenuAdmin)
+admin.site.register(Menu, MenuAdmin)
 admin.site.register(Program)
 admin.site.register(GalleryFile, GalleryFileAdmin)
 admin.site.register(CourseFile, CourseFileAdmin)

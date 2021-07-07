@@ -2,6 +2,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import ListField, FileField, ImageField
 
+from prostudy import settings
 from user.models import (
     PostImage,
     Feedback,
@@ -16,7 +17,7 @@ from user.models import (
     Post,
     Program,
     CourseFile,
-    Company, CostOfEducation, Certificate, QuestionAndAnswers, Result, InformationContent,
+    Company, CostOfEducation, Certificate, QuestionAndAnswer, Result, InformationContent,
     InformationContentDetail,
 )
 
@@ -244,14 +245,21 @@ class ProgramSerializer(serializers.ModelSerializer):
 
 
 class CertificateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Certificate
         fields = ('id', 'title', 'image', 'course')
 
+    def to_representation(self, instance):
+
+        data = super(CertificateSerializer, self).to_representation(instance)
+
+        return data
+
 
 class QuestionAndAnswersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = QuestionAndAnswers
+        model = QuestionAndAnswer
         fields = ('id', 'title', 'description', 'full_description', 'course', 'program')
 
 
