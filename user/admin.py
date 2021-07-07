@@ -23,6 +23,8 @@ from .models import (
     Company,
 )
 
+class MenuAdmin(admin.ModelAdmin):
+    list_display = ('title', 'id')
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email',)
