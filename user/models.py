@@ -56,9 +56,9 @@ class Post(Base):
     is_active = models.BooleanField(default=True)
 
 
-class PostAttachment(Base):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='attachments')
-    file = models.FileField(upload_to='post_attachments/')
+# class PostAttachment(Base):
+#     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='attachments')
+#     file = models.FileField(upload_to='post_attachments/')
 
 
 class PostImage(Base):
@@ -184,6 +184,9 @@ class InformationContent(Base):
     course = models.OneToOneField(Course, on_delete=models.CASCADE, null=True, blank=True)
     program = models.OneToOneField('Program', on_delete=models.CASCADE, null=True, blank=True)
     menu = models.OneToOneField(Menu, on_delete=models.CASCADE, null=True, blank=True)
+
+    def __str__(self):
+        return self.title['ru']
 
 class InformationContentDetail(Base):
     title = models.JSONField(default=dict)

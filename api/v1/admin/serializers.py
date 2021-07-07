@@ -10,7 +10,7 @@ from user.models import (
     Teacher,
     Advertisement,
     SubscriptionRequest,
-    PostAttachment,
+    # PostAttachment,
     Course,
     Menu,
     Post,
@@ -49,11 +49,11 @@ class MenuSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class PostAttachmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = PostAttachment
-        fields = ('id', 'file', 'post')
-        read_only_fields = ('id', 'post')
+# class PostAttachmentSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = PostAttachment
+#         fields = ('id', 'file', 'post')
+#         read_only_fields = ('id', 'post')
 
 
 class PostImageSerializer(serializers.ModelSerializer):
@@ -64,10 +64,10 @@ class PostImageSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    attachments = ListField(child=FileField(allow_empty_file=False),
-                            required=False,
-                            write_only=True,
-                            allow_empty=True)
+    # attachments = ListField(child=FileField(allow_empty_file=False),
+    #                         required=False,
+    #                         write_only=True,
+    #                         allow_empty=True)
     images = ListField(child=ImageField(allow_empty_file=False),
                        required=False,
                        write_only=True,
@@ -84,7 +84,7 @@ class PostSerializer(serializers.ModelSerializer):
             'url',
             'slug',
             'short_content',
-            'attachments',
+            # 'attachments',
             'images',
             'menu',
             'course',
@@ -96,14 +96,14 @@ class PostSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        attachments = validated_data.pop('attachments', [])
+        # attachments = validated_data.pop('attachments', [])
         images = validated_data.pop('images', [])
 
         with transaction.atomic():
             post = super().create(validated_data)
-            for attachment in attachments:
-                PostAttachment.objects.create(post=post,
-                                              file=attachment)
+            # for attachment in attachments:
+            #     PostAttachment.objects.create(post=post,
+            #                                   file=attachment)
             for image in images:
                 PostImage.objects.create(post=post,
                                          file=image)
@@ -124,9 +124,9 @@ class PostSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response.update({
-            'attachments': PostAttachmentSerializer(instance.attachments.all(),
-                                                    context=self.context,
-                                                    many=True).data,
+            # 'attachments': PostAttachmentSerializer(instance.attachments.all(),
+            #                                         context=self.context,
+            #                                         many=True).data,
             'images': PostImageSerializer(instance.images.all(),
                                           context=self.context,
                                           many=True).data,

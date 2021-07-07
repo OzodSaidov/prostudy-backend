@@ -8,7 +8,7 @@ from .models import (
     Teacher,
     Advertisement,
     SubscriptionRequest,
-    PostAttachment,
+    # PostAttachment,
     Course,
     InformationContent,
     InformationContentDetail,
@@ -55,7 +55,7 @@ admin.site.register(Result)
 admin.site.register(Certificate)
 admin.site.register(Post)
 admin.site.register(PostImage)
-admin.site.register(PostAttachment)
+# admin.site.register(PostAttachment)
 admin.site.register(Feedback)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Advertisement)
