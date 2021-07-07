@@ -50,9 +50,9 @@ class Post(Base):
     url = models.URLField(null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
     short_content = models.JSONField(null=True, blank=True, default=dict)
-    menu = models.OneToOneField(Menu, on_delete=models.CASCADE, null=True, blank=True)
-    course = models.OneToOneField('Course', on_delete=models.CASCADE, null=True, blank=True)
-    program = models.OneToOneField('Program', on_delete=models.CASCADE, null=True, blank=True)
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, null=True, blank=True)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, null=True, blank=True)
+    program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
 
