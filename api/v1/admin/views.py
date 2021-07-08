@@ -241,7 +241,28 @@ class InformationContentByCourseView(APIView):
         try:
             queryset = InformationContent.objects.get(course_id=self.kwargs['id'])
             serializer = InformationContentSerializer(queryset)
-            return Response(serializer.data)
+            domain = request.scheme + '://' + request.get_host()
+            title = serializer.data['title']
+            body = serializer.data['body']
+            background = serializer.data['background']
+            if background:
+                background = domain + background
+            list_content_detail = serializer.data['information_content_detail']
+            inf_content_detail = []
+            for content in list_content_detail:
+                detail = {
+                    "title": content['title'],
+                    "body": content['body'],
+                    "image": domain + content['image']
+                }
+                inf_content_detail.append(detail)
+            context = {
+                "title": title,
+                "body": body,
+                "background": background,
+                "information_content_detail": inf_content_detail
+            }
+            return Response(context)
         except ObjectDoesNotExist:
             return Response(status=404)
 
@@ -278,8 +299,11 @@ class CostEducationListByCourseView(ListAPIView):
     queryset = CostOfEducation.objects.all()
 
     def get(self, request, *args, **kwargs):
+        domain = request.scheme + '://' + request.get_host()
         queryset = CostOfEducation.objects.filter(course_id=self.kwargs['id'])
         serializer = CostOfEducationSerializer(queryset, many=True)
+        for data in serializer.data:
+            print(data)
         return Response(serializer.data)
 
 
@@ -396,6 +420,7 @@ class GalleryByMenuView(APIView):
             return Response(serializer.data)
         except ObjectDoesNotExist:
             return Response(status=404)
+
 
 class PostListByProgramView(ListAPIView):
     permission_classes = [AllowAny]
