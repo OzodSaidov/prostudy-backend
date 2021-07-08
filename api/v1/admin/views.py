@@ -145,9 +145,18 @@ class ProgramListByCourseView(ListAPIView):
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
+        domain = request.scheme + '://' + request.get_host()
         queryset = Program.objects.filter(course_id=self.kwargs['id'])
         serializer = ProgramSerializer(queryset, many=True)
-        return Response(serializer.data)
+        list_programs = []
+        for data in serializer.data:
+            context = {
+                "id": data['id'],
+                "title": data['title'],
+                "image": domain + data['image'],
+            }
+            list_programs.append(context)
+        return Response(list_programs)
 
 
 class InfoContentByProgramView(APIView):

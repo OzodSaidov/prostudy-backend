@@ -92,6 +92,7 @@ class GalleryFile(Base):
 
     def gallery_file_path(self, filename):
         return 'gallery/{0}/{1}'.format(self.gallery.title, filename)
+
     title = models.CharField(max_length=100, null=True)
     file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
     image_for_video = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
@@ -101,6 +102,8 @@ class GalleryFile(Base):
 
 
 """Предподаватель"""
+
+
 class Teacher(Base):
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
@@ -119,6 +122,8 @@ class Teacher(Base):
 
 
 """Курс"""
+
+
 class Course(Base):
     GRAPHIC_DESIGN = 1
     WEB_DESIGN = 2
@@ -153,13 +158,8 @@ class Course(Base):
     class Meta:
         ordering = ['id']
 
-class QuestionTitle(Base):
-    title = models.JSONField(default=dict)
-
 
 class QuestionAndAnswer(Base):
-    main_title = models.ForeignKey(QuestionTitle, on_delete=models.CASCADE, null=True,
-                                   blank=True, related_name='question_titles')
     title = models.JSONField(default=dict, null=True, blank=True)
     description = models.JSONField(default=dict)
     full_description = models.JSONField(default=dict)
@@ -194,6 +194,7 @@ class InformationContent(Base):
     def __str__(self):
         return self.title['ru']
 
+
 class InformationContentDetail(Base):
     title = models.JSONField(default=dict)
     body = models.JSONField(default=dict)
@@ -226,10 +227,7 @@ class CourseFile(Base):
 
 class Program(Base):
     title = models.JSONField(default=dict)
-    # content = models.JSONField(default=dict)
-    # information_content = models.JSONField(default=dict)
-    # main_image = models.ImageField(upload_to='programs/', validators=[validate_image_type], null=True)
-    # information_image = models.ImageField(upload_to='programs/', validators=[validate_image_type])
+    image = models.ImageField(upload_to='program/', validators=[validate_image_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs')
 
     def __str__(self):
