@@ -97,6 +97,7 @@ class GalleryFile(Base):
     file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
     image_for_video = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
                                         null=True, blank=True)
+    url = models.URLField(null=True, blank=True)
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
 
@@ -235,6 +236,8 @@ class Program(Base):
 
 
 """Рекламный пост"""
+
+
 class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
@@ -245,6 +248,8 @@ class Advertisement(Base):
 
 
 """Обратная связь"""
+
+
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -257,6 +262,8 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
+
+
 class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
@@ -279,3 +286,9 @@ class Company(Base):
 
     def __str__(self):
         return self.title
+
+
+class AboutUs(Base):
+    image = models.ImageField(upload_to='about_us/', validators=[validate_image_type])
+    content = models.JSONField(default=dict)
+    menu = models.OneToOneField(Menu, on_delete=models.CASCADE)

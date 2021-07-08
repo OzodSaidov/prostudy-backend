@@ -18,7 +18,7 @@ from user.models import (
     Program,
     CourseFile,
     Company, CostOfEducation, Certificate, QuestionAndAnswer, Result, InformationContent,
-    InformationContentDetail
+    InformationContentDetail, AboutUs
 )
 
 
@@ -140,7 +140,7 @@ class GalleryFileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GalleryFile
-        fields = ('id', 'title', 'file', 'image_for_video', 'gallery')
+        fields = ('id', 'title', 'file', 'image_for_video', 'url', 'gallery')
         read_only_fields = ('id', 'gallery')
 
 
@@ -253,8 +253,6 @@ class CertificateSerializer(serializers.ModelSerializer):
 
 
 class QuestionAndAnswersSerializer(serializers.ModelSerializer):
-    main_title = serializers.HiddenField(default=None)
-
     class Meta:
         model = QuestionAndAnswer
         fields = ('id', 'title', 'description', 'full_description', 'course', 'program')
@@ -349,3 +347,9 @@ class CompanySerializer(serializers.ModelSerializer):
     class Meta:
         model = Company
         fields = ('id', 'title', 'url', 'logo', 'menu')
+
+
+class AboutUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AboutUs
+        fields = ('id', 'image', 'content')

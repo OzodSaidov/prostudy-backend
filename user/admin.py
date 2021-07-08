@@ -21,6 +21,7 @@ from .models import (
     Program,
     CourseFile,
     Company,
+    AboutUs,
 )
 
 
@@ -73,3 +74,4 @@ admin.site.register(Program)
 admin.site.register(GalleryFile, GalleryFileAdmin)
 admin.site.register(CourseFile, CourseFileAdmin)
 admin.site.register(Company)
+admin.site.register(AboutUs)
