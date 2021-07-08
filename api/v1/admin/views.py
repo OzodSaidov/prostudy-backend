@@ -302,9 +302,17 @@ class CostEducationListByCourseView(ListAPIView):
         domain = request.scheme + '://' + request.get_host()
         queryset = CostOfEducation.objects.filter(course_id=self.kwargs['id'])
         serializer = CostOfEducationSerializer(queryset, many=True)
+        list_cost_education = []
         for data in serializer.data:
-            print(data)
-        return Response(serializer.data)
+            context = {
+                "title": data['title'],
+                "body": data['body'],
+                "old_price": data['old_price'],
+                "new_price": data['new_price'],
+                "image": domain + data['image'],
+            }
+            list_cost_education.append(context)
+        return Response(list_cost_education)
 
 
 class CostEducationCreateView(CreateAPIView):
