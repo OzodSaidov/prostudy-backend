@@ -29,6 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG") == 'TRUE')
 
+# ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0', '127.0.0.1']
 ALLOWED_HOSTS = ['sherzodbek.ml', '127.0.0.1']
 
 # Application definition
@@ -157,7 +158,7 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-IMAGE_TYPES = ('.JPG', '.JPEG', '.PNG', '.GIF', '.SVG')
+IMAGE_TYPES = ('.JPG', '.JPEG', '.PNG', '.GIF')
 VIDEO_TYPES = ('.MP4', '.MPEG')
 AUTH_USER_MODEL = 'user.User'
 
