@@ -38,7 +38,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 class GalleryFileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'file', 'image_for_video', 'gallery')
+    list_display = ('id', 'src', 'thumbnail', 'gallery')
 
 
 class CourseFileAdmin(admin.ModelAdmin):

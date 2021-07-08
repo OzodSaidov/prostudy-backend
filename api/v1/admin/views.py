@@ -432,7 +432,20 @@ class PostByMenuView(ListAPIView):
     queryset = Post.objects.all()
 
     def get(self, request, *args, **kwargs):
-        serializer = PostSerializer(Post.objects.filter(menu_id=self.kwargs['id']))
+        # domain = request.scheme + '://' + request.get_host()
+        posts = Post.objects.filter(menu_id=self.kwargs['id'])
+        serializer = PostSerializer(posts, many=True)
+        # post_list = []
+        # for post in serializer.data:
+        #     post_data = {
+        #         "title": post['title'],
+        #         "content": post['content'],
+        #         "short_content": post['short_content'],
+        #
+        #         "post_images": post['post_images']['file']
+        #     }
+        #     post_list.append(post_data)
+        #     print(post_list)
         return Response(serializer.data)
 
 

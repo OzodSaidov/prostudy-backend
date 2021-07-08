@@ -4,7 +4,7 @@ from api.v1.admin.views import *
 urlpatterns = [
     path('menu/create/', MenuCreateView.as_view()),
     path('menu/<int:id>/', MenuEditView.as_view()),
-    path('menu/<int:id>/post/', PostByMenuView.as_view()),
+    path('menu/<int:id>/posts/', PostByMenuView.as_view()),
     path('menu/<int:id>/gallery/', GalleryByMenuView.as_view()),
     path('post/create/', PostCreateView.as_view()),
     path('post/<int:id>/', PostEditView.as_view()),

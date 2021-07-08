@@ -66,6 +66,9 @@ class PostImage(Base):
     file = models.ImageField(upload_to='post_images/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.file.url
+
 
 class FileQuerySet(models.QuerySet):
     def delete(self, *args, **kwargs):
@@ -94,9 +97,9 @@ class GalleryFile(Base):
         return 'gallery/{0}/{1}'.format(self.gallery.title, filename)
 
     title = models.CharField(max_length=100, null=True)
-    file = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
-    image_for_video = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
-                                        null=True, blank=True)
+    src = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
+    thumbnail = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
+                                  null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
