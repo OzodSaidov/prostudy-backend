@@ -119,7 +119,7 @@ class GalleryFileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GalleryFile
-        fields = ('id', 'title', 'file', 'image_for_video', 'url', 'gallery')
+        fields = ('id', 'title', 'src', 'thumbnail', 'url', 'gallery')
         read_only_fields = ('id', 'gallery')
 
 
