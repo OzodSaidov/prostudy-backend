@@ -261,11 +261,14 @@ class QuestionTitleSerializer(serializers.ModelSerializer):
 
 
 class QuestionAndAnswersSerializer(serializers.ModelSerializer):
-    main_title = QuestionTitleSerializer(source='question_titles')
-
     class Meta:
         model = QuestionAndAnswer
         fields = ('id', 'main_title', 'title', 'description', 'full_description', 'course', 'program')
+
+    def to_representation(self, instance):
+        data = super(QuestionAndAnswersSerializer, self).to_representation(instance)
+        data['main_title'] = instance.main_title.title
+        return data
 
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:
