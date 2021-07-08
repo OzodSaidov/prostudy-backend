@@ -158,7 +158,8 @@ class QuestionTitle(Base):
 
 
 class QuestionAndAnswer(Base):
-    main_title = models.ForeignKey(QuestionTitle, on_delete=models.CASCADE, null=True, blank=True)
+    main_title = models.ForeignKey(QuestionTitle, on_delete=models.CASCADE, null=True,
+                                   blank=True, related_name='question_titles')
     title = models.JSONField(default=dict, null=True, blank=True)
     description = models.JSONField(default=dict)
     full_description = models.JSONField(default=dict)

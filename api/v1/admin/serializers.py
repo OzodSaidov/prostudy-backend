@@ -254,18 +254,18 @@ class CertificateSerializer(serializers.ModelSerializer):
 
         return data
 
+class QuestionTitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuestionTitle
+        fields = ('id', 'title')
+
 
 class QuestionAndAnswersSerializer(serializers.ModelSerializer):
-    main_title = serializers.PrimaryKeyRelatedField(queryset=QuestionTitle.objects.all(), many=True)
+    main_title = QuestionTitleSerializer(source='question_titles')
 
     class Meta:
         model = QuestionAndAnswer
         fields = ('id', 'main_title', 'title', 'description', 'full_description', 'course', 'program')
-
-    def to_representation(self, instance):
-        data = super(QuestionAndAnswersSerializer, self).to_representation(instance)
-        data['main_title'] = instance.main_title.title
-        return data
 
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:

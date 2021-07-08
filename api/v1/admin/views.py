@@ -87,17 +87,17 @@ class TeacherListByCourseView(ListAPIView):
         domain = request.scheme + '://' + request.get_host()
         queryset = Teacher.objects.filter(course_id=self.kwargs['id'])
         serializer = TeacherSerializer(queryset, many=True)
-        # list_teachers = []
-        # for data in serializer.data:
-        #     context = {
-        #         "title": data['title'],
-        #         "body": data['body'],
-        #         "old_price": data['old_price'],
-        #         "new_price": data['new_price'],
-        #         "image": domain + data['image'],
-        #     }
-        #     list_teachers.append(context)
-        return Response(serializer.data)
+        list_teachers = []
+        for data in serializer.data:
+            context = {
+                "first_name": data['first_name'],
+                "last_name": data['last_name'],
+                "photo": domain + data['photo'],
+                "specialty": data['specialty'],
+                "experience": data['experience'],
+            }
+            list_teachers.append(context)
+        return Response(list_teachers)
 
 
 class TeacherCreateView(ListCreateAPIView):
