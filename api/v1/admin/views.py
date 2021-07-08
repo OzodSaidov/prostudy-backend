@@ -84,8 +84,19 @@ class TeacherListByCourseView(ListAPIView):
     queryset = Teacher.objects.all()
 
     def get(self, request, *args, **kwargs):
+        domain = request.scheme + '://' + request.get_host()
         queryset = Teacher.objects.filter(course_id=self.kwargs['id'])
         serializer = TeacherSerializer(queryset, many=True)
+        # list_teachers = []
+        # for data in serializer.data:
+        #     context = {
+        #         "title": data['title'],
+        #         "body": data['body'],
+        #         "old_price": data['old_price'],
+        #         "new_price": data['new_price'],
+        #         "image": domain + data['image'],
+        #     }
+        #     list_teachers.append(context)
         return Response(serializer.data)
 
 
@@ -159,7 +170,6 @@ class QuestionListByProgramView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
-        print(kwargs['id'])
         queryset = QuestionAndAnswer.objects.filter(program_id=self.kwargs['id'])
         serializer = QuestionAndAnswersSerializer(queryset, many=True)
         return Response(serializer.data)

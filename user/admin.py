@@ -21,10 +21,13 @@ from .models import (
     Program,
     CourseFile,
     Company,
+    QuestionTitle,
 )
+
 
 class MenuAdmin(admin.ModelAdmin):
     list_display = ('title', 'id')
+
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('username', 'email',)
@@ -44,6 +47,7 @@ class CourseFileAdmin(admin.ModelAdmin):
 
 class TeacherAdmin(admin.ModelAdmin):
     list_display = ('fullname', 'specialty', 'experience')
+
 
 class InformationContentAdmin(admin.ModelAdmin):
     list_display = ('id', 'title')
@@ -70,3 +74,4 @@ admin.site.register(Program)
 admin.site.register(GalleryFile, GalleryFileAdmin)
 admin.site.register(CourseFile, CourseFileAdmin)
 admin.site.register(Company)
+admin.site.register(QuestionTitle)

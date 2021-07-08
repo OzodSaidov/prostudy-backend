@@ -18,7 +18,7 @@ from user.models import (
     Program,
     CourseFile,
     Company, CostOfEducation, Certificate, QuestionAndAnswer, Result, InformationContent,
-    InformationContentDetail,
+    InformationContentDetail, QuestionTitle,
 )
 
 
@@ -245,23 +245,27 @@ class ProgramSerializer(serializers.ModelSerializer):
 
 
 class CertificateSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Certificate
         fields = ('id', 'title', 'image', 'course')
 
     def to_representation(self, instance):
-
         data = super(CertificateSerializer, self).to_representation(instance)
 
         return data
 
 
 class QuestionAndAnswersSerializer(serializers.ModelSerializer):
+    main_title = serializers.PrimaryKeyRelatedField(queryset=QuestionTitle.objects.all(), many=True)
+
     class Meta:
         model = QuestionAndAnswer
-        fields = ('id', 'title', 'description', 'full_description', 'course', 'program')
+        fields = ('id', 'main_title', 'title', 'description', 'full_description', 'course', 'program')
 
+    def to_representation(self, instance):
+        data = super(QuestionAndAnswersSerializer, self).to_representation(instance)
+        data['main_title'] = instance.main_title.title
+        return data
 
 class ResultSerializer(serializers.ModelSerializer):
     class Meta:
