@@ -120,6 +120,7 @@ class GalleryFileSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'src', 'thumbnail', 'url', 'gallery')
         read_only_fields = ('id', 'gallery')
 
+
 class GallerySerializer(serializers.ModelSerializer):
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
     file = GalleryFileSerializer(source='gallery_files', many=True)
@@ -401,3 +402,16 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
             files.append(context)
         data['gallery'] = files
         return data
+
+
+class MenuBlogSerializer(serializers.ModelSerializer):
+    post = PostSerializer(source='posts', many=True)
+    information_content = InformationContentSerializer(source='inf_contents')
+    gallery = GallerySerializer(source='galleries', many=True)
+
+    class Meta:
+        model = Menu
+        fields = ('id', 'href', 'title', 'post', 'information_content', 'gallery', 'parent', 'children', 'is_active')
+        extra_kwargs = {
+            'children': {'read_only': True},
+        }

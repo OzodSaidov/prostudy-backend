@@ -484,7 +484,9 @@ class ProgramInformationView(RetrieveAPIView):
     queryset = Program.objects.all()
     lookup_url_kwarg = 'id'
 
-    # def get(self, request, *args, **kwargs):
-    #     program = Program.objects.get(id=self.kwargs['id'])
-    #     gallery = Course.objects.get()
-    #     print(gallery)
+
+class MenuBlogView(RetrieveAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = MenuBlogSerializer
+    queryset = Menu.objects.all()
+    lookup_url_kwarg = 'id'

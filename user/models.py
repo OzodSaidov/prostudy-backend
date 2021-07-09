@@ -50,7 +50,7 @@ class Post(Base):
     url = models.URLField(null=True, blank=True)
     slug = models.SlugField(null=True, blank=True)
     short_content = models.JSONField(null=True, blank=True, default=dict)
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, null=True, blank=True)
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
     course = models.ForeignKey('Course', on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
     program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
     is_active = models.BooleanField(default=True)
@@ -196,7 +196,8 @@ class InformationContent(Base):
                                   related_name='inf_contents')
     program = models.OneToOneField('Program', on_delete=models.CASCADE, null=True, blank=True,
                                    related_name='inf_contents')
-    menu = models.OneToOneField(Menu, on_delete=models.CASCADE, null=True, blank=True)
+    menu = models.OneToOneField(Menu, on_delete=models.CASCADE, null=True, blank=True,
+                                related_name='inf_contents')
 
     def __str__(self):
         return self.title['ru']
