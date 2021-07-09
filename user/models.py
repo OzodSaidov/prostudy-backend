@@ -298,4 +298,4 @@ class Company(Base):
 class AboutUs(Base):
     image = models.ImageField(upload_to='about_us/', validators=[validate_image_type])
     content = models.JSONField(default=dict)
-    menu = models.OneToOneField(Menu, on_delete=models.CASCADE)
+    menu = models.OneToOneField(Menu, on_delete=models.CASCADE, related_name='about')

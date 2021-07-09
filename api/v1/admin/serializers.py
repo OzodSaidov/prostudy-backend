@@ -408,10 +408,11 @@ class MenuBlogSerializer(serializers.ModelSerializer):
     post = PostSerializer(source='posts', many=True)
     information_content = InformationContentSerializer(source='inf_contents')
     gallery = GallerySerializer(source='galleries', many=True)
+    about_us = AboutUsSerializer(source='about')
 
     class Meta:
         model = Menu
-        fields = ('id', 'href', 'title', 'post', 'information_content', 'gallery', 'parent', 'children', 'is_active')
+        fields = ('id', 'href', 'title', 'post', 'information_content', 'gallery', 'about_us', 'parent', 'children', 'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
