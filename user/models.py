@@ -191,7 +191,8 @@ class InformationContent(Base):
     body = models.JSONField(default=dict)
     background = models.ImageField(upload_to='information_content', null=True, blank=True,
                                    validators=[validate_image_type])
-    course = models.OneToOneField(Course, on_delete=models.CASCADE, null=True, blank=True)
+    course = models.OneToOneField(Course, on_delete=models.CASCADE, null=True, blank=True,
+                                  related_name='inf_contents')
     program = models.OneToOneField('Program', on_delete=models.CASCADE, null=True, blank=True)
     menu = models.OneToOneField(Menu, on_delete=models.CASCADE, null=True, blank=True)
 

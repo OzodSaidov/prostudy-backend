@@ -1,7 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, \
-    ListAPIView, CreateAPIView
+    ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,7 +18,7 @@ class GetInformationContent(APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            queryset = InformationContent.objects.get(course_id=self.kwargs['id'])
+            queryset = InformationContent.objects.get(menu_id=self.kwargs['id'])
             serializer = InformationContentSerializer(queryset)
             domain = request.scheme + '://' + request.get_host()
             title = serializer.data['title']
@@ -540,3 +540,9 @@ class InformationContentByMenuView(GetInformationContent):
     #         return Response(context)
     #     except ObjectDoesNotExist:
     #         return Response(status=404)
+
+class CourseInformationView(RetrieveAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CourseInformationSerializer
+    lookup_url_kwarg = 'id'
+    queryset = Course.objects.all()

@@ -56,6 +56,10 @@ class PostImageSerializer(serializers.ModelSerializer):
         fields = ('id', 'file', 'post', 'is_active')
         read_only_fields = ('id', 'post')
 
+    # def to_representation(self, instance):
+    #     domain = self.context['request']
+    #     data = super(PostImageSerializer, self).to_representation(instance)
+
 
 class PostSerializer(serializers.ModelSerializer):
     post_images = ListField(child=ImageField(allow_empty_file=False),
@@ -63,6 +67,7 @@ class PostSerializer(serializers.ModelSerializer):
                             write_only=True,
                             allow_empty=True)
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
+
     # file_url = PostImageSerializer
     class Meta:
         model = Post
@@ -332,3 +337,52 @@ class AboutUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AboutUs
         fields = ('id', 'image', 'content')
+
+
+class CourseInformationSerializer(serializers.ModelSerializer):
+    course_file = CourseFileSerializer(source='course_files', many=True, required=False)
+    teacher = TeacherSerializer(source='teachers', many=True)
+    program_training = QuestionAndAnswersSerializer(source='programs_training', many=True)
+    result = ResultSerializer(source='results', many=True)
+    certificate = CertificateSerializer(source='cert')
+    inf_content = InformationContentSerializer(source='inf_contents')
+    cost_education = CostOfEducationSerializer(source='cost_educations', many=True)
+    program = ProgramSerializer(source='programs', many=True)
+
+    class Meta:
+        model = Course
+        fields = (
+            'id',
+            'category',
+            'title',
+            'href',
+            'menu',
+            'background',
+            'course_file',
+            'teacher',
+            'program_training',
+            'result',
+            'certificate',
+            'inf_content',
+            'cost_education',
+            'program'
+        )
+
+    def update(self, instance, validated_data):
+        title = validated_data.pop('title', dict())
+        instance.title.update(title)
+        return super(CourseInformationSerializer, self).update(instance, validated_data)
+
+    def to_representation(self, instance):
+        urls = {}
+        data = super(CourseInformationSerializer, self).to_representation(instance)
+        data['category'] = instance.get_category_display()
+        data['menu'] = instance.menu.title
+        for file in data['course_file']:
+            file_url = file['course_file']
+            if file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                urls['image'] = file_url
+            elif file_url.endswith(('.mp4', '.mpeg')):
+                urls['video'] = file_url
+        data['course_file'] = urls
+        return data
