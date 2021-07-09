@@ -462,7 +462,7 @@ class ResultEditView(RetrieveUpdateDestroyAPIView):
 
 class PostByMenuView(ListAPIView):
     permission_classes = [AllowAny]
-    serializers = PostSerializer
+    serializer_class = PostSerializer
     queryset = Post.objects.all()
 
     def get(self, request, *args, **kwargs):
@@ -485,7 +485,7 @@ class PostByMenuView(ListAPIView):
 
 class GalleryByMenuView(APIView):
     permission_classes = [AllowAny]
-    serializers = GallerySerializer
+    serializer_class = GallerySerializer
     queryset = Gallery.objects.all()
 
     def get(self, request, *args, **kwargs):
@@ -498,7 +498,7 @@ class GalleryByMenuView(APIView):
 
 class PostListByProgramView(ListAPIView):
     permission_classes = [AllowAny]
-    serializers = PostSerializer
+    serializer_class = PostSerializer
     queryset = Post.objects.all()
 
     def get(self, request, *args, **kwargs):
