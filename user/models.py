@@ -113,6 +113,7 @@ class Teacher(Base):
     last_name = models.JSONField(default=dict)
     specialty = models.JSONField(default=dict)
     experience = models.JSONField(default=dict)
+    about = models.JSONField(default=dict)
     photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, related_name='teachers', null=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='teachers')

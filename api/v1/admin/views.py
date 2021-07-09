@@ -11,40 +11,6 @@ from api.v1.admin.serializers import *
 from user.models import *
 
 
-class GetInformationContent(APIView):
-    permission_classes = [AllowAny]
-    serializers = InformationContentSerializer
-    queryset = InformationContent.objects.all()
-
-    def get(self, request, *args, **kwargs):
-        try:
-            queryset = InformationContent.objects.get(menu_id=self.kwargs['id'])
-            serializer = InformationContentSerializer(queryset)
-            domain = request.scheme + '://' + request.get_host()
-            title = serializer.data['title']
-            body = serializer.data['body']
-            background = serializer.data['background']
-            if background:
-                background = domain + background
-            list_content_detail = serializer.data['information_content_detail']
-            inf_content_detail = []
-            for content in list_content_detail:
-                detail = {
-                    "title": content['title'],
-                    "body": content['body'],
-                    "image": domain + content['image']
-                }
-                inf_content_detail.append(detail)
-            context = {
-                "title": title,
-                "body": body,
-                "background": background,
-                "information_content_detail": inf_content_detail
-            }
-            return Response(context)
-        except ObjectDoesNotExist:
-            return Response(status=404)
-
 class PostCreateView(ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = (AllowAny,)
@@ -118,20 +84,20 @@ class TeacherListByCourseView(ListAPIView):
     queryset = Teacher.objects.all()
 
     def get(self, request, *args, **kwargs):
-        domain = request.scheme + '://' + request.get_host()
+        # domain = request.scheme + '://' + request.get_host()
         queryset = Teacher.objects.filter(course_id=self.kwargs['id'])
         serializer = TeacherSerializer(queryset, many=True)
-        list_teachers = []
-        for data in serializer.data:
-            context = {
-                "first_name": data['first_name'],
-                "last_name": data['last_name'],
-                "photo": domain + data['photo'],
-                "specialty": data['specialty'],
-                "experience": data['experience'],
-            }
-            list_teachers.append(context)
-        return Response(list_teachers)
+        # list_teachers = []
+        # for data in serializer.data:
+        #     context = {
+        #         "first_name": data['first_name'],
+        #         "last_name": data['last_name'],
+        #         "photo": domain + data['photo'],
+        #         "specialty": data['specialty'],
+        #         "experience": data['experience'],
+        #     }
+        #     list_teachers.append(context)
+        return Response(serializer.data)
 
 
 class TeacherCreateView(ListCreateAPIView):
@@ -179,18 +145,18 @@ class ProgramListByCourseView(ListAPIView):
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
-        domain = request.scheme + '://' + request.get_host()
+        # domain = request.scheme + '://' + request.get_host()
         queryset = Program.objects.filter(course_id=self.kwargs['id'])
         serializer = ProgramSerializer(queryset, many=True)
-        list_programs = []
-        for data in serializer.data:
-            context = {
-                "id": data['id'],
-                "title": data['title'],
-                "image": domain + data['image'],
-            }
-            list_programs.append(context)
-        return Response(list_programs)
+        # list_programs = []
+        # for data in serializer.data:
+        #     context = {
+        #         "id": data['id'],
+        #         "title": data['title'],
+        #         "image": domain + data['image'],
+        #     }
+        #     list_programs.append(context)
+        return Response(serializer.data)
 
 
 class InfoContentByProgramView(APIView):
@@ -199,12 +165,9 @@ class InfoContentByProgramView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
-        try:
-            queryset = InformationContent.objects.get(program_id=self.kwargs['id'])
-            serializer = InformationContentSerializer(queryset)
-            return Response(serializer.data)
-        except ObjectDoesNotExist:
-            return Response(status=404)
+        queryset = InformationContent.objects.get(program_id=self.kwargs['id'])
+        serializer = InformationContentSerializer(queryset)
+        return Response(serializer.data)
 
 
 class QuestionListByProgramView(APIView):
@@ -291,33 +254,30 @@ class InformationContentByCourseView(APIView):
     queryset = InformationContent.objects.all()
 
     def get(self, request, *args, **kwargs):
-        try:
-            queryset = InformationContent.objects.get(course_id=self.kwargs['id'])
-            serializer = InformationContentSerializer(queryset)
-            domain = request.scheme + '://' + request.get_host()
-            title = serializer.data['title']
-            body = serializer.data['body']
-            background = serializer.data['background']
-            if background:
-                background = domain + background
-            list_content_detail = serializer.data['information_content_detail']
-            inf_content_detail = []
-            for content in list_content_detail:
-                detail = {
-                    "title": content['title'],
-                    "body": content['body'],
-                    "image": domain + content['image']
-                }
-                inf_content_detail.append(detail)
-            context = {
-                "title": title,
-                "body": body,
-                "background": background,
-                "information_content_detail": inf_content_detail
-            }
-            return Response(context)
-        except ObjectDoesNotExist:
-            return Response(status=404)
+        queryset = InformationContent.objects.get(course_id=self.kwargs['id'])
+        serializer = InformationContentSerializer(queryset)
+        # domain = request.scheme + '://' + request.get_host()
+        # title = serializer.data['title']
+        # body = serializer.data['body']
+        # background = serializer.data['background']
+        # if background:
+        #     background = domain + background
+        # list_content_detail = serializer.data['information_content_detail']
+        # inf_content_detail = []
+        # for content in list_content_detail:
+        #     detail = {
+        #         "title": content['title'],
+        #         "body": content['body'],
+        #         "image": domain + content['image']
+        #     }
+        #     inf_content_detail.append(detail)
+        # context = {
+        #     "title": title,
+        #     "body": body,
+        #     "background": background,
+        #     "information_content_detail": inf_content_detail
+        # }
+        return Response(serializer.data)
 
 
 class InformationContentCreateView(CreateAPIView):
@@ -352,20 +312,20 @@ class CostEducationListByCourseView(ListAPIView):
     queryset = CostOfEducation.objects.all()
 
     def get(self, request, *args, **kwargs):
-        domain = request.scheme + '://' + request.get_host()
+        # domain = request.scheme + '://' + request.get_host()
         queryset = CostOfEducation.objects.filter(course_id=self.kwargs['id'])
         serializer = CostOfEducationSerializer(queryset, many=True)
-        list_cost_education = []
-        for data in serializer.data:
-            context = {
-                "title": data['title'],
-                "body": data['body'],
-                "old_price": data['old_price'],
-                "new_price": data['new_price'],
-                "image": domain + data['image'],
-            }
-            list_cost_education.append(context)
-        return Response(list_cost_education)
+        # list_cost_education = []
+        # for data in serializer.data:
+        #     context = {
+        #         "title": data['title'],
+        #         "body": data['body'],
+        #         "old_price": data['old_price'],
+        #         "new_price": data['new_price'],
+        #         "image": domain + data['image'],
+        #     }
+        #     list_cost_education.append(context)
+        return Response(serializer.data)
 
 
 class CostEducationCreateView(CreateAPIView):
@@ -387,16 +347,13 @@ class CertificateByCourseView(APIView):
     queryset = Certificate.objects.all()
 
     def get(self, request, *args, **kwargs):
-        try:
-            cert = Certificate.objects.get(course_id=self.kwargs['id'])
-            serializer = CertificateSerializer(cert)
-            title = serializer.data['title']
-            image = serializer.data['image']
-            domain = request.scheme + '://' + request.get_host()
-            image_url = domain + image
-            return Response(data={"title": title, "image": image_url})
-        except ObjectDoesNotExist:
-            return Response(status=404)
+        cert = Certificate.objects.get(course_id=self.kwargs['id'])
+        serializer = CertificateSerializer(cert)
+        # title = serializer.data['title']
+        # image = serializer.data['image']
+        # domain = request.scheme + '://' + request.get_host()
+        # image_url = domain + image
+        return Response(serializer.data)
 
 
 class CertificateCreateView(CreateAPIView):
@@ -489,11 +446,8 @@ class GalleryByMenuView(APIView):
     queryset = Gallery.objects.all()
 
     def get(self, request, *args, **kwargs):
-        try:
-            serializer = GallerySerializer(Gallery.objects.get(menu_id=self.kwargs['id']))
-            return Response(serializer.data)
-        except ObjectDoesNotExist:
-            return Response(status=404)
+        serializer = GallerySerializer(Gallery.objects.get(menu_id=self.kwargs['id']))
+        return Response(serializer.data)
 
 
 class PostListByProgramView(ListAPIView):
@@ -507,39 +461,15 @@ class PostListByProgramView(ListAPIView):
         return Response(serializer.data)
 
 
-class InformationContentByMenuView(GetInformationContent):
-    pass
-    # permission_classes = [AllowAny]
-    # serializers = InformationContentSerializer
-    #
-    # def get(self, request, *args, **kwargs):
-    #     try:
-    #         queryset = InformationContent.objects.get(course_id=self.kwargs['id'])
-    #         serializer = InformationContentSerializer(queryset)
-    #         domain = request.scheme + '://' + request.get_host()
-    #         title = serializer.data['title']
-    #         body = serializer.data['body']
-    #         background = serializer.data['background']
-    #         if background:
-    #             background = domain + background
-    #         list_content_detail = serializer.data['information_content_detail']
-    #         inf_content_detail = []
-    #         for content in list_content_detail:
-    #             detail = {
-    #                 "title": content['title'],
-    #                 "body": content['body'],
-    #                 "image": domain + content['image']
-    #             }
-    #             inf_content_detail.append(detail)
-    #         context = {
-    #             "title": title,
-    #             "body": body,
-    #             "background": background,
-    #             "information_content_detail": inf_content_detail
-    #         }
-    #         return Response(context)
-    #     except ObjectDoesNotExist:
-    #         return Response(status=404)
+class InformationContentByMenuView(APIView):
+    permission_classes = [AllowAny]
+    serializers = InformationContentSerializer
+
+    def get(self, request, *args, **kwargs):
+        queryset = InformationContent.objects.get(course_id=self.kwargs['id'])
+        serializer = InformationContentSerializer(queryset)
+        return Response(serializer.data)
+
 
 class CourseInformationView(RetrieveAPIView):
     permission_classes = [AllowAny]
