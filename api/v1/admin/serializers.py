@@ -1,8 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
-from rest_framework.fields import ListField, FileField, ImageField
+from rest_framework.fields import ListField, ImageField
 
-from prostudy import settings
 from user.models import (
     PostImage,
     Feedback,
@@ -11,7 +10,6 @@ from user.models import (
     Teacher,
     Advertisement,
     SubscriptionRequest,
-    # PostAttachment,
     Course,
     Menu,
     Post,
@@ -56,10 +54,6 @@ class PostImageSerializer(serializers.ModelSerializer):
         fields = ('id', 'file', 'post', 'is_active')
         read_only_fields = ('id', 'post')
 
-    # def to_representation(self, instance):
-    #     domain = self.context['request']
-    #     data = super(PostImageSerializer, self).to_representation(instance)
-
 
 class PostSerializer(serializers.ModelSerializer):
     post_images = ListField(child=ImageField(allow_empty_file=False),
@@ -68,7 +62,6 @@ class PostSerializer(serializers.ModelSerializer):
                             allow_empty=True)
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
 
-    # file_url = PostImageSerializer
     class Meta:
         model = Post
         fields = (
@@ -167,6 +160,7 @@ class TeacherSerializer(serializers.ModelSerializer):
             'photo',
             'specialty',
             'experience',
+            'about',
             'menu',
             'course'
         )
@@ -229,11 +223,6 @@ class CertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Certificate
         fields = ('id', 'title', 'image', 'course')
-
-    def to_representation(self, instance):
-        data = super(CertificateSerializer, self).to_representation(instance)
-
-        return data
 
 
 class QuestionAndAnswersSerializer(serializers.ModelSerializer):
@@ -386,3 +375,18 @@ class CourseInformationSerializer(serializers.ModelSerializer):
                 urls['video'] = file_url
         data['course_file'] = urls
         return data
+
+
+class ProgramInformationSerializer(serializers.ModelSerializer):
+    info_content = InformationContentSerializer(source='information_content')
+    question = QuestionAndAnswersSerializer(source='questions', many=True)
+    gallery = GallerySerializer()
+
+    class Meta:
+        model = Program
+        fields = (
+            'id',
+            'title',
+            'image',
+            'course',
+        )
