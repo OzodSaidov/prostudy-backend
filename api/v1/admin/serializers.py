@@ -103,7 +103,7 @@ class PostSerializer(serializers.ModelSerializer):
 
         return super().update(instance, validated_data)
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Post):
         data = super(PostSerializer, self).to_representation(instance)
         data.update({
             "post_images": PostImageSerializer(instance.images.all(),
@@ -120,7 +120,6 @@ class GalleryFileSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'src', 'thumbnail', 'url', 'gallery')
         read_only_fields = ('id', 'gallery')
 
-
 class GallerySerializer(serializers.ModelSerializer):
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
     file = GalleryFileSerializer(source='gallery_files', many=True)
@@ -135,11 +134,6 @@ class GallerySerializer(serializers.ModelSerializer):
             'menu',
         )
         read_only_fields = ('id', 'course', 'menu')
-
-    # def to_representation(self, instance):
-    #     data = super(GallerySerializer, self).to_representation(instance)
-    #     data['course'] = instance.course.get_category_display()
-    #     return data
 
     def update(self, instance, validated_data):
         title = validated_data.pop('title', dict())
@@ -378,9 +372,9 @@ class CourseInformationSerializer(serializers.ModelSerializer):
 
 
 class ProgramInformationSerializer(serializers.ModelSerializer):
-    info_content = InformationContentSerializer(source='information_content')
+    information_content = InformationContentSerializer(source='inf_contents')
     question = QuestionAndAnswersSerializer(source='questions', many=True)
-    gallery = GallerySerializer()
+    post = PostSerializer(source='posts', many=True)
 
     class Meta:
         model = Program
@@ -389,4 +383,21 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
             'title',
             'image',
             'course',
+            'information_content',
+            'question',
+            'post',
         )
+
+    def to_representation(self, instance: Program):
+        data = super(ProgramInformationSerializer, self).to_representation(instance)
+        qs = instance.course.galleries.gallery_files.all()
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        files = []
+        for image in qs:
+            context = {
+                "src": domain + image.src.url,
+                "thumbnail": domain + image.thumbnail.url if image.thumbnail else None
+            }
+            files.append(context)
+        data['gallery'] = files
+        return data

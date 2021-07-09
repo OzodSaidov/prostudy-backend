@@ -476,3 +476,15 @@ class CourseInformationView(RetrieveAPIView):
     serializer_class = CourseInformationSerializer
     lookup_url_kwarg = 'id'
     queryset = Course.objects.all()
+
+
+class ProgramInformationView(RetrieveAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ProgramInformationSerializer
+    queryset = Program.objects.all()
+    lookup_url_kwarg = 'id'
+
+    # def get(self, request, *args, **kwargs):
+    #     program = Program.objects.get(id=self.kwargs['id'])
+    #     gallery = Course.objects.get()
+    #     print(gallery)

@@ -51,8 +51,8 @@ class Post(Base):
     slug = models.SlugField(null=True, blank=True)
     short_content = models.JSONField(null=True, blank=True, default=dict)
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, null=True, blank=True)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, null=True, blank=True)
-    program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
+    program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
     is_active = models.BooleanField(default=True)
 
 
@@ -79,8 +79,8 @@ class FileQuerySet(models.QuerySet):
 
 class Gallery(Base):
     title = models.CharField(max_length=100, null=True)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE,
-                               related_name='gallery_files', null=True, blank=True)
+    course = models.OneToOneField('Course', on_delete=models.CASCADE, null=True, blank=True,
+                                  related_name='galleries')
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='galleries',
                              null=True, blank=True)
 
@@ -194,7 +194,8 @@ class InformationContent(Base):
                                    validators=[validate_image_type])
     course = models.OneToOneField(Course, on_delete=models.CASCADE, null=True, blank=True,
                                   related_name='inf_contents')
-    program = models.OneToOneField('Program', on_delete=models.CASCADE, null=True, blank=True)
+    program = models.OneToOneField('Program', on_delete=models.CASCADE, null=True, blank=True,
+                                   related_name='inf_contents')
     menu = models.OneToOneField(Menu, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):

@@ -21,6 +21,7 @@ urlpatterns = [
     path('program/<int:id>/question/', QuestionListByProgramView.as_view()),
     path('program/<int:id>/gallery/', GalleryByProgramView.as_view()),
     path('program/<int:id>/posts/', PostListByProgramView.as_view()),
+    path('program/<int:id>/informations/', ProgramInformationView.as_view()),
     path('program/create/', ProgramCreateView.as_view()),
     path('program/<int:id>/', ProgramEditView.as_view()),
     path('teacher/create/', TeacherCreateView.as_view()),
