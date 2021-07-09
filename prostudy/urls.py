@@ -21,8 +21,9 @@ from prostudy import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('article.urls')),
+    path('api-auth/', include('rest_framework.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path('api/v1', include('api_v1.urls')),
 ]
 if settings.DEBUG:
     import debug_toolbar
