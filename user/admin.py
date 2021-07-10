@@ -1,41 +1,18 @@
 from django.contrib import admin
-from django.db import models
+from django.db import models as dj_models
 from django_json_widget.widgets import JSONEditorWidget
 
-from .models import (
-    User,
-    PostImage,
-    Feedback,
-    Gallery,
-    GalleryFile,
-    Teacher,
-    Advertisement,
-    SubscriptionRequest,
-    # PostAttachment,
-    Course,
-    InformationContent,
-    InformationContentDetail,
-    CostOfEducation,
-    QuestionAndAnswer,
-    Result,
-    Certificate,
-    Menu,
-    Post,
-    Program,
-    CourseFile,
-    Company,
-    AboutUs,
-)
+from user import models
 
 
 class BaseAdmin(admin.ModelAdmin):
     formfield_overrides = {
-        models.JSONField: {'widget': JSONEditorWidget}
+        dj_models.JSONField: {'widget': JSONEditorWidget}
     }
 
 
 class MenuAdmin(BaseAdmin):
-    list_display = ('title', 'id')
+    list_display = ('id', 'title')
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -62,25 +39,65 @@ class InformationContentAdmin(BaseAdmin):
     list_display = ('id', 'title')
 
 
-admin.site.register(Menu, MenuAdmin)
-admin.site.register(User, UserAdmin)
-admin.site.register(Gallery)
-admin.site.register(Course, CourseAdmin)
-admin.site.register(InformationContent, InformationContentAdmin)
-admin.site.register(InformationContentDetail)
-admin.site.register(CostOfEducation)
-admin.site.register(QuestionAndAnswer)
-admin.site.register(Result)
-admin.site.register(Certificate)
-admin.site.register(Post)
-admin.site.register(PostImage)
+class CertificateAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'image', 'course')
+
+
+class GalleryAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'course', 'menu')
+
+
+class InformationContentDetailAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'body', 'image')
+
+
+class CostOfEducationAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'body', 'old_price', 'new_price', 'image', 'course')
+
+
+class QuestionAndAnswerAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'description', 'full_description', 'program', 'course')
+
+
+class ResultAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'content', 'course')
+
+
+class PostAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'content', 'short_content', 'url', 'slug', 'menu', 'program', 'course', 'is_active')
+
+
+class AdvertisementAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'content', 'short_content', 'image_poster', 'menu', 'is_active')
+
+
+class ProgramAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'image', 'course')
+
+
+class AboutUsAdmin(BaseAdmin):
+    list_display = ('id', 'content', 'image')
+
+
+admin.site.register(models.Menu, MenuAdmin)
+admin.site.register(models.User, UserAdmin)
+admin.site.register(models.Gallery, GalleryAdmin)
+admin.site.register(models.Course, CourseAdmin)
+admin.site.register(models.InformationContent, InformationContentAdmin)
+admin.site.register(models.InformationContentDetail, InformationContentDetailAdmin)
+admin.site.register(models.CostOfEducation, CostOfEducationAdmin)
+admin.site.register(models.QuestionAndAnswer, QuestionAndAnswerAdmin)
+admin.site.register(models.Result, ResultAdmin)
+admin.site.register(models.Certificate, CertificateAdmin)
+admin.site.register(models.Post, PostAdmin)
+admin.site.register(models.Teacher, TeacherAdmin)
+admin.site.register(models.Advertisement, AdvertisementAdmin)
+admin.site.register(models.Program, ProgramAdmin)
+admin.site.register(models.GalleryFile, GalleryFileAdmin)
+admin.site.register(models.CourseFile, CourseFileAdmin)
+admin.site.register(models.AboutUs, AboutUsAdmin)
+admin.site.register(models.PostImage)
 # admin.site.register(PostAttachment)
-admin.site.register(Feedback)
-admin.site.register(Teacher, TeacherAdmin)
-admin.site.register(Advertisement)
-admin.site.register(SubscriptionRequest)
-admin.site.register(Program)
-admin.site.register(GalleryFile, GalleryFileAdmin)
-admin.site.register(CourseFile, CourseFileAdmin)
-admin.site.register(Company)
-admin.site.register(AboutUs)
+admin.site.register(models.Feedback)
+admin.site.register(models.SubscriptionRequest)
+admin.site.register(models.Company)
