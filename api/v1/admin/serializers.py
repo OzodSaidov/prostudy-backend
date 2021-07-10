@@ -16,7 +16,7 @@ from user.models import (
     Program,
     CourseFile,
     Company, CostOfEducation, Certificate, QuestionAndAnswer, Result, InformationContent,
-    InformationContentDetail, AboutUs, Language, LifeHack
+    InformationContentDetail, AboutUs, Language, LifeHack, MainTitle
 )
 
 
@@ -160,11 +160,11 @@ class TeacherSerializer(serializers.ModelSerializer):
             'course'
         )
 
-    def to_representation(self, instance: Teacher):
-        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
-        data = super(TeacherSerializer, self).to_representation(instance)
-        data['photo'] = domain + instance.photo.name
-        return data
+    # def to_representation(self, instance: Teacher):
+    #     domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+    #     data = super(TeacherSerializer, self).to_representation(instance)
+    #     data['photo'] = domain + instance.photo.name
+    #     return data
 
 class CourseFileSerializer(serializers.ModelSerializer):
     course = serializers.HiddenField(default=None)
@@ -362,7 +362,7 @@ class CourseInformationSerializer(serializers.ModelSerializer):
         instance.title.update(title)
         return super(CourseInformationSerializer, self).update(instance, validated_data)
 
-    def to_representation(self, instance):
+    def to_representation(self, instance: Course):
         urls = {}
         data = super(CourseInformationSerializer, self).to_representation(instance)
         data['category'] = instance.get_category_display()
@@ -374,6 +374,18 @@ class CourseInformationSerializer(serializers.ModelSerializer):
             elif file_url.endswith(('.mp4', '.mpeg')):
                 urls['video'] = file_url
         data['course_file'] = urls
+        teachers = []
+        for teacher in instance.teachers.all():
+            context = {
+                "first_name": teacher.first_name,
+                "last_name": teacher.last_name,
+                "photo": teacher.photo.url,
+                "specialty": teacher.specialty,
+                "experience": teacher.experience,
+                "about": teacher.about
+            }
+            teachers.append(context)
+        data['teacher'] = teachers
         return data
 
 
@@ -478,3 +490,9 @@ class MenuCoursesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
         fields = ('id', 'advertisement', 'course', 'about_us', 'life_hack', 'teacher', 'company')
+
+
+class MainTitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MainTitle
+        fields = ('id', 'title')

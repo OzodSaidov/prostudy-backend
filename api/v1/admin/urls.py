@@ -59,4 +59,6 @@ urlpatterns = [
     path('course/result/<int:id>/', ResultEditView.as_view()),
     path('course/<int:id>/informations/', CourseInformationView.as_view()),
     path('course/names/', CourseNameView.as_view()),
+    path('main-titles/', MainTitleView.as_view()),
+    path('main-titles/<int:id>', MainTitleEditView.as_view()),
 ]

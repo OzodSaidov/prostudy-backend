@@ -130,6 +130,7 @@ class ProgramListByCourseView(ListAPIView):
         programs = Program.objects.filter(course_id=self.kwargs['id'])
         return programs
 
+
 class InfoContentByProgramView(APIView):
     serializer_class = InformationContentSerializer
     permission_classes = [AllowAny]
@@ -437,4 +438,17 @@ class MenuCoursesView(RetrieveAPIView):
     permission_classes = [AllowAny]
     serializer_class = MenuCoursesSerializer
     queryset = Menu.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class MainTitleView(CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = MainTitleSerializer
+    queryset = MainTitle.objects.all()
+
+
+class MainTitleEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = MainTitleSerializer
+    queryset = MainTitle.objects.all()
     lookup_url_kwarg = 'id'
