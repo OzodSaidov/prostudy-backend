@@ -223,7 +223,7 @@ class CostOfEducation(Base):
 
 class CourseFile(Base):
     def course_file_path(self, filename):
-        title = str(self.course.title['ru']).replace(' ', '_').lower()
+        title = str(self.course.title['en']).replace(' ', '_').lower()
         return 'course_files/{0}/{1}'.format(title, filename)
 
     course_file = models.FileField(upload_to=course_file_path, validators=[validate_file_type], null=True)
