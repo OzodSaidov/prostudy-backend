@@ -496,3 +496,15 @@ class CourseNameView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = CourseNameSerializer
     queryset = Course.objects.all()
+
+
+class LanguageView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = LanguageSerializer
+    queryset = Language.objects.all()
+
+
+class LanguageEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    queryset = Language.objects.all()
+    lookup_url_kwarg = 'id'

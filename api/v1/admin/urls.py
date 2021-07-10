@@ -2,6 +2,8 @@ from django.urls import path
 from api.v1.admin.views import *
 
 urlpatterns = [
+    path('languages/', LanguageView.as_view()),
+    path('languages/<int:id>', LanguageEditView.as_view()),
     path('menu/create/', MenuCreateView.as_view()),
     path('menu/<int:id>/', MenuEditView.as_view()),
     path('menu/<int:id>/posts/', PostByMenuView.as_view()),

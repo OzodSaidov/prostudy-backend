@@ -1,5 +1,3 @@
-import json
-
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import ListField, ImageField
@@ -18,7 +16,7 @@ from user.models import (
     Program,
     CourseFile,
     Company, CostOfEducation, Certificate, QuestionAndAnswer, Result, InformationContent,
-    InformationContentDetail, AboutUs
+    InformationContentDetail, AboutUs, Language
 )
 
 
@@ -425,6 +423,14 @@ class MenuBlogSerializer(serializers.ModelSerializer):
             'children': {'read_only': True},
         }
 
+    def to_representation(self, instance: Menu):
+        data = super(MenuBlogSerializer, self).to_representation(instance)
+        posts = {}
+        for index, item in enumerate(instance.posts.all()):
+            posts[f'post{index + 1}'] = PostSerializer(item).data
+        data['post'] = posts
+        return data
+
 
 class CourseNameSerializer(serializers.ModelSerializer):
     class Meta:
@@ -435,3 +441,9 @@ class CourseNameSerializer(serializers.ModelSerializer):
         data = super(CourseNameSerializer, self).to_representation(instance)
         data['value'] = instance.get_value
         return data
+
+
+class LanguageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Language
+        fields = ('id', 'short_name', 'long_name')
