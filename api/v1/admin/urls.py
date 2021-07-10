@@ -27,7 +27,7 @@ urlpatterns = [
     path('program/<int:id>/', ProgramEditView.as_view()),
     path('teacher/create/', TeacherCreateView.as_view()),
     path('teacher/<int:id>/', TeacherEditView.as_view()),
-    path('feedback/create/', FeedbackCreateView.as_view()),
+    path('feedback/', FeedbackCreateView.as_view()),
     path('feedback/<int:id>/', FeedbackEditView.as_view()),
     path('subscriptionrequest/create/', SubscriptionRequestCreateView.as_view()),
     path('subscriptionrequest/<int:id>/', SubscriptionRequestEditView.as_view()),
@@ -53,4 +53,5 @@ urlpatterns = [
     path('course/result/', ResultCreateView.as_view()),
     path('course/result/<int:id>/', ResultEditView.as_view()),
     path('course/<int:id>/informations/', CourseInformationView.as_view()),
+    path('course/names/', CourseNameView.as_view()),
 ]

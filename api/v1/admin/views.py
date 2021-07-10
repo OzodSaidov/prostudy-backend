@@ -207,7 +207,7 @@ class AdvertisementEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-class FeedbackCreateView(ListCreateAPIView):
+class FeedbackCreateView(CreateAPIView):
     # throttle_classes = [PostAnononymousRateThrottle, ]
     permission_classes = [AllowAny]
     serializer_class = FeedbackSerializer
@@ -490,3 +490,9 @@ class MenuBlogView(RetrieveAPIView):
     serializer_class = MenuBlogSerializer
     queryset = Menu.objects.all()
     lookup_url_kwarg = 'id'
+
+
+class CourseNameView(ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = CourseNameSerializer
+    queryset = Course.objects.all()

@@ -409,7 +409,7 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
         data['post'] = posts
         return data
 
- 
+
 class MenuBlogSerializer(serializers.ModelSerializer):
     post = PostSerializer(source='posts', many=True)
     information_content = InformationContentSerializer(source='inf_contents')
@@ -418,7 +418,15 @@ class MenuBlogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Menu
-        fields = ('id', 'href', 'title', 'post', 'information_content', 'gallery', 'about_us', 'parent', 'children', 'is_active')
+        fields = (
+            'id', 'href', 'title', 'post', 'information_content', 'gallery', 'about_us', 'parent', 'children',
+            'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
+
+
+class CourseNameSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = ('title', )

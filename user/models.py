@@ -243,8 +243,6 @@ class Program(Base):
 
 
 """Рекламный пост"""
-
-
 class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
@@ -255,13 +253,13 @@ class Advertisement(Base):
 
 
 """Обратная связь"""
-
-
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
     phone = models.CharField(max_length=13, validators=[validate_phone])
     message = models.TextField()
+    region = models.JSONField(default=dict)
+    course = models.JSONField(default=dict)
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -269,8 +267,6 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
-
-
 class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
