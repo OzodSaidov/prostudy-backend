@@ -160,6 +160,10 @@ class Course(Base):
     def __str__(self):
         return self.get_category_display()
 
+    @property
+    def get_value(self):
+        return self.title['en']
+
     class Meta:
         ordering = ['id']
 
@@ -258,8 +262,8 @@ class Feedback(Base):
     email = models.EmailField()
     phone = models.CharField(max_length=13, validators=[validate_phone])
     message = models.TextField()
-    region = models.JSONField(default=dict)
-    course = models.JSONField(default=dict)
+    region = models.CharField(max_length=50, null=True)
+    course = models.CharField(max_length=100, null=True)
     is_active = models.BooleanField(default=True)
 
     class Meta:

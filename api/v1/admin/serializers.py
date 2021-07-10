@@ -429,4 +429,9 @@ class MenuBlogSerializer(serializers.ModelSerializer):
 class CourseNameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ('title', )
+        fields = ('title',)
+
+    def to_representation(self, instance):
+        data = super(CourseNameSerializer, self).to_representation(instance)
+        data['value'] = instance.get_value
+        return data
