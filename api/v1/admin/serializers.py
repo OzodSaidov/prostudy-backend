@@ -1,3 +1,5 @@
+import json
+
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import ListField, ImageField
@@ -390,6 +392,7 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
         )
 
     def to_representation(self, instance: Program):
+        print(instance.posts.all())
         data = super(ProgramInformationSerializer, self).to_representation(instance)
         qs = instance.course.galleries.gallery_files.all()
         domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
@@ -400,10 +403,13 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
                 "thumbnail": domain + image.thumbnail.url if image.thumbnail else None
             }
             files.append(context)
-        data['gallery'] = files
+        posts = {}
+        for index, item in enumerate(instance.posts.all()):
+            posts[f'post{index + 1}'] = PostSerializer(item).data
+        data['post'] = posts
         return data
 
-
+ 
 class MenuBlogSerializer(serializers.ModelSerializer):
     post = PostSerializer(source='posts', many=True)
     information_content = InformationContentSerializer(source='inf_contents')
