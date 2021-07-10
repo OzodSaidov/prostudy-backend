@@ -1,5 +1,3 @@
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpRequest
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, \
     ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
@@ -71,33 +69,18 @@ class GalleryByProgramView(ListAPIView):
     permission_classes = [AllowAny]
     queryset = Gallery.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        course = Course.objects.get(programs=self.kwargs['id'])
-        gallery = Gallery.objects.get(course_id=course.id)
-        serializer = GallerySerializer(gallery)
-        return Response(serializer.data)
+    def get_queryset(self):
+        gallery = Gallery.objects.filter(course__programs=self.kwargs['id'])
+        return gallery
 
 
 class TeacherListByCourseView(ListAPIView):
     serializer_class = TeacherSerializer
     permission_classes = [AllowAny, ]
-    queryset = Teacher.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        # domain = request.scheme + '://' + request.get_host()
-        queryset = Teacher.objects.filter(course_id=self.kwargs['id'])
-        serializer = TeacherSerializer(queryset, many=True)
-        # list_teachers = []
-        # for data in serializer.data:
-        #     context = {
-        #         "first_name": data['first_name'],
-        #         "last_name": data['last_name'],
-        #         "photo": domain + data['photo'],
-        #         "specialty": data['specialty'],
-        #         "experience": data['experience'],
-        #     }
-        #     list_teachers.append(context)
-        return Response(serializer.data)
+    def get_queryset(self):
+        teachers = Teacher.objects.filter(course_id=self.kwargs['id'])
+        return teachers
 
 
 class TeacherCreateView(ListCreateAPIView):
@@ -141,44 +124,28 @@ class CourseEditView(RetrieveUpdateDestroyAPIView):
 
 class ProgramListByCourseView(ListAPIView):
     serializer_class = ProgramSerializer
-    queryset = Program.objects.all()
     permission_classes = [AllowAny]
 
-    def get(self, request, *args, **kwargs):
-        # domain = request.scheme + '://' + request.get_host()
-        queryset = Program.objects.filter(course_id=self.kwargs['id'])
-        serializer = ProgramSerializer(queryset, many=True)
-        # list_programs = []
-        # for data in serializer.data:
-        #     context = {
-        #         "id": data['id'],
-        #         "title": data['title'],
-        #         "image": domain + data['image'],
-        #     }
-        #     list_programs.append(context)
-        return Response(serializer.data)
-
+    def get_queryset(self):
+        programs = Program.objects.filter(course_id=self.kwargs['id'])
+        return programs
 
 class InfoContentByProgramView(APIView):
     serializer_class = InformationContentSerializer
-    queryset = InformationContent.objects.all()
     permission_classes = [AllowAny]
 
-    def get(self, request, *args, **kwargs):
-        queryset = InformationContent.objects.get(program_id=self.kwargs['id'])
-        serializer = InformationContentSerializer(queryset)
-        return Response(serializer.data)
+    def get_queryset(self):
+        inf_content = InformationContent.objects.get(program_id=self.kwargs['id'])
+        return inf_content
 
 
 class QuestionListByProgramView(APIView):
     serializer_class = QuestionAndAnswersSerializer
-    queryset = QuestionAndAnswer.objects.all()
     permission_classes = [AllowAny]
 
-    def get(self, request, *args, **kwargs):
-        queryset = QuestionAndAnswer.objects.filter(program_id=self.kwargs['id'])
-        serializer = QuestionAndAnswersSerializer(queryset, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        questions = QuestionAndAnswer.objects.filter(program_id=self.kwargs['id'])
+        return questions
 
 
 class ProgramCreateView(CreateAPIView):
@@ -197,7 +164,7 @@ class ProgramEditView(RetrieveUpdateDestroyAPIView):
 class AdvertisementCreateView(ListCreateAPIView):
     serializer_class = AdvertisementSerializer
     permission_classes = [AllowAny]
-    queryset = Advertisement.objects.all()
+    queryset = Advertisement.objects.filter(is_active=True)
 
 
 class AdvertisementEditView(RetrieveUpdateDestroyAPIView):
@@ -251,32 +218,10 @@ class CompanyEditView(RetrieveUpdateDestroyAPIView):
 class InformationContentByCourseView(APIView):
     permission_classes = [AllowAny]
     serializer_class = InformationContentSerializer
-    queryset = InformationContent.objects.all()
 
     def get(self, request, *args, **kwargs):
         queryset = InformationContent.objects.get(course_id=self.kwargs['id'])
         serializer = InformationContentSerializer(queryset)
-        # domain = request.scheme + '://' + request.get_host()
-        # title = serializer.data['title']
-        # body = serializer.data['body']
-        # background = serializer.data['background']
-        # if background:
-        #     background = domain + background
-        # list_content_detail = serializer.data['information_content_detail']
-        # inf_content_detail = []
-        # for content in list_content_detail:
-        #     detail = {
-        #         "title": content['title'],
-        #         "body": content['body'],
-        #         "image": domain + content['image']
-        #     }
-        #     inf_content_detail.append(detail)
-        # context = {
-        #     "title": title,
-        #     "body": body,
-        #     "background": background,
-        #     "information_content_detail": inf_content_detail
-        # }
         return Response(serializer.data)
 
 
@@ -309,23 +254,10 @@ class InformationContentDetailEditView(RetrieveUpdateDestroyAPIView):
 class CostEducationListByCourseView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = CostOfEducationSerializer
-    queryset = CostOfEducation.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        # domain = request.scheme + '://' + request.get_host()
-        queryset = CostOfEducation.objects.filter(course_id=self.kwargs['id'])
-        serializer = CostOfEducationSerializer(queryset, many=True)
-        # list_cost_education = []
-        # for data in serializer.data:
-        #     context = {
-        #         "title": data['title'],
-        #         "body": data['body'],
-        #         "old_price": data['old_price'],
-        #         "new_price": data['new_price'],
-        #         "image": domain + data['image'],
-        #     }
-        #     list_cost_education.append(context)
-        return Response(serializer.data)
+    def get_queryset(self):
+        education_costs = CostOfEducation.objects.filter(course_id=self.kwargs['id'])
+        return education_costs
 
 
 class CostEducationCreateView(CreateAPIView):
@@ -349,10 +281,6 @@ class CertificateByCourseView(APIView):
     def get(self, request, *args, **kwargs):
         cert = Certificate.objects.get(course_id=self.kwargs['id'])
         serializer = CertificateSerializer(cert)
-        # title = serializer.data['title']
-        # image = serializer.data['image']
-        # domain = request.scheme + '://' + request.get_host()
-        # image_url = domain + image
         return Response(serializer.data)
 
 
@@ -372,12 +300,10 @@ class CertificateEditView(RetrieveUpdateDestroyAPIView):
 class QuestionAndAnswersListByCourseView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = QuestionAndAnswersSerializer
-    queryset = QuestionAndAnswer.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        queryset = QuestionAndAnswer.objects.filter(course_id=self.kwargs['id'])
-        serializer = QuestionAndAnswersSerializer(queryset, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        questions = QuestionAndAnswer.objects.filter(course_id=self.kwargs['id'])
+        return questions
 
 
 class QuestionAndAnswersCreateView(CreateAPIView):
@@ -396,12 +322,10 @@ class QuestionAndAnswersEditView(RetrieveUpdateDestroyAPIView):
 class ResultListByCourseView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = ResultSerializer
-    queryset = Result.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        queryset = Result.objects.filter(course_id=self.kwargs['id'])
-        serializer = ResultSerializer(queryset, many=True)
-        return Response(serializer.data)
+    def get_queryset(self):
+        results = Result.objects.filter(course_id=self.kwargs['id'])
+        return results
 
 
 class ResultCreateView(CreateAPIView):
@@ -420,24 +344,10 @@ class ResultEditView(RetrieveUpdateDestroyAPIView):
 class PostByMenuView(ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = PostSerializer
-    queryset = Post.objects.all()
 
-    def get(self, request, *args, **kwargs):
-        # domain = request.scheme + '://' + request.get_host()
+    def get_queryset(self):
         posts = Post.objects.filter(menu_id=self.kwargs['id'])
-        serializer = PostSerializer(posts, many=True)
-        # post_list = []
-        # for post in serializer.data:
-        #     post_data = {
-        #         "title": post['title'],
-        #         "content": post['content'],
-        #         "short_content": post['short_content'],
-        #
-        #         "post_images": post['post_images']['file']
-        #     }
-        #     post_list.append(post_data)
-        #     print(post_list)
-        return Response(serializer.data)
+        return posts
 
 
 class GalleryByMenuView(APIView):
@@ -507,4 +417,24 @@ class LanguageView(ListCreateAPIView):
 class LanguageEditView(RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
     queryset = Language.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class LifeHackView(ListCreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = LifeHackSerializer
+    queryset = LifeHack.objects.filter(is_active=True)
+
+
+class LifeHackEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = LifeHackSerializer
+    queryset = LifeHack.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class MenuCoursesView(RetrieveAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = MenuCoursesSerializer
+    queryset = Menu.objects.all()
     lookup_url_kwarg = 'id'

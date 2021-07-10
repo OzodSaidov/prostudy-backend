@@ -68,7 +68,7 @@ class PostAdmin(BaseAdmin):
 
 
 class AdvertisementAdmin(BaseAdmin):
-    list_display = ('id', 'title', 'content', 'short_content', 'image_poster', 'menu', 'is_active')
+    list_display = ('id', 'title', 'content', 'image_poster', 'menu', 'is_active')
 
 
 class ProgramAdmin(BaseAdmin):
@@ -102,3 +102,4 @@ admin.site.register(models.Feedback)
 admin.site.register(models.SubscriptionRequest)
 admin.site.register(models.Company)
 admin.site.register(models.Language)
+admin.site.register(models.LifeHack, BaseAdmin)

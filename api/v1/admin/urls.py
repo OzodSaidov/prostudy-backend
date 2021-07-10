@@ -2,6 +2,8 @@ from django.urls import path
 from api.v1.admin.views import *
 
 urlpatterns = [
+    path('lifehacks/', LifeHackView.as_view()),
+    path('lifehacks/<int:id>/', LifeHackEditView.as_view()),
     path('languages/', LanguageView.as_view()),
     path('languages/<int:id>', LanguageEditView.as_view()),
     path('menu/create/', MenuCreateView.as_view()),
@@ -10,6 +12,7 @@ urlpatterns = [
     path('menu/<int:id>/gallery/', GalleryByMenuView.as_view()),
     path('menu/<int:id>/info-content/', InformationContentByMenuView.as_view()),
     path('menu/<int:id>/blog/', MenuBlogView.as_view()),
+    path('menu/<int:id>/courses/', MenuCoursesView.as_view()),
     path('post/create/', PostCreateView.as_view()),
     path('post/<int:id>/', PostEditView.as_view()),
     path('gallery/create/', GalleryCreateView.as_view()),

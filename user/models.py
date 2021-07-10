@@ -125,6 +125,12 @@ class Teacher(Base):
     def fullname(self):
         return f"{self.first_name['ru']} {self.last_name['ru']}"
 
+    @property
+    def get_teacher_short_info(self):
+        return {"name": f'{self.first_name}',
+                "specialty": f'{self.specialty}',
+                "photo": f'{self.photo.url}'}
+
 
 """Курс"""
 
@@ -247,16 +253,20 @@ class Program(Base):
 
 
 """Рекламный пост"""
+
+
 class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
-    short_content = models.JSONField(default=dict)
     image_poster = models.ImageField(upload_to='advertisement/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
-    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='advertising_post')
+    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='advertising_posts')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='advertising_posts', null=True)
 
 
 """Обратная связь"""
+
+
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -271,6 +281,8 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
+
+
 class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
@@ -304,3 +316,10 @@ class AboutUs(Base):
 class Language(Base):
     short_name = models.CharField(max_length=3)
     long_name = models.CharField(max_length=50)
+
+
+class LifeHack(Base):
+    context = models.JSONField(default=dict)
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='life_hacks')
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='life_hacks')
+    is_active = models.BooleanField(default=True)

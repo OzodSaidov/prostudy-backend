@@ -16,7 +16,7 @@ from user.models import (
     Program,
     CourseFile,
     Company, CostOfEducation, Certificate, QuestionAndAnswer, Result, InformationContent,
-    InformationContentDetail, AboutUs, Language
+    InformationContentDetail, AboutUs, Language, LifeHack
 )
 
 
@@ -160,6 +160,11 @@ class TeacherSerializer(serializers.ModelSerializer):
             'course'
         )
 
+    def to_representation(self, instance: Teacher):
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        data = super(TeacherSerializer, self).to_representation(instance)
+        data['photo'] = domain + instance.photo.name
+        return data
 
 class CourseFileSerializer(serializers.ModelSerializer):
     course = serializers.HiddenField(default=None)
@@ -278,10 +283,10 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'content',
-            'short_content',
             'image_poster',
             'is_active',
-            'menu'
+            'menu',
+            'course',
         )
 
 
@@ -447,3 +452,29 @@ class LanguageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Language
         fields = ('id', 'short_name', 'long_name')
+
+
+class LifeHackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LifeHack
+        fields = ('id', 'context', 'teacher', 'menu', 'is_active')
+
+    def to_representation(self, instance: LifeHack):
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        data = super(LifeHackSerializer, self).to_representation(instance)
+        data['teacher'] = instance.teacher.get_teacher_short_info
+        data['teacher']['photo'] = domain + instance.teacher.photo.url
+        return data
+
+
+class MenuCoursesSerializer(serializers.ModelSerializer):
+    advertisement = AdvertisementSerializer(source='advertising_posts', many=True)
+    course = CourseSerializer(source='courses', many=True)
+    about_us = AboutUsSerializer(source='about', many=True)
+    life_hack = LifeHackSerializer(source='life_hacks', many=True)
+    teacher = TeacherSerializer(source='teachers', many=True)
+    company = CompanySerializer(source='companies', many=True)
+
+    class Meta:
+        model = Menu
+        fields = ('id', 'advertisement', 'course', 'about_us', 'life_hack', 'teacher', 'company')
