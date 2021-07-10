@@ -49,6 +49,7 @@ SECONDARY_APPS = [
     'imagekit',
     'corsheaders',
     'rest_framework_simplejwt',
+    'django_json_widget',
 ]
 
 USER_APPS = [
