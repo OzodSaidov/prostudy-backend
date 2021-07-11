@@ -456,7 +456,7 @@ class LanguageSerializer(serializers.ModelSerializer):
 class LifeHackSerializer(serializers.ModelSerializer):
     class Meta:
         model = LifeHack
-        fields = ('id', 'context', 'teacher', 'menu', 'is_active')
+        fields = ('id', 'context', 'teacher', 'is_active')
 
     def to_representation(self, instance: LifeHack):
         domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
