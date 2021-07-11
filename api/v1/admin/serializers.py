@@ -374,18 +374,6 @@ class CourseInformationSerializer(serializers.ModelSerializer):
             elif file_url.endswith(('.mp4', '.mpeg')):
                 urls['video'] = file_url
         data['course_file'] = urls
-        teachers = []
-        for teacher in instance.teachers.all():
-            context = {
-                "first_name": teacher.first_name,
-                "last_name": teacher.last_name,
-                "photo": teacher.photo.url,
-                "specialty": teacher.specialty,
-                "experience": teacher.experience,
-                "about": teacher.about
-            }
-            teachers.append(context)
-        data['teacher'] = teachers
         return data
 
 
