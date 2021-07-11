@@ -480,17 +480,13 @@ class LifeHackSerializer(serializers.ModelSerializer):
         return data
 
 
-# class HomeSerializer(serializers.ModelSerializer):
-#     advertisement = AdvertisementSerializer(source='advertising_posts', many=True)
-#     course = CourseSerializer(source='courses', many=True)
-#     about_us = AboutUsSerializer(source='about', many=True)
-#     life_hack = LifeHackSerializer(source='life_hacks', many=True)
-#     teacher = TeacherSerializer(source='teachers', many=True)
-#     company = CompanySerializer(source='companies', many=True)
-#
-#     class Meta:
-#         model = Menu
-#         fields = ('id', 'advertisement', 'course', 'about_us', 'life_hack', 'teacher', 'company')
+# class HomeSerializer(serializers.Serializer, ABC):
+#     advertisement = AdvertisementSerializer()
+#     course = CourseSerializer()
+#     about_us = AboutUsSerializer()
+#     life_hack = LifeHackSerializer()
+#     teacher = TeacherSerializer()
+#     company = CompanySerializer()
 
 
 class MainTitleSerializer(serializers.ModelSerializer):

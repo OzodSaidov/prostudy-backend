@@ -1,8 +1,9 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, \
-    ListAPIView, CreateAPIView, RetrieveAPIView
+    ListAPIView, CreateAPIView, RetrieveAPIView, GenericAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from api.v1.admin.serializers import *
 # from api.v1.admin.services.throttles import PostAnononymousRateThrottle
@@ -435,10 +436,16 @@ class LifeHackEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-# class HomeView(ListAPIView):
-#     permission_classes = [AllowAny]
-#     serializer_class = HomeSerializer
-#     # queryset = Menu.objects.all()
+class HomeView(ObjectMultipleModelAPIView):
+    permission_classes = [AllowAny]
+    querylist = [
+        {'queryset': Advertisement.objects.all(), 'serializer_class': AdvertisementSerializer},
+        {'queryset': Course.objects.all(), 'serializer_class': CourseSerializer},
+        {'queryset': AboutUs.objects.filter(menu__isnull=True), 'serializer_class': AboutUsSerializer},
+        {'queryset': LifeHack.objects.all(), 'serializer_class': LifeHackSerializer},
+        {'queryset': Teacher.objects.all(), 'serializer_class': TeacherSerializer},
+        {'queryset': Company.objects.all(), 'serializer_class': CompanySerializer},
+    ]
 
 
 class MainTitleView(CreateAPIView):
