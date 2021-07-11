@@ -430,13 +430,10 @@ class MenuBlogSerializer(serializers.ModelSerializer):
             'children': {'read_only': True},
         }
 
-    # def to_representation(self, instance: Menu):
-    #     data = super(MenuBlogSerializer, self).to_representation(instance)
-    #     data.update({
-    #         "gallery": GallerySerializer(instance.galleries.all(),
-    #                                      context=self.context, many=True).data
-    #     })
-    #     return data
+    def to_representation(self, instance: Menu):
+        data = super(MenuBlogSerializer, self).to_representation(instance)
+
+        return data
 
 
 class CourseNameSerializer(serializers.ModelSerializer):
@@ -477,9 +474,9 @@ class HomeSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer(source='teachers', many=True)
     company = CompanySerializer(source='companies', many=True)
 
-    # class Meta:
-    #     model = Menu
-    #     fields = ('id', 'advertisement', 'course', 'about_us', 'life_hack', 'teacher', 'company')
+    class Meta:
+        model = Menu
+        fields = ('id', 'advertisement', 'course', 'about_us', 'life_hack', 'teacher', 'company')
 
 
 class MainTitleSerializer(serializers.ModelSerializer):
