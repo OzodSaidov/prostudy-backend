@@ -435,10 +435,10 @@ class LifeHackEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-class HomeView(ListAPIView):
-    permission_classes = [AllowAny]
-    serializer_class = HomeSerializer
-    # queryset = Menu.objects.all()
+# class HomeView(ListAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = HomeSerializer
+#     # queryset = Menu.objects.all()
 
 
 class MainTitleView(CreateAPIView):
