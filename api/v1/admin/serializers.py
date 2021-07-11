@@ -160,11 +160,11 @@ class TeacherSerializer(serializers.ModelSerializer):
             'course'
         )
 
-    # def to_representation(self, instance: Teacher):
-    #     domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
-    #     data = super(TeacherSerializer, self).to_representation(instance)
-    #     data['photo'] = domain + instance.photo.name
-    #     return data
+    def to_representation(self, instance: Teacher):
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        data = super(TeacherSerializer, self).to_representation(instance)
+        data['photo'] = domain + instance.photo.name
+        return data
 
 class CourseFileSerializer(serializers.ModelSerializer):
     course = serializers.HiddenField(default=None)
