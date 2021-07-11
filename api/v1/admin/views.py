@@ -7,6 +7,7 @@ from drf_multiple_model.views import ObjectMultipleModelAPIView
 
 from api.v1.admin.serializers import *
 # from api.v1.admin.services.throttles import PostAnononymousRateThrottle
+from region.models import Region
 from user.models import *
 
 
@@ -440,11 +441,14 @@ class HomeView(ObjectMultipleModelAPIView):
     permission_classes = [AllowAny]
     querylist = [
         {'queryset': Advertisement.objects.all(), 'serializer_class': AdvertisementSerializer},
-        {'queryset': Course.objects.all(), 'serializer_class': CourseSerializer},
+        {'queryset': Course.objects.all()[:4], 'serializer_class': CourseSerializer},
         {'queryset': AboutUs.objects.filter(menu__isnull=True), 'serializer_class': AboutUsSerializer},
         {'queryset': LifeHack.objects.all(), 'serializer_class': LifeHackSerializer},
         {'queryset': Teacher.objects.all(), 'serializer_class': TeacherSerializer},
         {'queryset': Company.objects.all(), 'serializer_class': CompanySerializer},
+        {'queryset': Region.objects.all(), 'serializer_class': RegionSerializer},
+        {'queryset': Contact.objects.all(), 'serializer_class': ContactSerializer},
+        {'queryset': Social.objects.all(), 'serializer_class': SocialSerializer},
     ]
 
 
@@ -472,3 +476,29 @@ class MainTitleEditView(RetrieveUpdateDestroyAPIView):
 #     serializer_class = PostImageSerializer
 #     queryset = PostImage.objects.all()
 #     lookup_url_kwarg = 'id'
+
+
+class ContactView(CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ContactSerializer
+    queryset = Contact.objects.all()
+
+
+class ContactEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ContactSerializer
+    queryset = Contact.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class SocialView(CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = SocialSerializer
+    queryset = Social.objects.all()
+
+
+class SocialEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = SocialSerializer
+    queryset = Social.objects.all()
+    lookup_url_kwarg = 'id'
