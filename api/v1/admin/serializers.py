@@ -469,7 +469,7 @@ class LifeHackSerializer(serializers.ModelSerializer):
         return data
 
 
-class HomeSerializer(serializers.ListSerializer, ABC):
+class HomeSerializer(serializers.ModelSerializer):
     advertisement = AdvertisementSerializer(source='advertising_posts', many=True)
     course = CourseSerializer(source='courses', many=True)
     about_us = AboutUsSerializer(source='about', many=True)
@@ -485,4 +485,4 @@ class HomeSerializer(serializers.ListSerializer, ABC):
 class MainTitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MainTitle
-        fields = ('id', 'title')
+        fields = ('id', 'title', 'teacher')

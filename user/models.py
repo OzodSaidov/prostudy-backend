@@ -104,8 +104,11 @@ class GalleryFile(Base):
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
 
+
 class MainTitle(Base):
     title = models.JSONField(default=dict)
+    teacher = models.ForeignKey('Teacher', on_delete=models.DO_NOTHING, related_name='main_titles')
+
 
 """Предподаватель"""
 class Teacher(Base):
@@ -117,7 +120,6 @@ class Teacher(Base):
     photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, related_name='teachers', null=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='teachers')
-    main_title = models.ForeignKey(MainTitle, on_delete=models.DO_NOTHING, related_name='teachers', null=True)
 
     def __str__(self):
         return f"{self.first_name['ru']} {self.last_name['ru']}"
@@ -132,9 +134,6 @@ class Teacher(Base):
                 "specialty": f'{self.specialty}',
                 "photo": f'{self.photo.url}'}
 
-    @property
-    def get_main_title(self):
-        return self.main_title.title
 
 """Курс"""
 class Course(Base):
