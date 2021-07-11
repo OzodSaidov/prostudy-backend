@@ -12,7 +12,7 @@ urlpatterns = [
     path('menu/<int:id>/gallery/', GalleryByMenuView.as_view()),
     path('menu/<int:id>/info-content/', InformationContentByMenuView.as_view()),
     path('menu/<int:id>/blog/', MenuBlogView.as_view()),
-    path('menu/<int:id>/courses/', MenuCoursesView.as_view()),
+    path('home/', HomeView.as_view()),
     path('post/create/', PostCreateView.as_view()),
     path('post/<int:id>/', PostEditView.as_view()),
     path('gallery/create/', GalleryCreateView.as_view()),
