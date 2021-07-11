@@ -4,6 +4,7 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import ListField, ImageField
 
+from region.models import Region
 from user.models import (
     PostImage,
     Feedback,
@@ -493,3 +494,14 @@ class MainTitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MainTitle
         fields = ('id', 'title', 'teacher')
+
+
+class RegionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Region
+        fields = ('id', 'text')
+
+    def to_representation(self, instance: Region):
+        data = super(RegionSerializer, self).to_representation(instance)
+        data['value'] = instance.get_value
+        return data
