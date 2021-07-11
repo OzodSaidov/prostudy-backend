@@ -418,7 +418,7 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
 class MenuBlogSerializer(serializers.ModelSerializer):
     post = PostSerializer(source='posts', many=True)
     information_content = InformationContentSerializer(source='inf_contents')
-    gallery = Gallery(source='galleries', many=True)
+    gallery = GallerySerializer(source='galleries', many=True)
     about_us = AboutUsSerializer(source='abouts', many=True)
 
     class Meta:
