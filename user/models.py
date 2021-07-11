@@ -312,7 +312,7 @@ class Company(Base):
 class AboutUs(Base):
     image = models.ImageField(upload_to='about_us/', validators=[validate_image_type])
     content = models.JSONField(default=dict)
-    menu = models.OneToOneField(Menu, on_delete=models.CASCADE, related_name='about')
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='about')
 
 
 class Language(Base):
