@@ -178,6 +178,12 @@ class CourseFileSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ('id', 'course')
 
+    def to_representation(self, instance: CourseFile):
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        data = super(CourseFileSerializer, self).to_representation(instance)
+        data['course_file'] = domain + instance.course_file.url
+        return data
+
 
 class InformationContentDetailSerializer(serializers.ModelSerializer):
     information_content = serializers.HiddenField(default=None)
@@ -260,17 +266,9 @@ class CourseSerializer(serializers.ModelSerializer):
         return super(CourseSerializer, self).update(instance, validated_data)
 
     def to_representation(self, instance):
-        urls = {}
         data = super(CourseSerializer, self).to_representation(instance)
         data['category'] = instance.get_category_display()
         data['menu'] = instance.menu.title
-        for file in data['course_file']:
-            file_url = file['course_file']
-            if file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
-                urls['image'] = file_url
-            elif file_url.endswith(('.mp4', '.mpeg')):
-                urls['video'] = file_url
-        data['course_file'] = urls
         return data
 
 
@@ -363,17 +361,9 @@ class CourseInformationSerializer(serializers.ModelSerializer):
         return super(CourseInformationSerializer, self).update(instance, validated_data)
 
     def to_representation(self, instance: Course):
-        urls = {}
         data = super(CourseInformationSerializer, self).to_representation(instance)
         data['category'] = instance.get_category_display()
         data['menu'] = instance.menu.title
-        for file in data['course_file']:
-            file_url = file['course_file']
-            if file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
-                urls['image'] = file_url
-            elif file_url.endswith(('.mp4', '.mpeg')):
-                urls['video'] = file_url
-        data['course_file'] = urls
         return data
 
 
