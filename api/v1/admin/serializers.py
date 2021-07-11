@@ -54,12 +54,10 @@ class PostImageSerializer(serializers.ModelSerializer):
         fields = ('id', 'file', 'post', 'is_active')
         read_only_fields = ('id', 'post')
 
-    # def to_representation(self, instance):
-    #     print(self.context['request'].get_host())
+    # def to_representation(self, instance: PostImage):
     #     domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
     #     data = super(PostImageSerializer, self).to_representation(instance)
-    #     data['file'] = domain + instance.file.url
-    #     return data
+    #     data
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -273,9 +271,17 @@ class CourseSerializer(serializers.ModelSerializer):
         return super(CourseSerializer, self).update(instance, validated_data)
 
     def to_representation(self, instance):
+        urls = {}
         data = super(CourseSerializer, self).to_representation(instance)
         data['category'] = instance.get_category_display()
         data['menu'] = instance.menu.title
+        for file in data['course_file']:
+            file_url = file['course_file']
+            if file_url.endswith(('.jpg', '.jpeg', '.png', '.gif')):
+                urls['image'] = file_url
+            elif file_url.endswith(('.mp4', '.mpeg')):
+                urls['video'] = file_url
+        data['course_file'] = urls
         return data
 
 
@@ -391,23 +397,23 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
             'post',
         )
 
-    # def to_representation(self, instance: Program):
-    #     # print(instance.posts.all())
-    #     data = super(ProgramInformationSerializer, self).to_representation(instance)
-    #     # qs = instance.course.galleries.gallery_files.all()
-    #     # domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
-    #     # files = []
-    #     # for image in qs:
-    #     #     context = {
-    #     #         "src": domain + image.src.url,
-    #     #         "thumbnail": domain + image.thumbnail.url if image.thumbnail else None
-    #     #     }
-    #     #     files.append(context)
-    #     # posts = {}
-    #     # for index, item in enumerate(instance.posts.all()):
-    #     #     posts[f'post{index + 1}'] = PostSerializer(item).data
-    #     # data['post'] = posts
-    #     return data
+    def to_representation(self, instance: Program):
+        print(instance.posts.all())
+        data = super(ProgramInformationSerializer, self).to_representation(instance)
+        qs = instance.course.galleries.gallery_files.all()
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        files = []
+        for image in qs:
+            context = {
+                "src": domain + image.src.url,
+                "thumbnail": domain + image.thumbnail.url if image.thumbnail else None
+            }
+            files.append(context)
+        posts = {}
+        for index, item in enumerate(instance.posts.all()):
+            posts[f'post{index + 1}'] = PostSerializer(item).data
+        data['post'] = posts
+        return data
 
 
 class MenuBlogSerializer(serializers.ModelSerializer):
