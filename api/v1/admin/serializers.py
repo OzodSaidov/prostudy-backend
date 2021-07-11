@@ -346,8 +346,13 @@ class CompanySerializer(serializers.ModelSerializer):
 class AboutUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = AboutUs
-        fields = ('id', 'image', 'content')
+        fields = ('id', 'image', 'content', 'menu')
 
+    def to_representation(self, instance):
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        data = super(AboutUsSerializer, self).to_representation(instance)
+        data['image'] = domain + instance.image.url
+        return data
 
 class CourseInformationSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer(source='teachers', many=True)
@@ -406,20 +411,7 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
         )
 
     # def to_representation(self, instance: Program):
-    #     data = super(ProgramInformationSerializer, self).to_representation(instance)
-    #     qs = instance.course.galleries.gallery_files.all()
-    #     domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
-    #     files = []
-    #     for image in qs:
-    #         context = {
-    #             "src": domain + image.src.url,
-    #             "thumbnail": domain + image.thumbnail.url if image.thumbnail else None
-    #         }
-    #         files.append(context)
-    #     posts = {}
-    #     for index, item in enumerate(instance.posts.all()):
-    #         posts[f'post{index + 1}'] = PostSerializer(item).data
-    #     data['post'] = posts
+    #
     #     return data
 
 
@@ -427,12 +419,12 @@ class MenuBlogSerializer(serializers.ModelSerializer):
     post = PostSerializer(source='posts', many=True)
     information_content = InformationContentSerializer(source='inf_contents')
     gallery = GallerySerializer(source='galleries', many=True)
-    about_us = AboutUsSerializer(source='about')
+    # about_us = AboutUsSerializer(source='about')
 
     class Meta:
         model = Menu
         fields = (
-            'id', 'href', 'title', 'post', 'information_content', 'gallery', 'about_us', 'parent', 'children',
+            'id', 'href', 'title', 'post', 'information_content', 'gallery', 'parent', 'children',
             'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
@@ -440,10 +432,10 @@ class MenuBlogSerializer(serializers.ModelSerializer):
 
     # def to_representation(self, instance: Menu):
     #     data = super(MenuBlogSerializer, self).to_representation(instance)
-    #     posts = {}
-    #     for index, item in enumerate(instance.posts.all()):
-    #         posts[f'post{index + 1}'] = PostSerializer(item).data
-    #     data['post'] = posts
+    #     data.update({
+    #         "gallery": GallerySerializer(instance.galleries.all(),
+    #                                      context=self.context, many=True).data
+    #     })
     #     return data
 
 

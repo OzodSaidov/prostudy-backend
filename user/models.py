@@ -262,7 +262,7 @@ class Advertisement(Base):
     content = models.JSONField(default=dict)
     image_poster = models.ImageField(upload_to='advertisement/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
-    menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='advertising_posts')
+    url = models.URLField(null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='advertising_posts', null=True)
 
 
