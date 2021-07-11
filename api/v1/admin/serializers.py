@@ -178,7 +178,7 @@ class TeacherSerializer(serializers.ModelSerializer):
     def to_representation(self, instance: Teacher):
         domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
         data = super(TeacherSerializer, self).to_representation(instance)
-        data['photo'] = domain + instance.photo.url
+        data['photo'] = domain + instance.photo.url if instance.photo else None
         return data
 
 
@@ -197,7 +197,7 @@ class CourseFileSerializer(serializers.ModelSerializer):
     def to_representation(self, instance: CourseFile):
         domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
         data = super(CourseFileSerializer, self).to_representation(instance)
-        data['course_file'] = domain + instance.course_file.url
+        data['course_file'] = domain + instance.course_file.url if instance.course_file else None
         return data
 
 
@@ -323,6 +323,8 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'email',
             'phone',
             'message',
+            'region',
+            'course',
             'is_active',
             'menu'
         )
