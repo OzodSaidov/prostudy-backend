@@ -36,7 +36,7 @@ class TeacherAdmin(BaseAdmin):
 
 
 class InformationContentAdmin(BaseAdmin):
-    list_display = ('id', 'title')
+    list_display = ('id', 'title', 'body', 'background', 'course', 'program', 'menu',)
 
 
 class CertificateAdmin(BaseAdmin):
