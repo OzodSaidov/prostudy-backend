@@ -417,6 +417,7 @@ class LanguageView(ListCreateAPIView):
 
 class LanguageEditView(RetrieveUpdateDestroyAPIView):
     permission_classes = [AllowAny]
+    serializer_class = LanguageSerializer
     queryset = Language.objects.all()
     lookup_url_kwarg = 'id'
 
