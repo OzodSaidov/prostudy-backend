@@ -254,8 +254,6 @@ class Program(Base):
 
 
 """Рекламный пост"""
-
-
 class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
@@ -266,8 +264,6 @@ class Advertisement(Base):
 
 
 """Обратная связь"""
-
-
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -282,8 +278,6 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
-
-
 class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
