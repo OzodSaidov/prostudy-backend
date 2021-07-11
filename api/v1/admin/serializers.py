@@ -348,11 +348,11 @@ class AboutUsSerializer(serializers.ModelSerializer):
         model = AboutUs
         fields = ('id', 'image', 'content', 'menu')
 
-    def to_representation(self, instance):
-        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
-        data = super(AboutUsSerializer, self).to_representation(instance)
-        data['image'] = domain + instance.image.url
-        return data
+    # def to_representation(self, instance):
+    #     domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+    #     data = super(AboutUsSerializer, self).to_representation(instance)
+    #     data['image'] = domain + instance.image.url
+    #     return data
 
 class CourseInformationSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer(source='teachers', many=True)
@@ -419,13 +419,13 @@ class MenuBlogSerializer(serializers.ModelSerializer):
     post = PostSerializer(source='posts', many=True)
     information_content = InformationContentSerializer(source='inf_contents')
     gallery = GallerySerializer(source='galleries', many=True)
-    # about_us = AboutUsSerializer(source='about')
+    about_us = AboutUsSerializer(source='abouts', many=True)
 
     class Meta:
         model = Menu
         fields = (
             'id', 'href', 'title', 'post', 'information_content', 'gallery', 'parent', 'children',
-            'is_active')
+            'is_active', 'about_us')
         extra_kwargs = {
             'children': {'read_only': True},
         }
@@ -469,7 +469,7 @@ class LifeHackSerializer(serializers.ModelSerializer):
         return data
 
 
-class HomeSerializer(serializers.ListSerializer, ABC):
+class HomeSerializer(serializers.ModelSerializer):
     advertisement = AdvertisementSerializer(source='advertising_posts', many=True)
     course = CourseSerializer(source='courses', many=True)
     about_us = AboutUsSerializer(source='about', many=True)
@@ -485,4 +485,4 @@ class HomeSerializer(serializers.ListSerializer, ABC):
 class MainTitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MainTitle
-        fields = ('id', 'title')
+        fields = ('id', 'title', 'teacher')
