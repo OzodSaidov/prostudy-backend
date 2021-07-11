@@ -1,3 +1,5 @@
+from abc import ABC
+
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import ListField, ImageField
@@ -124,6 +126,14 @@ class GalleryFileSerializer(serializers.ModelSerializer):
         model = GalleryFile
         fields = ('id', 'title', 'src', 'thumbnail', 'url', 'gallery')
         read_only_fields = ('id', 'gallery')
+
+    def to_representation(self, instance):
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        data = super(GalleryFileSerializer, self).to_representation(instance)
+        data['src'] = domain + instance.src.url
+        if instance.thumbnail:
+            data['thumbnail'] = domain + instance.thumbnail.url
+        return data
 
 
 class GallerySerializer(serializers.ModelSerializer):
@@ -340,7 +350,6 @@ class AboutUsSerializer(serializers.ModelSerializer):
 
 
 class CourseInformationSerializer(serializers.ModelSerializer):
-    course_file = CourseFileSerializer(source='course_files', many=True, required=False)
     teacher = TeacherSerializer(source='teachers', many=True)
     program_training = QuestionAndAnswersSerializer(source='programs_training', many=True)
     result = ResultSerializer(source='results', many=True)
@@ -358,7 +367,6 @@ class CourseInformationSerializer(serializers.ModelSerializer):
             'href',
             'menu',
             'background',
-            'course_file',
             'teacher',
             'program_training',
             'result',
@@ -397,23 +405,22 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
             'post',
         )
 
-    def to_representation(self, instance: Program):
-        print(instance.posts.all())
-        data = super(ProgramInformationSerializer, self).to_representation(instance)
-        qs = instance.course.galleries.gallery_files.all()
-        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
-        files = []
-        for image in qs:
-            context = {
-                "src": domain + image.src.url,
-                "thumbnail": domain + image.thumbnail.url if image.thumbnail else None
-            }
-            files.append(context)
-        posts = {}
-        for index, item in enumerate(instance.posts.all()):
-            posts[f'post{index + 1}'] = PostSerializer(item).data
-        data['post'] = posts
-        return data
+    # def to_representation(self, instance: Program):
+    #     data = super(ProgramInformationSerializer, self).to_representation(instance)
+    #     qs = instance.course.galleries.gallery_files.all()
+    #     domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+    #     files = []
+    #     for image in qs:
+    #         context = {
+    #             "src": domain + image.src.url,
+    #             "thumbnail": domain + image.thumbnail.url if image.thumbnail else None
+    #         }
+    #         files.append(context)
+    #     posts = {}
+    #     for index, item in enumerate(instance.posts.all()):
+    #         posts[f'post{index + 1}'] = PostSerializer(item).data
+    #     data['post'] = posts
+    #     return data
 
 
 class MenuBlogSerializer(serializers.ModelSerializer):
@@ -431,13 +438,13 @@ class MenuBlogSerializer(serializers.ModelSerializer):
             'children': {'read_only': True},
         }
 
-    def to_representation(self, instance: Menu):
-        data = super(MenuBlogSerializer, self).to_representation(instance)
-        posts = {}
-        for index, item in enumerate(instance.posts.all()):
-            posts[f'post{index + 1}'] = PostSerializer(item).data
-        data['post'] = posts
-        return data
+    # def to_representation(self, instance: Menu):
+    #     data = super(MenuBlogSerializer, self).to_representation(instance)
+    #     posts = {}
+    #     for index, item in enumerate(instance.posts.all()):
+    #         posts[f'post{index + 1}'] = PostSerializer(item).data
+    #     data['post'] = posts
+    #     return data
 
 
 class CourseNameSerializer(serializers.ModelSerializer):
@@ -470,7 +477,7 @@ class LifeHackSerializer(serializers.ModelSerializer):
         return data
 
 
-class MenuCoursesSerializer(serializers.ModelSerializer):
+class HomeSerializer(serializers.ListSerializer, ABC):
     advertisement = AdvertisementSerializer(source='advertising_posts', many=True)
     course = CourseSerializer(source='courses', many=True)
     about_us = AboutUsSerializer(source='about', many=True)
@@ -478,9 +485,9 @@ class MenuCoursesSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer(source='teachers', many=True)
     company = CompanySerializer(source='companies', many=True)
 
-    class Meta:
-        model = Menu
-        fields = ('id', 'advertisement', 'course', 'about_us', 'life_hack', 'teacher', 'company')
+    # class Meta:
+    #     model = Menu
+    #     fields = ('id', 'advertisement', 'course', 'about_us', 'life_hack', 'teacher', 'company')
 
 
 class MainTitleSerializer(serializers.ModelSerializer):
