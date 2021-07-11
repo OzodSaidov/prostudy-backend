@@ -453,3 +453,16 @@ class MainTitleEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = MainTitleSerializer
     queryset = MainTitle.objects.all()
     lookup_url_kwarg = 'id'
+
+
+# class PostImageView(CreateAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = PostImageSerializer
+#     queryset = PostImage.objects.all()
+#
+#
+# class PostImageEditView(RetrieveUpdateDestroyAPIView):
+#     permission_classes = [AllowAny]
+#     serializer_class = PostImageSerializer
+#     queryset = PostImage.objects.all()
+#     lookup_url_kwarg = 'id'
