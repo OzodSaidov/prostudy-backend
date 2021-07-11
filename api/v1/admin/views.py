@@ -447,7 +447,10 @@ class HomeView(ObjectMultipleModelAPIView):
         {'queryset': Teacher.objects.all(), 'serializer_class': TeacherSerializer},
         {'queryset': Company.objects.all(), 'serializer_class': CompanySerializer},
         {'queryset': Region.objects.all(), 'serializer_class': RegionSerializer},
+        {'queryset': Contact.objects.all(), 'serializer_class': ContactSerializer},
+        {'queryset': Social.objects.all(), 'serializer_class': SocialSerializer},
     ]
+
 
 class MainTitleView(CreateAPIView):
     permission_classes = [AllowAny]
@@ -473,3 +476,29 @@ class MainTitleEditView(RetrieveUpdateDestroyAPIView):
 #     serializer_class = PostImageSerializer
 #     queryset = PostImage.objects.all()
 #     lookup_url_kwarg = 'id'
+
+
+class ContactView(CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ContactSerializer
+    queryset = Contact.objects.all()
+
+
+class ContactEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = ContactSerializer
+    queryset = Contact.objects.all()
+    lookup_url_kwarg = 'id'
+
+
+class SocialView(CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = SocialSerializer
+    queryset = Social.objects.all()
+
+
+class SocialEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = SocialSerializer
+    queryset = Social.objects.all()
+    lookup_url_kwarg = 'id'

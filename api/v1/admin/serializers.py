@@ -19,7 +19,7 @@ from user.models import (
     Program,
     CourseFile,
     Company, CostOfEducation, Certificate, QuestionAndAnswer, Result, InformationContent,
-    InformationContentDetail, AboutUs, Language, LifeHack, MainTitle
+    InformationContentDetail, AboutUs, Language, LifeHack, MainTitle, Contact, Social
 )
 
 
@@ -505,3 +505,13 @@ class RegionSerializer(serializers.ModelSerializer):
         data = super(RegionSerializer, self).to_representation(instance)
         data['value'] = instance.get_value
         return data
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ('id', 'location', 'phone', 'email')
+
+class SocialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Social
+        fields = ('id', 'title', 'url', 'image')

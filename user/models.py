@@ -111,6 +111,8 @@ class MainTitle(Base):
 
 
 """Предподаватель"""
+
+
 class Teacher(Base):
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
@@ -136,6 +138,8 @@ class Teacher(Base):
 
 
 """Курс"""
+
+
 class Course(Base):
     GRAPHIC_DESIGN = 1
     WEB_DESIGN = 2
@@ -254,6 +258,8 @@ class Program(Base):
 
 
 """Рекламный пост"""
+
+
 class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
@@ -264,13 +270,15 @@ class Advertisement(Base):
 
 
 """Обратная связь"""
+
+
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
     phone = models.CharField(max_length=13, validators=[validate_phone])
     message = models.TextField()
-    region = models.CharField(max_length=50, null=True)
-    course = models.CharField(max_length=100, null=True)
+    region = models.CharField(max_length=50, null=True, blank=True)
+    course = models.CharField(max_length=100, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -278,6 +286,8 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
+
+
 class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
@@ -318,3 +328,15 @@ class LifeHack(Base):
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='life_hacks')
     # menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='life_hacks')
     is_active = models.BooleanField(default=True)
+
+
+class Contact(Base):
+    location = models.CharField(max_length=250)
+    phone = models.CharField(max_length=13, validators=[validate_phone])
+    email = models.EmailField()
+
+
+class Social(Base):
+    title = models.CharField(max_length=50)
+    url = models.URLField()
+    image = models.ImageField(upload_to='social', validators=[validate_image_type])
