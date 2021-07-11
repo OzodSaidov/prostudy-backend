@@ -418,7 +418,7 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
 class MenuBlogSerializer(serializers.ModelSerializer):
     post = PostSerializer(source='posts', many=True)
     information_content = InformationContentSerializer(source='inf_contents')
-    gallery = GallerySerializer(source='galleries', many=True)
+    gallery = GalleryFileSerializer(source='', many=True)
     about_us = AboutUsSerializer(source='abouts', many=True)
 
     class Meta:
@@ -466,17 +466,17 @@ class LifeHackSerializer(serializers.ModelSerializer):
         return data
 
 
-class HomeSerializer(serializers.ModelSerializer):
-    advertisement = AdvertisementSerializer(source='advertising_posts', many=True)
-    course = CourseSerializer(source='courses', many=True)
-    about_us = AboutUsSerializer(source='about', many=True)
-    life_hack = LifeHackSerializer(source='life_hacks', many=True)
-    teacher = TeacherSerializer(source='teachers', many=True)
-    company = CompanySerializer(source='companies', many=True)
-
-    class Meta:
-        model = Menu
-        fields = ('id', 'advertisement', 'course', 'about_us', 'life_hack', 'teacher', 'company')
+# class HomeSerializer(serializers.ModelSerializer):
+#     advertisement = AdvertisementSerializer(source='advertising_posts', many=True)
+#     course = CourseSerializer(source='courses', many=True)
+#     about_us = AboutUsSerializer(source='about', many=True)
+#     life_hack = LifeHackSerializer(source='life_hacks', many=True)
+#     teacher = TeacherSerializer(source='teachers', many=True)
+#     company = CompanySerializer(source='companies', many=True)
+#
+#     class Meta:
+#         model = Menu
+#         fields = ('id', 'advertisement', 'course', 'about_us', 'life_hack', 'teacher', 'company')
 
 
 class MainTitleSerializer(serializers.ModelSerializer):
