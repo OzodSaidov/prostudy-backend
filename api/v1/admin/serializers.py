@@ -181,6 +181,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         data['photo'] = domain + instance.photo.url
         return data
 
+
 class CourseFileSerializer(serializers.ModelSerializer):
     course = serializers.HiddenField(default=None)
 
@@ -354,6 +355,7 @@ class AboutUsSerializer(serializers.ModelSerializer):
     #     data['image'] = domain + instance.image.url
     #     return data
 
+
 class CourseInformationSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer(source='teachers', many=True)
     program_training = QuestionAndAnswersSerializer(source='programs_training', many=True)
@@ -410,9 +412,19 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
             'post',
         )
 
-    # def to_representation(self, instance: Program):
-    #
-    #     return data
+    def to_representation(self, instance: Program):
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        data = super(ProgramInformationSerializer, self).to_representation(instance)
+        gallery = []
+        for file in instance.course.galleries.gallery_files.all():
+            context = {
+                "title": file.title,
+                "src": domain + file.src.url if file.src else None,
+                "thumbnail": domain + file.thumbnail.url if file.thumbnail else None
+            }
+            gallery.append(context)
+        data['gallery'] = gallery
+        return data
 
 
 class MenuBlogSerializer(serializers.ModelSerializer):
