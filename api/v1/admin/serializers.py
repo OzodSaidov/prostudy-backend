@@ -127,13 +127,13 @@ class GalleryFileSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'src', 'thumbnail', 'url', 'gallery')
         read_only_fields = ('id', 'gallery')
 
-    def to_representation(self, instance):
-        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
-        data = super(GalleryFileSerializer, self).to_representation(instance)
-        data['src'] = domain + instance.src.url
-        if instance.thumbnail:
-            data['thumbnail'] = domain + instance.thumbnail.url
-        return data
+    # def to_representation(self, instance):
+    #     domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+    #     data = super(GalleryFileSerializer, self).to_representation(instance)
+    #     data['src'] = domain + instance.src.url
+    #     if instance.thumbnail:
+    #         data['thumbnail'] = domain + instance.thumbnail.url
+    #     return data
 
 
 class GallerySerializer(serializers.ModelSerializer):
@@ -432,7 +432,7 @@ class MenuBlogSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance: Menu):
         data = super(MenuBlogSerializer, self).to_representation(instance)
-
+        data['gallery'] = GallerySerializer(instance.galleries.first(), context=self.context).data
         return data
 
 
