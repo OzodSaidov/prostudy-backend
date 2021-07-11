@@ -107,7 +107,7 @@ class GalleryFile(Base):
 
 class MainTitle(Base):
     title = models.JSONField(default=dict)
-    teacher = models.ForeignKey('Teacher', on_delete=models.DO_NOTHING, related_name='main_titles')
+    teacher = models.ForeignKey('Teacher', on_delete=models.DO_NOTHING, related_name='main_titles', null=True)
 
 
 """Предподаватель"""
