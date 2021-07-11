@@ -312,7 +312,7 @@ class Company(Base):
 class AboutUs(Base):
     image = models.ImageField(upload_to='about_us/', validators=[validate_image_type])
     content = models.JSONField(default=dict)
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='about')
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='abouts', null=True, blank=True)
 
 
 class Language(Base):
@@ -323,5 +323,5 @@ class Language(Base):
 class LifeHack(Base):
     context = models.JSONField(default=dict)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='life_hacks')
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='life_hacks')
+    # menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='life_hacks')
     is_active = models.BooleanField(default=True)
