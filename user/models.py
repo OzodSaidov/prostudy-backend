@@ -111,8 +111,6 @@ class MainTitle(Base):
 
 
 """Предподаватель"""
-
-
 class Teacher(Base):
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
@@ -138,8 +136,6 @@ class Teacher(Base):
 
 
 """Курс"""
-
-
 class Course(Base):
     GRAPHIC_DESIGN = 1
     WEB_DESIGN = 2
@@ -282,8 +278,6 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
-
-
 class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
@@ -322,7 +316,6 @@ class Language(Base):
 class LifeHack(Base):
     context = models.JSONField(default=dict)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='life_hacks')
-    # menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='life_hacks')
     is_active = models.BooleanField(default=True)
 
 
@@ -336,3 +329,7 @@ class Social(Base):
     title = models.CharField(max_length=50)
     url = models.URLField()
     image = models.ImageField(upload_to='social', validators=[validate_image_type])
+
+
+class Presentation(Base):
+    file = models.FileField(upload_to='presentation')
