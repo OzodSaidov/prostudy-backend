@@ -331,7 +331,7 @@ class LifeHack(Base):
 
 
 class Contact(Base):
-    location = models.CharField(max_length=250)
+    location = models.JSONField(default=dict)
     phone = models.CharField(max_length=13, validators=[validate_phone])
     email = models.EmailField()
 
