@@ -270,8 +270,6 @@ class Advertisement(Base):
 
 
 """Обратная связь"""
-
-
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
