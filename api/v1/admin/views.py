@@ -449,7 +449,7 @@ class LifeHackEditView(RetrieveUpdateDestroyAPIView):
 
 
 class HomeView(ObjectMultipleModelAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = None
     querylist = [
         {'queryset': Advertisement.objects.all(), 'serializer_class': AdvertisementSerializer},
