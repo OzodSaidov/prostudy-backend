@@ -50,6 +50,7 @@ SECONDARY_APPS = [
     'corsheaders',
     'rest_framework_simplejwt',
     'django_json_widget',
+    'drf_multiple_model',
 ]
 
 USER_APPS = [
@@ -178,6 +179,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '50/day',
+    }
 }
 # --------------------------------------------------------------------------------------
 
