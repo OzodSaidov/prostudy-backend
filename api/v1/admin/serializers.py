@@ -350,12 +350,6 @@ class AboutUsSerializer(serializers.ModelSerializer):
         model = AboutUs
         fields = ('id', 'image', 'content', 'menu')
 
-    # def to_representation(self, instance):
-    #     domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
-    #     data = super(AboutUsSerializer, self).to_representation(instance)
-    #     data['image'] = domain + instance.image.url
-    #     return data
-
 
 class CourseInformationSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer(source='teachers', many=True)
@@ -477,15 +471,6 @@ class LifeHackSerializer(serializers.ModelSerializer):
         data['teacher'] = instance.teacher.get_teacher_short_info
         data['teacher']['photo'] = domain + instance.teacher.photo.url
         return data
-
-
-# class HomeSerializer(serializers.Serializer, ABC):
-#     advertisement = AdvertisementSerializer()
-#     course = CourseSerializer()
-#     about_us = AboutUsSerializer()
-#     life_hack = LifeHackSerializer()
-#     teacher = TeacherSerializer()
-#     company = CompanySerializer()
 
 
 class MainTitleSerializer(serializers.ModelSerializer):
