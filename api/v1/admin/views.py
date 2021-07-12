@@ -197,7 +197,7 @@ class FeedbackEditView(RetrieveDestroyAPIView):
 
 
 class SubscriptionRequestCreateView(CreateAPIView):
-    # throttle_classes = []
+    throttle_classes = [AnonRateThrottle]
     permission_classes = [AllowAny]
     serializer_class = SubscriptionRequestSerializer
     queryset = SubscriptionRequest.objects.all()
