@@ -450,6 +450,7 @@ class HomeView(ObjectMultipleModelAPIView):
         {'queryset': Region.objects.all(), 'serializer_class': RegionSerializer},
         {'queryset': Contact.objects.all(), 'serializer_class': ContactSerializer},
         {'queryset': Social.objects.all(), 'serializer_class': SocialSerializer},
+        {'queryset': Presentation.objects.all(), 'serializer_class': PresentationSerializer},
     ]
 
 
