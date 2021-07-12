@@ -19,7 +19,7 @@ from user.models import (
     Program,
     CourseFile,
     Company, CostOfEducation, Certificate, QuestionAndAnswer, Result, InformationContent,
-    InformationContentDetail, AboutUs, Language, LifeHack, MainTitle, Contact, Social
+    InformationContentDetail, AboutUs, Language, LifeHack, MainTitle, Contact, Social, Presentation
 )
 
 
@@ -298,7 +298,6 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class AdvertisementSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Advertisement
         fields = (
@@ -505,12 +504,20 @@ class RegionSerializer(serializers.ModelSerializer):
         data['value'] = instance.get_value
         return data
 
+
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields = ('id', 'location', 'phone', 'email')
 
+
 class SocialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Social
         fields = ('id', 'title', 'url', 'image')
+
+
+class PresentationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Presentation
+        fields = ('id', 'file')

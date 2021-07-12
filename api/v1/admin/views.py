@@ -439,6 +439,7 @@ class LifeHackEditView(RetrieveUpdateDestroyAPIView):
 
 class HomeView(ObjectMultipleModelAPIView):
     permission_classes = [AllowAny]
+    serializer_class = None
     querylist = [
         {'queryset': Advertisement.objects.all(), 'serializer_class': AdvertisementSerializer},
         {'queryset': Course.objects.all()[:4], 'serializer_class': CourseSerializer},
@@ -465,17 +466,17 @@ class MainTitleEditView(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
 
 
-# class PostImageView(CreateAPIView):
-#     permission_classes = [AllowAny]
-#     serializer_class = PostImageSerializer
-#     queryset = PostImage.objects.all()
-#
-#
-# class PostImageEditView(RetrieveUpdateDestroyAPIView):
-#     permission_classes = [AllowAny]
-#     serializer_class = PostImageSerializer
-#     queryset = PostImage.objects.all()
-#     lookup_url_kwarg = 'id'
+class PresentationView(CreateAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = PresentationSerializer
+    queryset = Presentation.objects.all()
+
+
+class PresentationEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = PresentationSerializer
+    queryset = Presentation.objects.all()
+    lookup_url_kwarg = 'id'
 
 
 class ContactView(CreateAPIView):

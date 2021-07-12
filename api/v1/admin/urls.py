@@ -65,4 +65,6 @@ urlpatterns = [
     path('contacts/<int:id>', ContactEditView.as_view()),
     path('social/', SocialView.as_view()),
     path('social/<int:id>', SocialEditView.as_view()),
+    path('presentation/', PresentationView.as_view()),
+    path('presentation/<int:id>', PresentationEditView.as_view()),
 ]
