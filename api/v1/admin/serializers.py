@@ -334,7 +334,7 @@ class SubscriptionRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubscriptionRequest
-        fields = ('id', 'name', 'number_visitors', 'phone', 'is_active', 'menu')
+        fields = ('id', 'name', 'number_visitors', 'phone', 'is_active', 'menu', 'course')
 
 
 class CompanySerializer(serializers.ModelSerializer):
