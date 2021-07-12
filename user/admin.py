@@ -48,7 +48,7 @@ class GalleryAdmin(BaseAdmin):
 
 
 class InformationContentDetailAdmin(BaseAdmin):
-    list_display = ('id', 'title', 'body', 'image')
+    list_display = ('id', 'title', 'body', 'image', 'information_content')
 
 
 class CostOfEducationAdmin(BaseAdmin):
