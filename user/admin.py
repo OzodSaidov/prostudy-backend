@@ -79,7 +79,7 @@ class AboutUsAdmin(BaseAdmin):
     list_display = ('id', 'content', 'image')
 
 
-class ContactAdmin(admin.ModelAdmin):
+class ContactAdmin(BaseAdmin):
     list_display = ('id', 'location', 'phone', 'email')
 
 
