@@ -448,8 +448,6 @@ class HomeView(ObjectMultipleModelAPIView):
         {'queryset': Teacher.objects.all(), 'serializer_class': TeacherSerializer},
         {'queryset': Company.objects.all(), 'serializer_class': CompanySerializer},
         {'queryset': Region.objects.all(), 'serializer_class': RegionSerializer},
-        {'queryset': Contact.objects.all(), 'serializer_class': ContactSerializer},
-        {'queryset': Social.objects.all(), 'serializer_class': SocialSerializer},
         {'queryset': Presentation.objects.all(), 'serializer_class': PresentationSerializer},
     ]
 

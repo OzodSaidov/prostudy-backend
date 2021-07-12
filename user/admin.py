@@ -84,7 +84,7 @@ class ContactAdmin(BaseAdmin):
 
 
 class SocialAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'url', 'image')
+    list_display = ('id', 'title', 'url', 'image', 'contact')
 
 
 admin.site.register(models.Menu, MenuAdmin)
