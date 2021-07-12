@@ -132,9 +132,9 @@ class Teacher(Base):
 
     @property
     def get_teacher_short_info(self):
-        return {"name": f'{self.first_name}',
-                "specialty": f'{self.specialty}',
-                "photo": f'{self.photo.url}'}
+        return {"name": self.first_name,
+                "specialty": self.specialty,
+                "photo": self.photo.url}
 
 
 """Курс"""

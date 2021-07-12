@@ -176,7 +176,7 @@ class TeacherSerializer(serializers.ModelSerializer):
             'course'
         )
 
-    def to_representation(self, instance: Teacher):
+    def to_representation(self, instance):
         domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
         data = super(TeacherSerializer, self).to_representation(instance)
         data['photo'] = domain + instance.photo.url if instance.photo else None
@@ -308,6 +308,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             'content',
             'image_poster',
             'is_active',
+            'url'
             'menu',
             'course',
         )
