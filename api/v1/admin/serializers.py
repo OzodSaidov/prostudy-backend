@@ -307,7 +307,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             'content',
             'image_poster',
             'is_active',
-            'url'
+            'url',
             'course',
         )
 

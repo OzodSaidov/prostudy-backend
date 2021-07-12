@@ -258,8 +258,6 @@ class Program(Base):
 
 
 """Рекламный пост"""
-
-
 class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
