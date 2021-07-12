@@ -1,58 +1,57 @@
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, \
-    ListAPIView, CreateAPIView, RetrieveAPIView, GenericAPIView
+    ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_multiple_model.views import ObjectMultipleModelAPIView
-
+from rest_framework.throttling import AnonRateThrottle
 from api.v1.admin.serializers import *
-# from api.v1.admin.services.throttles import PostAnononymousRateThrottle
 from region.models import Region
 from user.models import *
 
 
 class PostCreateView(ListCreateAPIView):
     serializer_class = PostSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = Post.objects.all()
 
 
 class PostEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Post.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class MenuCreateView(ListCreateAPIView):
     serializer_class = MenuSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = Menu.objects.filter(parent=None)
 
 
 class MenuEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = MenuSerializer
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
     queryset = Menu.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class GalleryFileCreateView(ListCreateAPIView):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     serializer_class = GalleryFileSerializer
     queryset = GalleryFile.objects.all()
 
 
 class GalleryFileRetrieveDestroyView(RetrieveDestroyAPIView):
     queryset = GalleryFile.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = GalleryFileSerializer
     lookup_url_kwarg = 'id'
 
 
 class GalleryCreateView(ListCreateAPIView):
     serializer_class = GallerySerializer
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
 
     def get_queryset(self):
         queryset = Gallery.objects.filter(course__category__isnull=False)
@@ -61,7 +60,7 @@ class GalleryCreateView(ListCreateAPIView):
 
 class GalleryEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = GallerySerializer
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     queryset = Gallery.objects.all()
     lookup_url_kwarg = 'id'
 
@@ -87,25 +86,25 @@ class TeacherListByCourseView(ListAPIView):
 
 class TeacherCreateView(ListCreateAPIView):
     serializer_class = TeacherSerializer
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     queryset = Teacher.objects.all()
 
 
 class TeacherEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = TeacherSerializer
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
     queryset = Teacher.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class CourseFileCreateView(ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CourseFileSerializer
     queryset = CourseFile.objects.all()
 
 
 class CourseFileRetrieveDestroyView(RetrieveDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CourseFileSerializer
     queryset = CourseFile.objects.all()
     lookup_url_kwarg = 'id'
@@ -113,13 +112,13 @@ class CourseFileRetrieveDestroyView(RetrieveDestroyAPIView):
 
 class CourseCreateView(ListCreateAPIView):
     serializer_class = CourseSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Course.objects.all()
 
 
 class CourseEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = CourseSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Course.objects.all()
     lookup_url_kwarg = 'id'
 
@@ -135,7 +134,7 @@ class ProgramListByCourseView(ListAPIView):
 
 class InfoContentByProgramView(APIView):
     serializer_class = InformationContentSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         inf_content = InformationContent.objects.get(program_id=self.kwargs['id'])
@@ -144,7 +143,7 @@ class InfoContentByProgramView(APIView):
 
 class QuestionListByProgramView(APIView):
     serializer_class = QuestionAndAnswersSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         questions = QuestionAndAnswer.objects.filter(program_id=self.kwargs['id'])
@@ -154,11 +153,11 @@ class QuestionListByProgramView(APIView):
 class ProgramCreateView(CreateAPIView):
     serializer_class = ProgramSerializer
     queryset = Program.objects.all()
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class ProgramEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ProgramSerializer
     queryset = Program.objects.all()
     lookup_url_kwarg = 'id'
@@ -166,60 +165,72 @@ class ProgramEditView(RetrieveUpdateDestroyAPIView):
 
 class AdvertisementCreateView(ListCreateAPIView):
     serializer_class = AdvertisementSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Advertisement.objects.filter(is_active=True)
 
 
 class AdvertisementEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = AdvertisementSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Advertisement.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class FeedbackCreateView(CreateAPIView):
-    # throttle_classes = [PostAnononymousRateThrottle, ]
+    throttle_classes = [AnonRateThrottle]
     permission_classes = [AllowAny]
+    serializer_class = FeedbackSerializer
+    queryset = Feedback.objects.all()
+
+
+class FeedbackView(ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = FeedbackSerializer
     queryset = Feedback.objects.all()
 
 
 class FeedbackEditView(RetrieveDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = FeedbackSerializer
     queryset = Feedback.objects.all()
     lookup_url_kwarg = 'id'
 
 
-class SubscriptionRequestCreateView(ListCreateAPIView):
-    # throttle_classes = [PostAnononymousRateThrottle]
+class SubscriptionRequestCreateView(CreateAPIView):
+    throttle_classes = [AnonRateThrottle]
     permission_classes = [AllowAny]
     serializer_class = SubscriptionRequestSerializer
     queryset = SubscriptionRequest.objects.all()
 
 
+class SubscriptionRequestView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = SubscriptionRequestSerializer
+    queryset = SubscriptionRequest.objects.all()
+
+
 class SubscriptionRequestEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = SubscriptionRequestSerializer
     queryset = SubscriptionRequest.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class CompanyCreateView(ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CompanySerializer
     queryset = Company.objects.all()
 
 
 class CompanyEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CompanySerializer
     queryset = Company.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class InformationContentByCourseView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = InformationContentSerializer
 
     def get(self, request, *args, **kwargs):
@@ -229,26 +240,26 @@ class InformationContentByCourseView(APIView):
 
 
 class InformationContentCreateView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = InformationContentSerializer
     queryset = InformationContent.objects.all()
 
 
 class InformationContentEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = InformationContentSerializer
     queryset = InformationContent.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class InformationContentDetailCreateView(ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = InformationContentDetailSerializer
     queryset = InformationContentDetail.objects.all()
 
 
 class InformationContentDetailEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = InformationContentDetailSerializer
     queryset = InformationContentDetail.objects.all()
     lookup_url_kwarg = 'id'
@@ -264,20 +275,20 @@ class CostEducationListByCourseView(ListAPIView):
 
 
 class CostEducationCreateView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = CostOfEducationSerializer
     queryset = CostOfEducation.objects.all()
 
 
 class CostEducationEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CostOfEducationSerializer
     queryset = CostOfEducation.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class CertificateByCourseView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CertificateSerializer
     queryset = Certificate.objects.all()
 
@@ -288,20 +299,20 @@ class CertificateByCourseView(APIView):
 
 
 class CertificateCreateView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = CertificateSerializer
     queryset = Certificate.objects.all()
 
 
 class CertificateEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CertificateSerializer
     queryset = Certificate.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class QuestionAndAnswersListByCourseView(ListAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = QuestionAndAnswersSerializer
 
     def get_queryset(self):
@@ -310,13 +321,13 @@ class QuestionAndAnswersListByCourseView(ListAPIView):
 
 
 class QuestionAndAnswersCreateView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = QuestionAndAnswersSerializer
     queryset = QuestionAndAnswer.objects.all()
 
 
 class QuestionAndAnswersEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = QuestionAndAnswersSerializer
     queryset = QuestionAndAnswer.objects.all()
     lookup_url_kwarg = 'id'
@@ -332,13 +343,13 @@ class ResultListByCourseView(ListAPIView):
 
 
 class ResultCreateView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = ResultSerializer
     queryset = Result.objects.all()
 
 
 class ResultEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ResultSerializer
     queryset = Result.objects.all()
     lookup_url_kwarg = 'id'
@@ -354,7 +365,7 @@ class PostByMenuView(ListAPIView):
 
 
 class GalleryByMenuView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = GallerySerializer
     queryset = Gallery.objects.all()
 
@@ -375,7 +386,7 @@ class PostListByProgramView(ListAPIView):
 
 
 class InformationContentByMenuView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializers = InformationContentSerializer
 
     def get(self, request, *args, **kwargs):
@@ -385,21 +396,21 @@ class InformationContentByMenuView(APIView):
 
 
 class CourseInformationView(RetrieveAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = CourseInformationSerializer
     lookup_url_kwarg = 'id'
     queryset = Course.objects.all()
 
 
 class ProgramInformationView(RetrieveAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ProgramInformationSerializer
     queryset = Program.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class MenuBlogView(RetrieveAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = MenuBlogSerializer
     queryset = Menu.objects.all()
     lookup_url_kwarg = 'id'
@@ -412,33 +423,33 @@ class CourseNameView(ListAPIView):
 
 
 class LanguageView(ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = LanguageSerializer
     queryset = Language.objects.all()
 
 
 class LanguageEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = LanguageSerializer
     queryset = Language.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class LifeHackView(ListCreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = LifeHackSerializer
     queryset = LifeHack.objects.filter(is_active=True)
 
 
 class LifeHackEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = LifeHackSerializer
     queryset = LifeHack.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class HomeView(ObjectMultipleModelAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = None
     querylist = [
         {'queryset': Advertisement.objects.all(), 'serializer_class': AdvertisementSerializer},
@@ -453,52 +464,52 @@ class HomeView(ObjectMultipleModelAPIView):
 
 
 class MainTitleView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = MainTitleSerializer
     queryset = MainTitle.objects.all()
 
 
 class MainTitleEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = MainTitleSerializer
     queryset = MainTitle.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class PresentationView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = PresentationSerializer
     queryset = Presentation.objects.all()
 
 
 class PresentationEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PresentationSerializer
     queryset = Presentation.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class ContactView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = ContactSerializer
     queryset = Contact.objects.all()
 
 
 class ContactEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ContactSerializer
     queryset = Contact.objects.all()
     lookup_url_kwarg = 'id'
 
 
 class SocialView(CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
     serializer_class = SocialSerializer
     queryset = Social.objects.all()
 
 
 class SocialEditView(RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = SocialSerializer
     queryset = Social.objects.all()
     lookup_url_kwarg = 'id'
