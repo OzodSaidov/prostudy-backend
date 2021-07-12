@@ -490,16 +490,18 @@ class RegionSerializer(serializers.ModelSerializer):
         return data
 
 
-class ContactSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Contact
-        fields = ('id', 'location', 'phone', 'email')
-
-
 class SocialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Social
-        fields = ('id', 'title', 'url', 'image')
+        fields = ('id', 'title', 'url', 'image', 'contact')
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    social = SocialSerializer(source='socials', many=True)
+
+    class Meta:
+        model = Contact
+        fields = ('id', 'location', 'phone', 'email', 'social')
 
 
 class PresentationSerializer(serializers.ModelSerializer):

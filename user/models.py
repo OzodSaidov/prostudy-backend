@@ -329,7 +329,7 @@ class Social(Base):
     title = models.CharField(max_length=50)
     url = models.URLField()
     image = models.ImageField(upload_to='social', validators=[validate_image_type])
-
+    contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='socials', null=True)
 
 class Presentation(Base):
     file = models.FileField(upload_to='presentation')
