@@ -79,6 +79,14 @@ class AboutUsAdmin(BaseAdmin):
     list_display = ('id', 'content', 'image')
 
 
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('id', 'location', 'phone', 'email')
+
+
+class SocialAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'url', 'image')
+
+
 admin.site.register(models.Menu, MenuAdmin)
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Gallery, GalleryAdmin)
@@ -104,3 +112,5 @@ admin.site.register(models.Company)
 admin.site.register(models.Language)
 admin.site.register(models.LifeHack, BaseAdmin)
 admin.site.register(models.MainTitle, BaseAdmin)
+admin.site.register(models.Contact, ContactAdmin)
+admin.site.register(models.Social, SocialAdmin)
