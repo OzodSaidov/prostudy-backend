@@ -30,7 +30,15 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = bool(os.getenv("DEBUG") == 'TRUE')
 
 # ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0', '127.0.0.1']
-ALLOWED_HOSTS = ['sherzodbek.ml', '127.0.0.1']
+# ALLOWED_HOSTS = ['sherzodbek.ml', '127.0.0.1']
+HOST_IP = os.getenv('HOST_IP')
+DOMAIN_NAME = os.getenv('DOMAIN_NAME')
+localhost = os.getenv('localhost')
+
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = [HOST_IP, DOMAIN_NAME, localhost]
 
 # Application definition
 PRIMARY_APPS = [
@@ -155,18 +163,21 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
+if DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+else:
+    STATICFILES_FINDERS = (
+        'django.contrib.staticfiles.finders.FileSystemFinder',
+        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    )
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 IMAGE_TYPES = ('.JPG', '.JPEG', '.PNG', '.GIF')
 VIDEO_TYPES = ('.MP4', '.MPEG')
 AUTH_USER_MODEL = 'user.User'
 
-LOGIN_REDIRECT_URL = reverse_lazy('user:admin')
-LOGOUT_REDIRECT_URL = reverse_lazy('user:login')
+# LOGIN_REDIRECT_URL = reverse_lazy('user:admin')
+# LOGOUT_REDIRECT_URL = reverse_lazy('user:login')
 LOGIN_URL = reverse_lazy('user:login')
 CORS_ALLOW_ALL_ORIGINS = True
 
