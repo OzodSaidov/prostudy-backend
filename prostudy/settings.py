@@ -178,7 +178,7 @@ AUTH_USER_MODEL = 'user.User'
 
 # LOGIN_REDIRECT_URL = reverse_lazy('user:admin')
 # LOGOUT_REDIRECT_URL = reverse_lazy('user:login')
-LOGIN_URL = reverse_lazy('user:login')
+# LOGIN_URL = reverse_lazy('user:login')
 CORS_ALLOW_ALL_ORIGINS = True
 
 # REST FRAMEWORK
