@@ -450,7 +450,7 @@ class LifeHackEditView(RetrieveUpdateDestroyAPIView):
 
 class HomeView(ObjectMultipleModelAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = None
+    serializer_class = RegionSerializer
     querylist = [
         {'queryset': Advertisement.objects.all(), 'serializer_class': AdvertisementSerializer},
         {'queryset': Course.objects.all()[:4], 'serializer_class': CourseSerializer},
@@ -458,7 +458,7 @@ class HomeView(ObjectMultipleModelAPIView):
         {'queryset': LifeHack.objects.all(), 'serializer_class': LifeHackSerializer},
         {'queryset': Teacher.objects.all(), 'serializer_class': TeacherSerializer},
         {'queryset': Company.objects.all(), 'serializer_class': CompanySerializer},
-        {'queryset': Region.objects.all(), 'serializer_class': RegionSerializer},
+        {'queryset': Region.objects.all(), 'serializer_class': serializer_class},
         {'queryset': Presentation.objects.all(), 'serializer_class': PresentationSerializer},
     ]
 
