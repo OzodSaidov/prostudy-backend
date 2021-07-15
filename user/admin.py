@@ -20,7 +20,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class CourseAdmin(BaseAdmin):
-    list_display = ('category', 'id')
+    list_display = ('category', 'slug', 'id')
 
 
 class GalleryFileAdmin(admin.ModelAdmin):
@@ -72,7 +72,7 @@ class AdvertisementAdmin(BaseAdmin):
 
 
 class ProgramAdmin(BaseAdmin):
-    list_display = ('id', 'title', 'image', 'course')
+    list_display = ('id', 'title', 'slug', 'image', 'course')
 
 
 class AboutUsAdmin(BaseAdmin):
