@@ -237,6 +237,7 @@ class ProgramSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
+            'slug',
             'image',
             'course',
         )
@@ -271,6 +272,7 @@ class CourseSerializer(serializers.ModelSerializer):
             'category',
             'title',
             'href',
+            'slug',
             'menu',
             'course_file',
             'background',

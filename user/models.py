@@ -1,5 +1,5 @@
 from django.core import validators
-
+from autoslug import AutoSlugField
 from django.contrib.auth.models import AbstractUser
 from django.contrib import admin
 from django.db import models
@@ -158,9 +158,14 @@ class Course(Base):
         (MICROSOFT_OFFICE, 'Microsoft office'),
         (SOCIAL_MEDIA_MARKETING, 'Social Media Marketing'),
     )
+
+    def get_populate_from(self):
+        return '%s' % (self.get_category_display())
+
     category = models.IntegerField(choices=CATEGORY)
     title = models.JSONField(default=dict)
     href = models.CharField(max_length=200, null=True, verbose_name='uri')
+    slug = AutoSlugField(populate_from=get_populate_from, unique=True, null=True, blank=True)
     background = models.ImageField(upload_to='background/', validators=[validate_image_type], null=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='courses')
 
@@ -245,12 +250,16 @@ class CourseFile(Base):
 
 
 class Program(Base):
+    def get_populate_from(self):
+        return '%s' % (self.title['en'])
+
     title = models.JSONField(default=dict)
+    slug = AutoSlugField(populate_from=get_populate_from, unique=True, null=True)
     image = models.ImageField(upload_to='program/', validators=[validate_image_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs')
 
     def __str__(self):
-        return self.title['ru']
+        return self.title['en']
 
 
 """Рекламный пост"""
