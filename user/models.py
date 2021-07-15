@@ -165,8 +165,7 @@ class Course(Base):
     category = models.IntegerField(choices=CATEGORY)
     title = models.JSONField(default=dict)
     href = models.CharField(max_length=200, null=True, verbose_name='uri')
-    slug = AutoSlugField(populate_from=get_populate_from, unique=True,
-                         null=True)
+    slug = AutoSlugField(populate_from=get_populate_from, unique=True, null=True)
     background = models.ImageField(upload_to='background/', validators=[validate_image_type], null=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='courses')
 
