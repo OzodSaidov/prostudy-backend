@@ -94,7 +94,8 @@ class Gallery(Base):
 class GalleryFile(Base):
 
     def gallery_file_path(self, filename):
-        return 'gallery/{0}/{1}'.format(self.gallery.title, filename)
+        title = self.gallery.title.replace(' ', '_').replace('-', '_').lower()
+        return 'gallery/{0}/{1}'.format(title, filename)
 
     title = models.CharField(max_length=100, null=True)
     src = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
