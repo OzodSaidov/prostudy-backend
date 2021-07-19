@@ -306,8 +306,6 @@ class AdvertisementSerializer(serializers.ModelSerializer):
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
-    menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
-
     class Meta:
         model = Feedback
         fields = (
@@ -319,7 +317,6 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'region',
             'course',
             'is_active',
-            'menu'
         )
 
 
