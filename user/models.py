@@ -30,7 +30,7 @@ class Menu(MPTTModel):
     href = models.CharField(max_length=200, null=True, verbose_name='uri')
     title = models.JSONField(default=dict)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-    is_active = models.BooleanField(default=False)
+    # is_active = models.BooleanField(default=False)
 
     def __str__(self):
         if settings.LANGUAGE_CODE == 'uz':
@@ -53,7 +53,7 @@ class Post(Base):
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
     course = models.ForeignKey('Course', on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
     program = models.ForeignKey('Program', on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
-    is_active = models.BooleanField(default=True)
+    # is_active = models.BooleanField(default=True)
 
 
 # class PostAttachment(Base):
@@ -64,7 +64,7 @@ class Post(Base):
 class PostImage(Base):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='images')
     file = models.ImageField(upload_to='post_images/', validators=[validate_image_type])
-    is_active = models.BooleanField(default=False)
+    # is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return self.file.url
@@ -327,7 +327,7 @@ class Language(Base):
 class LifeHack(Base):
     context = models.JSONField(default=dict)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='life_hacks')
-    is_active = models.BooleanField(default=True)
+    # is_active = models.BooleanField(default=True)
 
 
 class Contact(Base):
