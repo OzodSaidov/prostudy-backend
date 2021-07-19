@@ -281,7 +281,7 @@ class Feedback(Base):
     message = models.TextField(null=True, blank=True)
     region = models.CharField(max_length=50, null=True, blank=True)
     course = models.CharField(max_length=100, null=True, blank=True)
-    is_active = models.BooleanField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['-create_at']
