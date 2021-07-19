@@ -299,7 +299,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'image_poster',
-            'is_active',
+            # 'is_active',
             'url',
             'course',
         )
@@ -316,7 +316,7 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'message',
             'region',
             'course',
-            'is_active',
+            # 'is_active',
         )
 
 
@@ -325,7 +325,14 @@ class SubscriptionRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubscriptionRequest
-        fields = ('id', 'name', 'number_visitors', 'phone', 'is_active', 'menu', 'course')
+        fields = (
+            'id',
+            'name',
+            'number_visitors',
+            'phone',
+            # 'is_active',
+            'menu',
+            'course')
 
 
 class CompanySerializer(serializers.ModelSerializer):
