@@ -312,11 +312,11 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'email',
-            # 'phone',
+            'phone',
             'message',
             'region',
             'course',
-            'is_active',
+            # 'is_active',
         )
 
 
