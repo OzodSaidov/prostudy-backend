@@ -1,5 +1,5 @@
-command = '/home/prostudy-backend/venv/bin/gunicorn'
-pythonpath = '/home/prostudy-backend/prostudy'
+command = '/home/prostudy/prostudy-backend/venv/bin/gunicorn'
+pythonpath = '/home/prostudy/prostudy-backend/prostudy'
 bind = '127.0.0.1:8000'
 workers = 5
 limit_request_fields = 32000

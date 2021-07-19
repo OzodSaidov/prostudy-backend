@@ -1,4 +1,4 @@
 #!/bin/bash
-source /home/prostudy-backend/venv/bin/activate
-exec gunicorn -c "/home/prostudy-backend/bin/gunicorn_conf.py" prostudy.wsgi
+source /home/prostudy/prostudy-backend/venv/bin/activate
+exec gunicorn -c "/home/prostudy/prostudy-backend/bin/gunicorn_conf.py" prostudy.wsgi
 
