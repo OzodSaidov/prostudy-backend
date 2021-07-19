@@ -278,7 +278,7 @@ class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
     phone = models.CharField(max_length=13, validators=[validate_phone])
-    message = models.TextField()
+    message = models.TextField(null=True, blank=True)
     region = models.CharField(max_length=50, null=True, blank=True)
     course = models.CharField(max_length=100, null=True, blank=True)
     is_active = models.BooleanField(default=True)
