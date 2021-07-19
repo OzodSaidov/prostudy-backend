@@ -325,7 +325,7 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'message',
             'region',
             'course',
-            # 'is_active',
+            'is_active',
         )
 
 
