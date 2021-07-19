@@ -64,21 +64,11 @@ class ResultAdmin(BaseAdmin):
 
 
 class PostAdmin(BaseAdmin):
-    list_display = (
-        'id', 'title', 'content', 'short_content', 'url', 'slug', 'menu', 'program', 'course',
-        # 'is_active'
-    )
+    list_display = ('id', 'title', 'content', 'short_content', 'url', 'slug', 'menu', 'program', 'course', 'is_active')
 
 
 class AdvertisementAdmin(BaseAdmin):
-    list_display = (
-        'id',
-        'title',
-        'content',
-        'image_poster',
-        'url',
-        # 'is_active'
-    )
+    list_display = ('id', 'title', 'content', 'image_poster', 'url', 'is_active')
 
 
 class ProgramAdmin(BaseAdmin):

@@ -26,10 +26,7 @@ from user.models import (
 class MenuListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
-        fields = (
-            'id', 'href', 'title', 'parent', 'children',
-            # 'is_active'
-        )
+        fields = ('id', 'href', 'title', 'parent', 'children', 'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
@@ -38,10 +35,7 @@ class MenuListSerializer(serializers.ModelSerializer):
 class MenuSerializer(serializers.ModelSerializer):
     class Meta:
         model = Menu
-        fields = (
-            'id', 'href', 'title', 'parent', 'children',
-            # 'is_active'
-        )
+        fields = ('id', 'href', 'title', 'parent', 'children', 'is_active')
         extra_kwargs = {
             'children': {'read_only': True},
         }
@@ -60,10 +54,7 @@ class MenuSerializer(serializers.ModelSerializer):
 class PostImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostImage
-        fields = (
-            'id', 'file', 'post',
-            # 'is_active'
-        )
+        fields = ('id', 'file', 'post', 'is_active')
         read_only_fields = ('id', 'post')
 
     # def to_representation(self, instance: PostImage):
@@ -308,7 +299,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'image_poster',
-            # 'is_active',
+            'is_active',
             'url',
             'course',
         )
@@ -334,14 +325,7 @@ class SubscriptionRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SubscriptionRequest
-        fields = (
-            'id',
-            'name',
-            'number_visitors',
-            'phone',
-            # 'is_active',
-            'menu',
-            'course')
+        fields = ('id', 'name', 'number_visitors', 'phone', 'is_active', 'menu', 'course')
 
 
 class CompanySerializer(serializers.ModelSerializer):
@@ -441,9 +425,7 @@ class MenuBlogSerializer(serializers.ModelSerializer):
         model = Menu
         fields = (
             'id', 'href', 'title', 'post', 'information_content', 'gallery', 'parent', 'children',
-            # 'is_active',
-            'about_us'
-        )
+            'is_active', 'about_us')
         extra_kwargs = {
             'children': {'read_only': True},
         }
@@ -474,10 +456,7 @@ class LanguageSerializer(serializers.ModelSerializer):
 class LifeHackSerializer(serializers.ModelSerializer):
     class Meta:
         model = LifeHack
-        fields = (
-            'id', 'context', 'teacher',
-            # 'is_active'
-        )
+        fields = ('id', 'context', 'teacher', 'is_active')
 
     def to_representation(self, instance: LifeHack):
         domain = self.context['request'].scheme + '://' + self.context['request'].get_host()

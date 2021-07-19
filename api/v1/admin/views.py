@@ -165,8 +165,7 @@ class ProgramEditView(RetrieveUpdateDestroyAPIView):
 class AdvertisementCreateView(ListCreateAPIView):
     serializer_class = AdvertisementSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    # queryset = Advertisement.objects.filter(is_active=True)
-    queryset = Advertisement.objects.all()
+    queryset = Advertisement.objects.filter(is_active=True)
 
 
 class AdvertisementEditView(RetrieveUpdateDestroyAPIView):
@@ -431,8 +430,7 @@ class LanguageEditView(RetrieveUpdateDestroyAPIView):
 class LifeHackView(ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = LifeHackSerializer
-    # queryset = LifeHack.objects.filter(is_active=True)
-    queryset = LifeHack.objects.all()
+    queryset = LifeHack.objects.filter(is_active=True)
 
 
 class LifeHackEditView(RetrieveUpdateDestroyAPIView):
@@ -446,12 +444,10 @@ class HomeView(ObjectMultipleModelAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = RegionSerializer
     querylist = [
-        # {'queryset': Advertisement.objects.filter(is_active=True), 'serializer_class': AdvertisementSerializer},
-        {'queryset': Advertisement.objects.all(), 'serializer_class': AdvertisementSerializer},
+        {'queryset': Advertisement.objects.filter(is_active=True), 'serializer_class': AdvertisementSerializer},
         {'queryset': Course.objects.all()[:4], 'serializer_class': CourseSerializer},
         {'queryset': AboutUs.objects.filter(menu__isnull=True), 'serializer_class': AboutUsSerializer},
-        # {'queryset': LifeHack.objects.filter(is_active=True), 'serializer_class': LifeHackSerializer},
-        {'queryset': LifeHack.objects.all(), 'serializer_class': LifeHackSerializer},
+        {'queryset': LifeHack.objects.filter(is_active=True), 'serializer_class': LifeHackSerializer},
         {'queryset': Teacher.objects.all(), 'serializer_class': TeacherSerializer},
         {'queryset': Company.objects.all(), 'serializer_class': CompanySerializer},
         {'queryset': Region.objects.all(), 'serializer_class': serializer_class},
