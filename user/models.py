@@ -281,7 +281,7 @@ class Feedback(Base):
     message = models.TextField(null=True, blank=True)
     region = models.CharField(max_length=50, null=True, blank=True)
     course = models.CharField(max_length=100, null=True, blank=True)
-    is_active = models.BooleanField(default=1)
+    is_active = models.BooleanField()
 
     class Meta:
         ordering = ['-create_at']
@@ -293,7 +293,7 @@ class SubscriptionRequest(Base):
     number_visitors = models.IntegerField()
     phone = models.CharField(max_length=13, validators=[validate_phone])
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='subscriptions', null=True)
-    is_active = models.BooleanField(default=1)
+    is_active = models.BooleanField()
 
     class Meta:
         ordering = ['-create_at']
