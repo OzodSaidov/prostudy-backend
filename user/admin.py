@@ -68,7 +68,7 @@ class PostAdmin(BaseAdmin):
 
 
 class AdvertisementAdmin(BaseAdmin):
-    list_display = ('id', 'title', 'content', 'image_poster', 'url', 'is_active')
+    list_display = ('id', 'title', 'slug', 'content', 'image_poster', 'url', 'is_active')
 
 
 class ProgramAdmin(BaseAdmin):

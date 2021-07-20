@@ -297,6 +297,7 @@ class AdvertisementSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
+            'slug',
             'content',
             'image_poster',
             'is_active',

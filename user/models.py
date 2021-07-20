@@ -271,10 +271,14 @@ class Program(Base):
 
 
 class Advertisement(Base):
+    def get_populate_from(self):
+        return '%s' % (self.title['en'])
+
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
     image_poster = models.ImageField(upload_to='advertisement/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
+    slug = AutoSlugField(populate_from=get_populate_from, unique=True, null=True)
     url = models.URLField(null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='advertising_posts', null=True)
 
