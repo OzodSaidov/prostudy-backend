@@ -112,6 +112,8 @@ class MainTitle(Base):
 
 
 """Предподаватель"""
+
+
 class Teacher(Base):
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
@@ -137,6 +139,8 @@ class Teacher(Base):
 
 
 """Курс"""
+
+
 class Course(Base):
     GRAPHIC_DESIGN = 1
     WEB_DESIGN = 2
@@ -264,6 +268,8 @@ class Program(Base):
 
 
 """Рекламный пост"""
+
+
 class Advertisement(Base):
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
@@ -274,6 +280,8 @@ class Advertisement(Base):
 
 
 """Обратная связь"""
+
+
 class Feedback(Base):
     name = models.CharField(max_length=50)
     email = models.EmailField()
@@ -288,6 +296,8 @@ class Feedback(Base):
 
 
 """Заявка на подписку"""
+
+
 class SubscriptionRequest(Base):
     name = models.CharField(max_length=50)
     number_visitors = models.IntegerField()
@@ -342,5 +352,13 @@ class Social(Base):
     image = models.ImageField(upload_to='social', validators=[validate_image_type])
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='socials', null=True)
 
+
 class Presentation(Base):
     file = models.FileField(upload_to='presentation')
+
+
+class Graduate(Base):
+    title = models.JSONField(default=dict)
+    src = models.FileField(upload_to='graduate/')
+    thumb = models.ImageField(upload_to='graduate/')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='graduates')

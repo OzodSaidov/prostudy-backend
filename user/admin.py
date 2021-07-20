@@ -87,6 +87,10 @@ class SocialAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'url', 'image', 'contact')
 
 
+class GraduateAdmin(BaseAdmin):
+    list_display = ('id', 'title', 'src', 'thumb', 'course')
+
+
 admin.site.register(models.Menu, MenuAdmin)
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Gallery, GalleryAdmin)
@@ -115,3 +119,4 @@ admin.site.register(models.MainTitle, BaseAdmin)
 admin.site.register(models.Contact, ContactAdmin)
 admin.site.register(models.Social, SocialAdmin)
 admin.site.register(models.Presentation)
+admin.site.register(models.Graduate)

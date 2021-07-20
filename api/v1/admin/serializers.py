@@ -19,7 +19,7 @@ from user.models import (
     Program,
     CourseFile,
     Company, CostOfEducation, Certificate, QuestionAndAnswer, Result, InformationContent,
-    InformationContentDetail, AboutUs, Language, LifeHack, MainTitle, Contact, Social, Presentation
+    InformationContentDetail, AboutUs, Language, LifeHack, MainTitle, Contact, Social, Presentation, Graduate
 )
 
 
@@ -342,6 +342,18 @@ class AboutUsSerializer(serializers.ModelSerializer):
         fields = ('id', 'image', 'content', 'menu')
 
 
+class GraduateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Graduate
+        fields = (
+            'id',
+            'title',
+            'src',
+            'thumb',
+            'course',
+        )
+
+
 class CourseInformationSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer(source='teachers', many=True)
     program_training = QuestionAndAnswersSerializer(source='programs_training', many=True)
@@ -350,6 +362,7 @@ class CourseInformationSerializer(serializers.ModelSerializer):
     inf_content = InformationContentSerializer(source='inf_contents')
     cost_education = CostOfEducationSerializer(source='cost_educations', many=True)
     program = ProgramSerializer(source='programs', many=True)
+    graduate = GraduateSerializer(source='graduates', many=True)
 
     class Meta:
         model = Course
@@ -367,7 +380,8 @@ class CourseInformationSerializer(serializers.ModelSerializer):
             'certificate',
             'inf_content',
             'cost_education',
-            'program'
+            'program',
+            'graduate',
         )
 
     def update(self, instance, validated_data):

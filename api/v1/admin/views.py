@@ -505,3 +505,16 @@ class SocialEditView(RetrieveUpdateDestroyAPIView):
     serializer_class = SocialSerializer
     queryset = Social.objects.all()
     lookup_url_kwarg = 'id'
+
+
+class GraduateView(CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = GraduateSerializer
+    queryset = Graduate.objects.all()
+
+
+class GraduateEditView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = GraduateSerializer
+    queryset = Graduate.objects.all()
+    lookup_field = 'id'
