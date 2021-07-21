@@ -355,6 +355,12 @@ class GraduateSerializer(serializers.ModelSerializer):
         )
 
 
+class MainTitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MainTitle
+        fields = ('id', 'title', 'course', 'program')
+
+
 class CourseInformationSerializer(serializers.ModelSerializer):
     teacher = TeacherSerializer(source='teachers', many=True)
     program_training = QuestionAndAnswersSerializer(source='programs_training', many=True)
@@ -364,6 +370,7 @@ class CourseInformationSerializer(serializers.ModelSerializer):
     cost_education = CostOfEducationSerializer(source='cost_educations', many=True)
     program = ProgramSerializer(source='programs', many=True)
     graduate = GraduateSerializer(source='graduates', many=True)
+    title_teachers = MainTitleSerializer(source='titles')
 
     class Meta:
         model = Course
@@ -371,6 +378,7 @@ class CourseInformationSerializer(serializers.ModelSerializer):
             'id',
             'category',
             'title',
+            'title_teachers',
             'href',
             'menu',
             'background',
@@ -394,6 +402,7 @@ class CourseInformationSerializer(serializers.ModelSerializer):
         data = super(CourseInformationSerializer, self).to_representation(instance)
         data['category'] = instance.get_category_display()
         data['menu'] = instance.menu.title
+        data['title_teachers'] = instance.titles.title
         return data
 
 
@@ -401,12 +410,14 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
     information_content = InformationContentSerializer(source='inf_contents')
     question = QuestionAndAnswersSerializer(source='questions', many=True)
     post = PostSerializer(source='posts', many=True)
+    title_questions = MainTitleSerializer(source='titles')
 
     class Meta:
         model = Program
         fields = (
             'id',
             'title',
+            'title_questions',
             'image',
             'course',
             'slug',
@@ -427,6 +438,7 @@ class ProgramInformationSerializer(serializers.ModelSerializer):
             }
             gallery.append(context)
         data['gallery'] = gallery
+        data['title_questions'] = instance.titles.title
         return data
 
 
@@ -479,12 +491,6 @@ class LifeHackSerializer(serializers.ModelSerializer):
         data['teacher'] = instance.teacher.get_teacher_short_info
         data['teacher']['photo'] = domain + instance.teacher.photo.url
         return data
-
-
-class MainTitleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MainTitle
-        fields = ('id', 'title', 'course', 'program')
 
 
 class RegionSerializer(serializers.ModelSerializer):

@@ -108,8 +108,8 @@ class GalleryFile(Base):
 
 class MainTitle(Base):
     title = models.JSONField(default=dict)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='titles', null=True, blank=True)
-    program = models.ForeignKey('Program', on_delete=models.CASCADE, related_name='titles', null=True, blank=True)
+    course = models.OneToOneField('Course', on_delete=models.CASCADE, related_name='titles', null=True, blank=True)
+    program = models.OneToOneField('Program', on_delete=models.CASCADE, related_name='titles', null=True, blank=True)
 
 
 """Предподаватель"""
