@@ -108,12 +108,11 @@ class GalleryFile(Base):
 
 class MainTitle(Base):
     title = models.JSONField(default=dict)
-    teacher = models.ForeignKey('Teacher', on_delete=models.DO_NOTHING, related_name='main_titles', null=True)
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='titles', null=True, blank=True)
+    program = models.ForeignKey('Program', on_delete=models.CASCADE, related_name='titles', null=True, blank=True)
 
 
 """Предподаватель"""
-
-
 class Teacher(Base):
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
@@ -261,7 +260,7 @@ class Program(Base):
     title = models.JSONField(default=dict)
     slug = AutoSlugField(populate_from=get_populate_from, unique=True, null=True)
     image = models.ImageField(upload_to='program/', validators=[validate_image_type], null=True)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs')
+    course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs', null=True)
 
     def __str__(self):
         return self.title['en']

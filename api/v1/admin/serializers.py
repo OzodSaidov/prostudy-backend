@@ -484,7 +484,7 @@ class LifeHackSerializer(serializers.ModelSerializer):
 class MainTitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = MainTitle
-        fields = ('id', 'title', 'teacher')
+        fields = ('id', 'title', 'course', 'program')
 
 
 class RegionSerializer(serializers.ModelSerializer):
