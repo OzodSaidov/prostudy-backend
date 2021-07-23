@@ -1,5 +1,3 @@
-from abc import ABC
-
 from django.db import transaction
 from rest_framework import serializers
 from rest_framework.fields import ListField, ImageField
@@ -320,6 +318,13 @@ class FeedbackSerializer(serializers.ModelSerializer):
             'is_active',
         )
 
+    def create(self, validated_data):
+        course = validated_data.pop('course')
+        if course:
+            return Feedback.objects.create(course=str(course).replace('-', ' ').upper(), **validated_data)
+        else:
+            return super(FeedbackSerializer, self).create(validated_data)
+
 
 class SubscriptionRequestSerializer(serializers.ModelSerializer):
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)
@@ -327,6 +332,14 @@ class SubscriptionRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscriptionRequest
         fields = ('id', 'name', 'number_visitors', 'phone', 'is_active', 'menu', 'course')
+
+    def create(self, validated_data):
+        course = validated_data.pop('course')
+        if course:
+            return SubscriptionRequest.objects.create(course=str(course).replace('-', ' ').upper(),
+                                                      **validated_data)
+        else:
+            return super(SubscriptionRequestSerializer, self).create(validated_data)
 
 
 class CompanySerializer(serializers.ModelSerializer):
