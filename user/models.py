@@ -275,7 +275,7 @@ class Advertisement(Base):
 
     title = models.JSONField(default=dict)
     content = models.JSONField(default=dict)
-    image_poster = models.ImageField(upload_to='advertisement/', validators=[validate_image_type])
+    image_poster = models.ImageField(upload_to='rek_file/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
     slug = AutoSlugField(populate_from=get_populate_from, unique=True, null=True)
     url = models.URLField(null=True)
