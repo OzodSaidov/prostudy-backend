@@ -34,7 +34,6 @@ DEBUG = bool(os.getenv("DEBUG") == 'TRUE')
 HOST_IP = os.getenv('HOST_IP')
 DOMAIN_NAME = os.getenv('DOMAIN_NAME')
 localhost = os.getenv('localhost')
-
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
@@ -182,7 +181,7 @@ AUTH_USER_MODEL = 'user.User'
 # LOGIN_URL = reverse_lazy('user:login')
 # CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    "https://prostudy.uz"
+    "https://prostudy.uz",
     "https://demo.prostudy.uz",
 ]
 
