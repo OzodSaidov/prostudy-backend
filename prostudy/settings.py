@@ -183,6 +183,7 @@ AUTH_USER_MODEL = 'user.User'
 CORS_ALLOWED_ORIGINS = [
     "https://prostudy.uz",
     "https://demo.prostudy.uz",
+    "http://localhost:3000",
 ]
 
 # REST FRAMEWORK
@@ -228,3 +229,6 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
+
+# --------------------------------------------------------------------------------------
+# EMAIL
