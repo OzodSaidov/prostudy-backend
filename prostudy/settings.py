@@ -180,7 +180,11 @@ AUTH_USER_MODEL = 'user.User'
 # LOGIN_REDIRECT_URL = reverse_lazy('user:admin')
 # LOGOUT_REDIRECT_URL = reverse_lazy('user:login')
 # LOGIN_URL = reverse_lazy('user:login')
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://prostudy.uz"
+    "https://demo.prostudy.uz",
+]
 
 # REST FRAMEWORK
 # ----------------------------------- ---------------------------------------------------
