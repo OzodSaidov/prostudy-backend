@@ -277,7 +277,7 @@ class Advertisement(Base):
     content = models.JSONField(default=dict)
     image_poster = models.ImageField(upload_to='rek_file/', validators=[validate_image_type])
     is_active = models.BooleanField(default=False)
-    slug = AutoSlugField(populate_from=get_populate_from, unique=True, null=True)
+    slug = AutoSlugField(populate_from=get_populate_from, null=True)
     url = models.URLField(null=True)
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='advertising_posts', null=True)
 
