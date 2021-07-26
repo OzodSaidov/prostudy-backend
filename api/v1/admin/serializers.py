@@ -319,10 +319,13 @@ class FeedbackSerializer(serializers.ModelSerializer):
         )
 
     def create(self, validated_data):
-        course = validated_data.pop('course')
-        if course:
-            return Feedback.objects.create(course=str(course).replace('-', ' ').upper(), **validated_data)
-        else:
+        try:
+            course = validated_data.pop('course')
+            if course:
+                return Feedback.objects.create(course=str(course).replace('-', ' ').upper(), **validated_data)
+            else:
+                return super(FeedbackSerializer, self).create(validated_data)
+        except KeyError:
             return super(FeedbackSerializer, self).create(validated_data)
 
 

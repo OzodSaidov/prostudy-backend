@@ -120,6 +120,7 @@ class Teacher(Base):
     experience = models.JSONField(default=dict)
     about = models.JSONField(default=dict)
     photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
+    background = models.ImageField(upload_to='teachers/', validators=[validate_image_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, related_name='teachers', null=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='teachers')
 
@@ -363,5 +364,6 @@ class Presentation(Base):
 class Graduate(Base):
     title = models.JSONField(default=dict)
     src = models.FileField(upload_to='graduate/')
+    url = models.URLField(validators=[validators.URLValidator(schemes=['https', 'http'])], null=True)
     thumb = models.ImageField(upload_to='graduate/')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='graduates')
