@@ -184,6 +184,8 @@ CORS_ALLOWED_ORIGINS = [
     "https://prostudy.uz",
     "https://demo.prostudy.uz",
     "http://localhost:3000",
+    "https://new.prostudy.uz",
+    "https://prostudy.bsg.uz",
 ]
 
 # REST FRAMEWORK
