@@ -364,7 +364,7 @@ class Presentation(Base):
 
 class Graduate(Base):
     title = models.JSONField(default=dict)
-    src = models.FileField(upload_to='graduate/')
-    url = models.URLField(validators=[validators.URLValidator(schemes=['https', 'http'])], null=True)
+    src = models.URLField(validators=[validators.URLValidator(schemes=['https', 'http'])], null=True)
+    video = models.FileField(upload_to='graduate/')
     thumb = models.ImageField(upload_to='graduate/')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='graduates')
