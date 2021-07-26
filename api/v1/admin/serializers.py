@@ -159,9 +159,11 @@ class TeacherSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'photo',
+            'background',
             'specialty',
             'experience',
             'about',
+            'information',
             'menu',
             'course'
         )
@@ -170,6 +172,7 @@ class TeacherSerializer(serializers.ModelSerializer):
         domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
         data = super(TeacherSerializer, self).to_representation(instance)
         data['photo'] = domain + instance.photo.url if instance.photo else None
+        data['background'] = domain + instance.background.url if instance.background else None
         return data
 
 
@@ -366,6 +369,7 @@ class GraduateSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'src',
+            'url',
             'thumb',
             'course',
         )
