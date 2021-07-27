@@ -88,7 +88,7 @@ class SocialAdmin(admin.ModelAdmin):
 
 
 class GraduateAdmin(BaseAdmin):
-    list_display = ('id', 'title', 'src', 'thumb', 'course')
+    list_display = ('id', 'full_name', 'src', 'video', 'thumb', 'course')
 
 
 admin.site.register(models.Menu, MenuAdmin)
