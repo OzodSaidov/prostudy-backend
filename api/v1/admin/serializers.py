@@ -367,7 +367,7 @@ class GraduateSerializer(serializers.ModelSerializer):
         model = Graduate
         fields = (
             'id',
-            'title',
+            'full_name',
             'src',
             'video',
             'thumb',
