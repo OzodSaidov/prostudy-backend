@@ -369,7 +369,7 @@ class GraduateSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'src',
-            'url',
+            'video',
             'thumb',
             'course',
         )
@@ -542,3 +542,5 @@ class PresentationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Presentation
         fields = ('id', 'file')
+
+
