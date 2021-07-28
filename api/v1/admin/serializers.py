@@ -164,6 +164,7 @@ class TeacherSerializer(serializers.ModelSerializer):
             'experience',
             'about',
             'information',
+            'slug',
             'menu',
             'course'
         )

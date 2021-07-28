@@ -114,12 +114,16 @@ class MainTitle(Base):
 
 """Предподаватель"""
 class Teacher(Base):
+    def get_populate_from(self):
+        return '%s-%s' % (self.first_name['en'], self.last_name['en'])
+
     first_name = models.JSONField(default=dict)
     last_name = models.JSONField(default=dict)
     specialty = models.JSONField(default=dict)
     experience = models.JSONField(default=dict)
     about = models.JSONField(default=dict)
     information = models.JSONField(default=dict, null=True)
+    slug = AutoSlugField(populate_from=get_populate_from, null=True)
     photo = models.ImageField(upload_to='teachers/', validators=[validate_image_type])
     background = models.ImageField(upload_to='teachers/', validators=[validate_image_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.DO_NOTHING, related_name='teachers', null=True)
@@ -171,7 +175,7 @@ class Course(Base):
     category = models.IntegerField(choices=CATEGORY)
     title = models.JSONField(default=dict)
     href = models.CharField(max_length=200, null=True, verbose_name='uri')
-    slug = AutoSlugField(populate_from=get_populate_from, unique=True, null=True)
+    slug = AutoSlugField(populate_from=get_populate_from, null=True)
     background = models.ImageField(upload_to='background/', validators=[validate_image_type], null=True)
     menu = models.ForeignKey('Menu', on_delete=models.DO_NOTHING, related_name='courses')
 
@@ -260,7 +264,7 @@ class Program(Base):
         return '%s' % (self.title['en'])
 
     title = models.JSONField(default=dict)
-    slug = AutoSlugField(populate_from=get_populate_from, unique=True, null=True)
+    slug = AutoSlugField(populate_from=get_populate_from, null=True)
     image = models.ImageField(upload_to='program/', validators=[validate_image_type], null=True)
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name='programs', null=True)
 

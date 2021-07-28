@@ -32,7 +32,7 @@ class CourseFileAdmin(admin.ModelAdmin):
 
 
 class TeacherAdmin(BaseAdmin):
-    list_display = ('fullname', 'specialty', 'experience', 'course')
+    list_display = ('fullname', 'slug', 'specialty', 'experience', 'course')
 
 
 class InformationContentAdmin(BaseAdmin):
