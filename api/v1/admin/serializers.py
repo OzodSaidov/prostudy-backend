@@ -126,6 +126,12 @@ class GalleryFileSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'src', 'thumbnail', 'url', 'gallery')
         read_only_fields = ('id', 'gallery')
 
+    def to_representation(self, instance: GalleryFile):
+        domain = self.context['request'].scheme + '://' + self.context['request'].get_host()
+        data = super(GalleryFileSerializer, self).to_representation(instance)
+        data['thumbnail'] = domain + instance.thumbnail.url
+        return data
+
 
 class GallerySerializer(serializers.ModelSerializer):
     menu = serializers.PrimaryKeyRelatedField(queryset=Menu.objects.filter(children=None), required=False)

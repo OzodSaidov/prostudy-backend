@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.db import models
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFit
 
 from prostudy import settings
 from prostudy.base_models import Base
@@ -99,8 +101,8 @@ class GalleryFile(Base):
 
     title = models.CharField(max_length=100, null=True)
     src = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
-    thumbnail = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
-                                  null=True, blank=True)
+    thumbnail = ImageSpecField(source='src', processors=[ResizeToFit(700, 550)],
+                               format='JPEG', options={'quality': 60})
     url = models.URLField(null=True, blank=True)
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
