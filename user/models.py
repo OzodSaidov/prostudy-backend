@@ -5,8 +5,6 @@ from django.contrib import admin
 from django.db import models
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
-from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFit
 
 from prostudy import settings
 from prostudy.base_models import Base
@@ -75,7 +73,8 @@ class PostImage(Base):
 class FileQuerySet(models.QuerySet):
     def delete(self, *args, **kwargs):
         for obj in self:
-            obj.file.delete()
+            obj.src.delete()
+            obj.thumbnail.delete()
         super(FileQuerySet, self).delete()
 
 
@@ -101,11 +100,8 @@ class GalleryFile(Base):
 
     title = models.CharField(max_length=100, null=True)
     src = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
-    # thumbnail = ImageSpecField(source='src', processors=[ResizeToFit(700, 550)],
-    #                            format='JPEG', options={'quality': 60})
     thumbnail = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
                                   null=True, blank=True)
-    url = models.URLField(null=True, blank=True)
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
 
@@ -117,6 +113,8 @@ class MainTitle(Base):
 
 
 """Предподаватель"""
+
+
 class Teacher(Base):
     def get_populate_from(self):
         return '%s-%s' % (self.first_name['en'], self.last_name['en'])
