@@ -101,8 +101,10 @@ class GalleryFile(Base):
 
     title = models.CharField(max_length=100, null=True)
     src = models.FileField(upload_to=gallery_file_path, validators=[validate_file_type])
-    thumbnail = ImageSpecField(source='src', processors=[ResizeToFit(700, 550)],
-                               format='JPEG', options={'quality': 60})
+    # thumbnail = ImageSpecField(source='src', processors=[ResizeToFit(700, 550)],
+    #                            format='JPEG', options={'quality': 60})
+    thumbnail = models.ImageField(upload_to=gallery_file_path, validators=[validate_image_type],
+                                  null=True, blank=True)
     url = models.URLField(null=True, blank=True)
     gallery = models.ForeignKey('Gallery', on_delete=models.CASCADE, related_name='gallery_files')
     objects = FileQuerySet.as_manager()
