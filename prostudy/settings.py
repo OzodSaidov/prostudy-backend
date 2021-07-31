@@ -29,15 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in bin!
 DEBUG = bool(os.getenv("DEBUG") == 'TRUE')
 
-# ALLOWED_HOSTS = ['sherzodbek.ml', '0.0.0.0', '127.0.0.1']
-# ALLOWED_HOSTS = ['sherzodbek.ml', '127.0.0.1']
-HOST_IP = os.getenv('HOST_IP')
-DOMAIN_NAME = os.getenv('DOMAIN_NAME')
-localhost = os.getenv('localhost')
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = [HOST_IP, DOMAIN_NAME, localhost]
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS').split(' ')
 
 # Application definition
 PRIMARY_APPS = [
@@ -115,15 +107,8 @@ if os.getenv('PRODUCTION') == 'TRUE':
 else:
     DATABASES = {
         'default': {
-            # 'ENGINE': 'django.db.backends.sqlite3',
-            # 'NAME': BASE_DIR / 'db.sqlite3',
-            # MySQL settings
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('DB_NAME'),
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': os.getenv('DB_PORT'),
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
