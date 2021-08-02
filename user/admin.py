@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db import models as dj_models
 from django_json_widget.widgets import JSONEditorWidget
+from django.contrib.auth.admin import UserAdmin
 
 from user import models
 
@@ -15,8 +16,8 @@ class MenuAdmin(BaseAdmin):
     list_display = ('id', 'title')
 
 
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email',)
+# class UserAdmin(admin.ModelAdmin):
+#     list_display = ('username', 'email',)
 
 
 class CourseAdmin(BaseAdmin):
